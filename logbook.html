@@ -12,14 +12,14 @@
         .tab-btn.active { background-color: #1e3a8a; color: white; }
     </style>
 </head>
-<body class="bg-blue-900 min-h-screen pb-10">
+<body class="bg-blue-900 min-h-screen pb-10 font-sans">
 
     <div class="p-8 text-center">
         <div class="w-20 h-20 bg-white rounded-3xl mx-auto flex items-center justify-center shadow-2xl mb-4 transform -rotate-6">
             <i class="fas fa-map-marked-alt text-blue-900 text-3xl"></i>
         </div>
-        <h1 id="userName" class="text-white font-black text-2xl uppercase tracking-tighter italic text-center">Halo, User!</h1>
-        <p id="userId" class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-1 italic">NIM: --</p>
+        <h1 id="userName" class="text-white font-black text-2xl uppercase tracking-tighter italic">Halo, User!</h1>
+        <p id="userId" class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-1 italic italic">NIM: --</p>
     </div>
 
     <div class="bg-white mx-6 p-8 rounded-[3rem] shadow-2xl border-b-[10px] border-orange-500 min-h-[500px]">
@@ -56,7 +56,7 @@
 
             <div>
                 <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic">Deskripsi Tugas</label>
-                <textarea id="deskripsi" placeholder="Tulis rincian pekerjaan Anda..." rows="3" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 mt-1"></textarea>
+                <textarea id="deskripsi" placeholder="Apa yang Anda kerjakan hari ini?" rows="3" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 mt-1"></textarea>
             </div>
 
             <div class="bg-blue-50 p-5 rounded-2xl border-2 border-dashed border-blue-200 text-center">
@@ -70,21 +70,21 @@
         </div>
 
         <div id="pane-history" class="hidden space-y-4">
-            <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-lg text-center border-b-8 border-orange-500 mb-8">
+            <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-lg text-center border-b-8 border-orange-500 mb-6">
                 <p class="text-[9px] font-black text-orange-400 uppercase tracking-widest mb-1 italic">Total Skor Terkumpul</p>
-                <h2 id="overallScore" class="text-4xl font-black text-white italic tracking-tighter">0</h2>
-                <p class="text-[8px] text-blue-300 font-bold uppercase mt-2">Sinkron Otomatis dengan Database Cloud</p>
+                <h2 id="overallScore" class="text-5xl font-black text-white italic tracking-tighter">0</h2>
+                <p class="text-[8px] text-blue-300 font-bold uppercase mt-2 italic">Sinkronisasi Cloud Aktif</p>
             </div>
 
             <div id="loading" class="text-center py-10 font-black text-blue-900 text-[10px] animate-pulse uppercase tracking-[0.3em] italic">Sinkronisasi Database...</div>
             <div id="riwayatList" class="space-y-5"></div>
         </div>
 
-        <button onclick="logout()" class="w-full mt-12 text-gray-300 font-black text-[9px] uppercase tracking-[0.3em] italic opacity-50">Keluar Dari Akun</button>
+        <button onclick="logout()" class="w-full mt-12 text-gray-300 font-black text-[9px] uppercase tracking-[0.3em] italic opacity-50">Keluar Akun</button>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyeR9R4vHkkTak9Tr9gUMvuwG04TxDTd8_YVsHVmLBThSvpvLl976291pkcPV0EPwn6/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxawq_0J0vfivnxCKy8uEnmUICkh5lHScbw5A7EjPil3IjZ_XYLoFx9Cd5pJyGJW8J8/exec";
         const user = JSON.parse(localStorage.getItem('current_user'));
 
         if(!user || user.role !== "MAHASISWA") {
@@ -102,7 +102,7 @@
             if(tab === 'history') fetchRiwayatCloud();
         }
 
-        // FUNGSI UTAMA DENGAN GPS
+        // --- FUNGSI SIMPAN DENGAN TRACKING GPS ---
         async function simpanLaporan() {
             const btn = document.getElementById('btnSimpan');
             const kat = document.getElementById('jenis').value;
@@ -114,27 +114,30 @@
             btn.disabled = true;
             btn.innerText = "MENGUNCI LOKASI GPS...";
 
-            // 1. Ambil Geotagging
             let mapsLink = "-";
             try {
                 const pos = await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(resolve, reject, {timeout: 10000});
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    });
                 });
                 mapsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                 document.getElementById('gps-status').classList.remove('hidden');
             } catch (err) {
-                alert("Gagal ambil lokasi GPS. Pastikan GPS HP menyala!");
+                alert("GPS GAGAL: Harap aktifkan Lokasi/GPS di HP Anda!");
                 btn.disabled = false;
                 btn.innerText = "Kirim Laporan & GPS";
                 return;
             }
 
-            // 2. Logika Skor
+            // Hitung Skor
             let skorOtomatis = 3; 
             if(kat === "Survei") skorOtomatis = 10;
             else if(kat === "Non-Survei") skorOtomatis = 5;
 
-            // 3. Proses Foto
+            // Proses Foto
             const fotoFile = document.getElementById('fotoInput').files[0];
             let base64Foto = "";
             if(fotoFile) {
@@ -161,21 +164,24 @@
                         foto: base64Foto,
                         rowId: "ID-" + Date.now(),
                         skor: skorOtomatis,
-                        geotagging: mapsLink // Kirim link maps ke kolom L
+                        geotagging: mapsLink 
                     })
                 });
-                alert("BERHASIL! DATA & GPS TERSIMPAN");
+                alert("LAPORAN & LOKASI BERHASIL DISIMPAN!");
                 location.reload();
             } catch (e) {
-                alert("GAGAL KONEKSI!");
+                alert("GAGAL KONEKSI KE SERVER!");
                 btn.disabled = false;
+                btn.innerText = "Kirim Laporan & GPS";
             }
         }
 
+        // --- FUNGSI RIWAYAT DENGAN OVERALL SCORE ---
         async function fetchRiwayatCloud() {
             const container = document.getElementById('riwayatList');
             const loading = document.getElementById('loading');
             const scoreLabel = document.getElementById('overallScore');
+            
             loading.classList.remove('hidden');
             container.innerHTML = "";
 
@@ -189,21 +195,32 @@
 
                 let totalScore = 0;
 
+                if (data.length === 0) {
+                    container.innerHTML = `<p class="text-center text-[10px] font-bold text-gray-300 uppercase mt-10">Database Kosong.</p>`;
+                    scoreLabel.innerText = "0";
+                    return;
+                }
+
                 data.forEach(item => {
-                    totalScore += parseInt(item.skor || 0);
+                    // Paksa skor menjadi angka agar tidak NaN
+                    let nilaiSkor = parseInt(item.skor) || 0;
+                    totalScore += nilaiSkor;
+
                     container.innerHTML += `
-                        <div class="bg-gray-50 p-6 rounded-[2.5rem] border-l-[10px] border-blue-900 shadow-sm relative">
+                        <div class="bg-gray-50 p-6 rounded-[2.5rem] border-l-[10px] border-blue-900 shadow-sm relative mb-4">
                             <div class="flex justify-between items-start mb-2">
-                                <span class="text-[9px] font-black text-orange-600 uppercase italic">${item.tanggal}</span>
+                                <span class="text-[9px] font-black text-orange-600 uppercase italic tracking-tighter">${item.tanggal}</span>
                                 <span class="text-[8px] bg-blue-900 text-white px-3 py-1 rounded-full font-black uppercase tracking-widest">${item.jenis}</span>
                             </div>
                             <h3 class="font-black text-blue-900 text-sm uppercase leading-tight">${item.lokasi}</h3>
+                            <p class="text-[11px] text-gray-500 mt-2 italic leading-relaxed line-clamp-2">"${item.deskripsi}"</p>
+                            
                             <div class="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center">
-                                <div class="bg-orange-100 px-3 py-1 rounded-lg">
-                                    <span class="text-[9px] font-black text-orange-600 uppercase italic">POIN: ${item.skor || '0'}</span>
+                                <div class="bg-orange-100 px-3 py-1 rounded-lg border border-orange-200">
+                                    <span class="text-[9px] font-black text-orange-600 uppercase italic">SKOR: ${nilaiSkor}</span>
                                 </div>
                                 <div class="flex gap-2">
-                                    ${item.geotagging && item.geotagging !== "-" ? `<a href="${item.geotagging}" target="_blank" class="text-green-600 text-[10px] font-black underline italic">CEK GPS</a>` : ""}
+                                    ${item.geotagging && item.geotagging !== "-" ? `<a href="${item.geotagging}" target="_blank" class="text-green-600 text-[10px] font-black underline italic">GPS</a>` : ""}
                                     ${item.foto !== "-" ? `<a href="${item.foto}" target="_blank" class="text-blue-600 text-[10px] font-black underline italic">FOTO</a>` : ""}
                                 </div>
                             </div>
@@ -212,7 +229,8 @@
                 });
                 scoreLabel.innerText = totalScore;
             } catch (e) {
-                loading.innerText = "ERROR SINKRON!";
+                loading.innerText = "GAGAL SINKRONISASI!";
+                scoreLabel.innerText = "!";
             }
         }
 
