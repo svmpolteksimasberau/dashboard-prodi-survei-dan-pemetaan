@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPI Performa Dosen - Survei & Pemetaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 p-4 md:p-8">
+
+    <div class="container mx-auto max-w-6xl">
+        <div class="flex justify-between items-center mb-6">
+            <a href="dashboard.html" class="text-blue-900 font-bold flex items-center gap-2 hover:underline text-sm">
+                <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+            </a>
+            <h1 class="text-xl font-black text-blue-900 uppercase tracking-tighter">KPI PERFORMANCE</h1>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="md:col-span-1 bg-gradient-to-br from-blue-900 to-blue-700 p-8 rounded-3xl shadow-xl text-white flex flex-col justify-center items-center relative overflow-hidden">
+                <i class="fas fa-chart-line text-7xl absolute -right-4 -bottom-4 opacity-10"></i>
+                <p class="text-xs font-bold uppercase tracking-widest opacity-80 mb-2">Total Skor Terkumpul</p>
+                <h2 id="totalSkorDisplay" class="text-7xl font-black">0</h2>
+                <p class="text-[10px] mt-4 opacity-60 italic uppercase tracking-widest">Akumulasi Poin Kinerja</p>
+            </div>
+
+            <div class="md:col-span-2 bg-white p-6 rounded-3xl shadow-md border border-gray-200">
+                <h3 class="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-widest text-center">Distribusi Aktivitas Tri Dharma</h3>
+                <div class="h-32">
+                    <canvas id="miniChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <form id="kpiForm" class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-orange-500 space-y-4">
+                    <h3 class="font-bold text-gray-700 mb-2 font-mono uppercase text-sm italic">Input Aktivitas Harian</h3>
+                    
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tanggal</label>
+                        <input type="date" id="tgl" class="w-full p-3 border rounded-xl mt-1 focus:ring-2 focus:ring-blue-500 outline-none" required>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Kategori Kinerja</label>
+                        <select id="kat" class="w-full p-3 border rounded-xl mt-1 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="Pengajaran">Pengajaran (+5 Poin)</option>
+                            <option value="Penelitian">Penelitian (+5 Poin)</option>
+                            <option value="Pengabdian">Pengabdian (+5 Poin)</option>
+                            <option value="Administrasi">Administrasi (+5 Poin)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Detail Pekerjaan</label>
+                        <textarea id="desk" rows="3" class="w-full p-3 border rounded-xl mt-1 focus:ring-2 focus:ring-blue-500 outline-none text-sm" placeholder="Apa yang Anda selesaikan hari ini?" required></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-900 text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition shadow-lg uppercase tracking-widest text-xs">Simpan & Hitung Poin</button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-2 bg-white rounded-3xl shadow-lg border border-gray-200 overflow-hidden">
+                <div class="p-6 border-b bg-gray-50 flex justify-between items-center">
+                    <h3 class="font-bold text-xs uppercase text-gray-500">History Tanggal & Deskripsi</h3>
+                    <div class="flex gap-2">
+                        <span class="w-3 h-3 rounded-full bg-blue-900"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-600"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                    </div>
+                </div>
+                <div class="overflow-y-auto max-h-[400px]">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-100 text-[10px] text-gray-400 uppercase font-bold">
+                            <tr>
+                                <th class="p-4">Tgl</th>
+                                <th class="p-4">Jenis Aktivitas</th>
+                                <th class="p-4 text-center">Skor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="histBody" class="divide-y text-xs">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTotalScore = 0;
+        const counts = { Pengajaran: 0, Penelitian: 0, Pengabdian: 0, Administrasi: 0 };
+
+        const ctx = document.getElementById('miniChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Pengajaran', 'Penelitian', 'Pengabdian', 'Administrasi'],
+                datasets: [{
+                    label: 'Aktivitas',
+                    data: [0, 0, 0, 0],
+                    backgroundColor: ['#1e3a8a', '#16a34a', '#ca8a04', '#dc2626'],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { beginAtZero: true, display: false }, 
+                    x: { grid: { display: false }, ticks: { font: { size: 9, weight: 'bold' } } } 
+                }
+            }
+        });
+
+        document.getElementById('kpiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const tgl = document.getElementById('tgl').value;
+            const kat = document.getElementById('kat').value;
+            const dsk = document.getElementById('desk').value;
+
+            // 1. Update Skor Utama
+            currentTotalScore += 5;
+            document.getElementById('totalSkorDisplay').innerText = currentTotalScore;
+
+            // 2. Update Grafik Bar
+            counts[kat]++;
+            myChart.data.datasets[0].data = Object.values(counts);
+            myChart.update();
+
+            // 3. Tambah Baris History
+            const row = `
+                <tr class="hover:bg-blue-50 transition border-l-4 border-transparent hover:border-blue-900">
+                    <td class="p-4 font-bold text-gray-500 text-[10px]">${tgl}</td>
+                    <td class="p-4">
+                        <span class="text-[10px] font-black uppercase text-blue-900 tracking-tighter">${kat}</span><br>
+                        <span class="text-gray-400 font-normal italic leading-relaxed text-[11px]">${dsk}</span>
+                    </td>
+                    <td class="p-4 text-center font-black text-blue-900">+5</td>
+                </tr>
+            `;
+            document.getElementById('histBody').insertAdjacentHTML('afterbegin', row);
+
+            // 4. Feedback Visual pada Skor
+            const scoreDisplay = document.getElementById('totalSkorDisplay');
+            scoreDisplay.classList.add('scale-110');
+            setTimeout(() => scoreDisplay.classList.remove('scale-110'), 200);
+
+            this.reset();
+        });
+    </script>
+</body>
+</html>

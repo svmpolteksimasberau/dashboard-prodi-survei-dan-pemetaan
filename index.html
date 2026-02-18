@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Survei dan Pemetaan - Poltek Simas BC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-blue-900 flex items-center justify-center min-h-screen p-6">
+
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
+        <div class="flex mb-8 bg-gray-100 rounded-xl p-1">
+            <button type="button" onclick="switchTab('login')" id="tabL" class="w-1/2 py-2 rounded-lg font-bold text-sm bg-white shadow transition-all">Login</button>
+            <button type="button" onclick="switchTab('register')" id="tabR" class="w-1/2 py-2 rounded-lg font-bold text-sm text-gray-500 transition-all">Daftar Akun</button>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 id="headerTitle" class="text-xl font-black text-blue-900 leading-tight uppercase">
+                Dashboard Survei dan Pemetaan <br>
+                <span class="text-sm font-bold text-orange-600">Politeknik Sinar Mas Berau Coal</span>
+            </h1>
+            <div class="h-1 w-20 bg-blue-900 mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div id="loginArea">
+            <form id="loginForm" class="space-y-4">
+                <div class="relative">
+                    <i class="fas fa-user absolute left-3 top-4 text-gray-400"></i>
+                    <input type="text" id="logId" placeholder="NUPTK / NIM" class="w-full p-3 pl-10 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-3 top-4 text-gray-400"></i>
+                    <input type="password" id="logPass" placeholder="Password" class="w-full p-3 pl-10 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg text-sm uppercase">Masuk Portal</button>
+                <p class="text-center">
+                    <button type="button" onclick="forgotPass()" class="text-[10px] text-blue-600 hover:underline font-bold">Lupa Password?</button>
+                </p>
+            </form>
+        </div>
+
+        <div id="registerArea" class="hidden">
+            <form id="registerForm" class="space-y-4">
+                <select id="regRole" class="w-full p-3 border rounded-xl bg-gray-50 text-xs font-bold text-blue-900">
+                    <option value="dosen">Registrasi Dosen (NUPTK)</option>
+                    <option value="mahasiswa">Registrasi Mahasiswa (NIM)</option>
+                </select>
+                <input type="text" id="regId" placeholder="NUPTK / NIM" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                <input type="email" id="regEmail" placeholder="Email Pemulihan & Notifikasi" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                <input type="password" id="regPass" placeholder="Buat Password Bebas" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                <button type="submit" class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold hover:bg-orange-700 transition shadow-lg text-sm uppercase">Aktivasi Akun</button>
+            </form>
+        </div>
+
+        <p id="alertBox" class="text-[10px] mt-4 text-center hidden font-bold p-3 rounded-lg border"></p>
+    </div>
+
+    <script>
+        // Data Dosen Resmi
+        const dosenList = {
+            "1112099302": "Loryena Ayu Karondia",
+            "1109068901": "Syaiful Muflichin Purnama",
+            "1453779680230023": "Nurya Ramadhania",
+            "2434777678230073": "Irma Yusiyanti",
+            "7435774675230242": "Murdawati",
+            "8960779680230032": "Devika Rahma Damayanti Yusuf"
+        };
+
+        function switchTab(mode) {
+            const isLogin = mode === 'login';
+            document.getElementById('loginArea').classList.toggle('hidden', !isLogin);
+            document.getElementById('registerArea').classList.toggle('hidden', isLogin);
+            document.getElementById('tabL').className = isLogin ? "w-1/2 py-2 rounded-lg font-bold text-sm bg-white shadow transition-all" : "w-1/2 py-2 rounded-lg font-bold text-sm text-gray-500";
+            document.getElementById('tabR').className = !isLogin ? "w-1/2 py-2 rounded-lg font-bold text-sm bg-white shadow transition-all" : "w-1/2 py-2 rounded-lg font-bold text-sm text-gray-500";
+            document.getElementById('alertBox').classList.add('hidden');
+        }
+
+        function forgotPass() {
+            const id = prompt("Masukkan NUPTK / NIM Anda:");
+            if (!id) return;
+            const saved = localStorage.getItem('user_' + id);
+            if (saved) {
+                const user = JSON.parse(saved);
+                alert("Instruksi reset password dikirim ke: " + user.email);
+            } else {
+                alert("ID tidak ditemukan.");
+            }
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('regId').value;
+            const role = document.getElementById('regRole').value;
+            const alert = document.getElementById('alertBox');
+
+            if (role === 'dosen' && !dosenList[id]) {
+                alert.innerText = "NUPTK TIDAK TERDAFTAR DI DATABASE PRODI.";
+                alert.className = "text-[10px] mt-4 text-center font-bold bg-red-50 text-red-600 p-3 rounded-lg border border-red-200 block";
+                alert.classList.remove('hidden');
+                return;
+            }
+
+            const userData = {
+                id: id,
+                role: role,
+                email: document.getElementById('regEmail').value,
+                pass: document.getElementById('regPass').value,
+                name: role === 'dosen' ? dosenList[id] : "Mahasiswa (" + id + ")"
+            };
+
+            localStorage.setItem('user_' + id, JSON.stringify(userData));
+            alert.innerText = "AKUN BERHASIL DIAKTIVASI! SILAKAN LOGIN.";
+            alert.className = "text-[10px] mt-4 text-center font-bold bg-green-50 text-green-600 p-3 rounded-lg border border-green-200 block";
+            alert.classList.remove('hidden');
+            setTimeout(() => switchTab('login'), 2000);
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('logId').value;
+            const pass = document.getElementById('logPass').value;
+            const alert = document.getElementById('alertBox');
+
+            const savedData = localStorage.getItem('user_' + id);
+            const user = savedData ? JSON.parse(savedData) : null;
+
+            if (user && user.pass === pass) {
+                localStorage.setItem('current_user', JSON.stringify(user));
+                window.location.href = 'dashboard.html';
+            } else {
+                alert.innerText = "ID ATAU PASSWORD SALAH!";
+                alert.className = "text-[10px] mt-4 text-center font-bold bg-red-50 text-red-600 p-3 rounded-lg border border-red-200 block";
+                alert.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

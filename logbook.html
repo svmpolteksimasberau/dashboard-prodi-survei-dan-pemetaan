@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Logbook Mahasiswa - Survei & Pemetaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+    <div class="container mx-auto max-w-4xl">
+        <h1 class="text-2xl font-bold mb-6 text-blue-900 uppercase">Logbook Kegiatan Harian</h1>
+        
+        <div class="bg-white p-8 rounded-2xl shadow-lg border-t-8 border-yellow-500">
+            <form id="logForm" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="date" id="tglLog" class="p-3 border rounded" required>
+                    <input type="text" id="lokasi" placeholder="Lokasi (Contoh: Workshop/Pit A)" class="p-3 border rounded" required>
+                </div>
+                <textarea id="kegiatan" rows="4" class="w-full p-3 border rounded" placeholder="Detail kegiatan yang dilakukan hari ini..." required></textarea>
+                <div class="flex items-center gap-4">
+                    <input type="file" class="text-xs">
+                    <button class="flex-1 bg-yellow-500 text-blue-900 font-bold py-3 rounded-xl shadow-md">KIRIM LOGBOOK</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="historyLog" class="mt-8 space-y-4">
+            </div>
+    </div>
+    <script>
+        document.getElementById('logForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const tgl = document.getElementById('tglLog').value;
+            const lok = document.getElementById('lokasi').value;
+            const isi = document.getElementById('kegiatan').value;
+
+            const entry = `
+                <div class="bg-white p-4 rounded-xl border shadow-sm">
+                    <div class="flex justify-between font-bold text-blue-900">
+                        <span>📅 ${tgl}</span>
+                        <span class="text-xs uppercase bg-blue-100 px-2 py-1 rounded">📍 ${lok}</span>
+                    </div>
+                    <p class="mt-2 text-gray-600 text-sm italic border-l-4 border-yellow-500 pl-4">${isi}</p>
+                </div>
+            `;
+            document.getElementById('historyLog').insertAdjacentHTML('afterbegin', entry);
+            this.reset();
+        });
+    </script>
+</body>
+</html>
