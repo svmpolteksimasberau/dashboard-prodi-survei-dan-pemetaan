@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KPI Performa Dosen - Poltek Simas BC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -11,14 +12,14 @@
     <div class="container mx-auto max-w-6xl">
         <div class="flex justify-between items-center mb-6">
             <a href="dashboard.html" class="text-blue-900 font-bold flex items-center gap-2 hover:underline text-sm">
-                <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+                <i class="fas fa-arrow-left"></i> Dashboard
             </a>
-            <h1 class="text-xl font-black text-blue-900 uppercase tracking-tighter text-right">KPI PERFORMANCE</h1>
+            <h1 class="text-xl font-black text-blue-900 uppercase tracking-tighter">KPI PERFORMANCE</h1>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-gradient-to-br from-blue-900 to-blue-700 p-8 rounded-[2.5rem] shadow-xl text-white flex flex-col justify-center items-center">
-                <p class="text-[10px] font-bold uppercase opacity-80 mb-2 tracking-[0.2em]">Total Skor Anda</p>
+            <div class="bg-gradient-to-br from-blue-900 to-blue-700 p-8 rounded-[2.5rem] shadow-xl text-white flex flex-col justify-center items-center text-center">
+                <p class="text-[10px] font-bold uppercase opacity-80 mb-2 tracking-widest">Total Skor Anda</p>
                 <h2 id="totalSkorDisplay" class="text-7xl font-black">0</h2>
             </div>
             <div class="md:col-span-2 bg-white p-6 rounded-[2.5rem] shadow-md border border-gray-100">
@@ -32,12 +33,12 @@
                 <input type="hidden" id="editRowId">
                 
                 <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Tanggal Kegiatan</label>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Tanggal</label>
                     <input type="date" id="tgl" class="w-full mt-1 p-3 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500" required>
                 </div>
 
                 <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Kategori Utama</label>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Kategori</label>
                     <select id="kat" class="w-full mt-1 p-3 bg-gray-50 border-none rounded-2xl font-bold text-blue-900 outline-none focus:ring-2 focus:ring-orange-500">
                         <option value="Pengajaran">Pengajaran (+5 Poin)</option>
                         <option value="Penelitian">Penelitian (+5 Poin)</option>
@@ -47,19 +48,19 @@
                 </div>
 
                 <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Deskripsi Pekerjaan</label>
-                    <textarea id="desk" rows="3" class="w-full mt-1 p-3 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" placeholder="Jelaskan apa yang Anda kerjakan hari ini..." required></textarea>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Deskripsi</label>
+                    <textarea id="desk" rows="3" class="w-full mt-1 p-3 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" placeholder="Apa yang Anda kerjakan?" required></textarea>
                 </div>
 
                 <div class="space-y-2">
-                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-[0.2em] shadow-lg transform active:scale-95 transition-all">SUBMIT</button>
+                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest shadow-lg transform active:scale-95 transition-all">SUBMIT</button>
                     <button type="button" id="btnBatal" class="hidden w-full bg-gray-100 text-gray-500 font-black py-3 rounded-2xl uppercase text-[10px]">Batal Edit</button>
                 </div>
             </form>
 
             <div class="lg:col-span-2 bg-white rounded-[2.5rem] shadow-lg border border-gray-100 overflow-hidden">
                 <table class="w-full text-left">
-                    <thead class="bg-gray-50 text-[10px] text-gray-400 uppercase font-black tracking-tighter">
+                    <thead class="bg-gray-50 text-[10px] text-gray-400 uppercase font-black">
                         <tr>
                             <th class="p-5">Tanggal</th>
                             <th class="p-5">Aktivitas</th>
@@ -73,6 +74,7 @@
     </div>
 
     <script>
+        // URL Web App Versi 5 Anda
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwqKz_nVp6iSF-Ts-4VgsxlYacbASHzv5q39zxZmbvcYwt_sifhw8wanfWSikTl_1H4Eg/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
         if (!user) window.location.href = 'index.html';
@@ -91,10 +93,10 @@
                 if(counts[item.kategori] !== undefined) counts[item.kategori]++;
                 body.insertAdjacentHTML('beforeend', `
                     <tr class="hover:bg-gray-50 transition-all">
-                        <td class="p-5 font-bold text-gray-400 italic">${item.tanggal}</td>
+                        <td class="p-5 font-bold text-gray-400">${item.tanggal}</td>
                         <td class="p-5">
-                            <span class="font-black text-blue-900 uppercase leading-none">${item.kategori}</span><br>
-                            <span class="text-gray-600 font-semibold">${item.deskripsi}</span>
+                            <span class="font-black text-blue-900 uppercase">${item.kategori}</span><br>
+                            <span class="text-gray-600">${item.deskripsi}</span>
                         </td>
                         <td class="p-5 text-center">
                             <div class="flex justify-center items-center gap-3">
@@ -115,7 +117,7 @@
             btn.innerText = "SINKRONISASI...";
             btn.disabled = true;
 
-            const rowId = isEdit ? editRowId : "ID-" + Date.now();
+            const rowId = isEdit ? editRowId : "ID-KPI-" + Date.now();
             const payload = {
                 action: isEdit ? "UPDATE" : "INSERT",
                 type: "KPI",
@@ -139,22 +141,28 @@
                 localStorage.setItem('kpi_score_' + user.id, totalScore);
                 localStorage.setItem('kpi_history_' + user.id, JSON.stringify(kpiHistory));
                 location.reload();
+            })
+            .catch(() => {
+                alert("Gagal koneksi Cloud!");
+                btn.innerText = "SUBMIT";
+                btn.disabled = false;
             });
         });
 
         window.startEdit = function(idx) {
             const item = kpiHistory[idx];
-            document.getElementById('formTitle').innerText = "MODE EDIT AKTIVITAS";
+            document.getElementById('formTitle').innerText = "EDIT AKTIVITAS";
             document.getElementById('editRowId').value = item.rowId;
             document.getElementById('kat').value = item.kategori;
             document.getElementById('desk').value = item.deskripsi;
             document.getElementById('tgl').value = item.tanggal;
             document.getElementById('btnSubmit').innerText = "UPDATE DATA";
             document.getElementById('btnBatal').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.hapusKPI = function(idx, rowId) {
-            if(confirm("Hapus aktivitas ini secara permanen dari Cloud Drive?")) {
+            if(confirm("Hapus aktivitas ini dari Cloud Drive?")) {
                 fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "KPI", rowId: rowId }) });
                 kpiHistory.splice(idx, 1);
                 totalScore -= 5;
@@ -166,7 +174,7 @@
 
         function updateChart(c) {
             new Chart(document.getElementById('miniChart'), {
-                type: 'bar', data: { labels: Object.keys(c), datasets: [{ data: Object.values(c), backgroundColor: '#1e3a8a', borderRadius: 10 }] },
+                type: 'bar', data: { labels: Object.keys(c), datasets: [{ data: Object.values(c), backgroundColor: '#1e3a8a', borderRadius: 8 }] },
                 options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
             });
         }
