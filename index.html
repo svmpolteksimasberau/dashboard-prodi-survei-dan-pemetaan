@@ -3,85 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Survei dan Pemetaan - Poltek Simas BC</title>
+    <title>Portal PKL Survei dan Pemetaan - Poltek Simas BC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-blue-900 flex items-center justify-center min-h-screen p-6">
+<body class="bg-blue-900 flex items-center justify-center min-h-screen p-6 font-sans">
 
     <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md border-t-8 border-orange-500 transition-all">
         <div class="flex mb-8 bg-gray-100 rounded-2xl p-1">
-            <button type="button" onclick="switchTab('login')" id="tabL" class="w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all">Login</button>
-            <button type="button" onclick="switchTab('register')" id="tabR" class="w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400 transition-all">Daftar Akun</button>
+            <button type="button" onclick="switchTab('login')" id="tabL" class="w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all">Login Portal</button>
+            <button type="button" onclick="switchTab('register')" id="tabR" class="w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400 transition-all">Aktivasi Akun</button>
         </div>
 
         <div class="text-center mb-8">
-            <h1 id="headerTitle" class="text-xl font-black text-blue-900 leading-tight uppercase tracking-tighter">
-                Dashboard Survei dan Pemetaan <br>
-                <span class="text-xs font-bold text-orange-600 tracking-widest">Politeknik Sinar Mas Berau Coal</span>
+            <h1 class="text-xl font-black text-blue-900 leading-tight uppercase tracking-tighter">
+                Sistem Informasi PKL <br>
+                <span class="text-[10px] font-bold text-orange-600 tracking-widest">Survei dan Pemetaan - PSBC</span>
             </h1>
-            <div class="h-1.5 w-16 bg-blue-900 mx-auto mt-4 rounded-full"></div>
+            <div class="h-1 w-12 bg-blue-900 mx-auto mt-3 rounded-full"></div>
         </div>
 
         <div id="loginArea">
             <form id="loginForm" class="space-y-4">
-                <div class="relative">
-                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">NUPTK / NIM</label>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">NIM / NUPTK</label>
                     <div class="relative mt-1">
-                        <i class="fas fa-user absolute left-4 top-4 text-gray-400"></i>
-                        <input type="text" id="logId" placeholder="Masukkan ID" class="w-full p-4 pl-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-sm" required>
+                        <i class="fas fa-id-card absolute left-4 top-4 text-gray-300"></i>
+                        <input type="text" id="logId" placeholder="Contoh: 123" class="w-full p-4 pl-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-bold text-sm" required>
                     </div>
                 </div>
                 
-                <div class="relative">
+                <div>
                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Password</label>
                     <div class="relative mt-1">
-                        <i class="fas fa-lock absolute left-4 top-4 text-gray-400"></i>
-                        <input type="password" id="logPass" placeholder="••••••••" class="w-full p-4 pl-12 pr-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-sm" required>
-                        <button type="button" onclick="toggleView('logPass', 'eyeLog')" class="absolute right-4 top-4 text-gray-400 hover:text-blue-900">
-                            <i class="fas fa-eye" id="eyeLog"></i>
-                        </button>
+                        <i class="fas fa-key absolute left-4 top-4 text-gray-300"></i>
+                        <input type="password" id="logPass" placeholder="••••••••" class="w-full p-4 pl-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-bold text-sm" required>
                     </div>
                 </div>
 
-                <button type="submit" class="w-full bg-blue-900 text-white py-4 rounded-2xl font-black hover:bg-blue-800 transition shadow-lg text-xs uppercase tracking-[0.2em] transform active:scale-95">Masuk Portal</button>
-                
-                <p class="text-center">
-                    <button type="button" onclick="forgotPass()" class="text-[10px] text-blue-600 hover:underline font-black uppercase tracking-widest">Lupa Password?</button>
-                </p>
+                <button type="submit" class="w-full bg-blue-900 text-white py-4 rounded-2xl font-black hover:bg-blue-800 transition shadow-lg text-xs uppercase tracking-widest active:scale-95">Masuk Ke Dashboard</button>
             </form>
         </div>
 
         <div id="registerArea" class="hidden">
             <form id="registerForm" class="space-y-4">
                 <div>
-                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Kategori Akun</label>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Pilih Kategori</label>
                     <select id="regRole" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl font-black text-blue-900 text-xs outline-none focus:ring-2 focus:ring-orange-500">
-                        <option value="dosen">REGISTRASI DOSEN (NUPTK)</option>
-                        <option value="mahasiswa">REGISTRASI MAHASISWA (NIM)</option>
+                        <option value="mahasiswa">SAYA MAHASISWA (NIM)</option>
+                        <option value="dosen">SAYA DOSEN (NUPTK)</option>
                     </select>
                 </div>
 
-                <input type="text" id="regId" placeholder="NUPTK / NIM" class="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-semibold text-sm" required>
-                <input type="email" id="regEmail" placeholder="Email Pemulihan" class="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-semibold text-sm" required>
-                
-                <div class="relative">
-                    <input type="password" id="regPass" placeholder="Buat Password" class="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-semibold text-sm pr-12" required>
-                    <button type="button" onclick="toggleView('regPass', 'eyeReg')" class="absolute right-4 top-4 text-gray-400">
-                        <i class="fas fa-eye" id="eyeReg"></i>
-                    </button>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Nomor Induk Resmi</label>
+                    <input type="text" id="regId" placeholder="Masukkan NIM (123/122)" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm" required>
                 </div>
 
-                <button type="submit" class="w-full bg-orange-600 text-white py-4 rounded-2xl font-black hover:bg-orange-700 transition shadow-lg text-xs uppercase tracking-[0.2em] transform active:scale-95">Aktivasi Akun</button>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Password Baru</label>
+                    <input type="password" id="regPass" placeholder="Buat Password Bebas" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm" required>
+                </div>
+
+                <button type="submit" class="w-full bg-orange-600 text-white py-4 rounded-2xl font-black hover:bg-orange-700 transition shadow-lg text-xs uppercase tracking-widest active:scale-95">Aktivasi Sekarang</button>
             </form>
         </div>
 
-        <p id="alertBox" class="text-[10px] mt-6 text-center hidden font-black p-4 rounded-2xl border"></p>
+        <p id="alertBox" class="text-[9px] mt-6 text-center hidden font-black p-4 rounded-2xl border uppercase tracking-tighter"></p>
     </div>
 
     <script>
-        // Data Dosen Resmi Prodi Survei dan Pemetaan
-        const dosenList = {
+        // --- 1. DATA MASTER RESMI (FILTER) ---
+        const allowedDosen = {
             "1112099302": "Loryena Ayu Karondia, S.T., M.T.",
             "1109068901": "Syaiful Muflichin Purnama, S.T., M.Eng.",
             "1453779680230023": "Nurya Ramadhania, S.T., M.T.",
@@ -90,96 +83,85 @@
             "8960779680230032": "Devika Rahma Damayanti Yusuf, S.T., M.T."
         };
 
-        // Fungsi Toggle Password (Lihat/Sembunyi)
-        function toggleView(inputId, eyeId) {
-            const input = document.getElementById(inputId);
-            const eye = document.getElementById(eyeId);
-            if (input.type === "password") {
-                input.type = "text";
-                eye.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                input.type = "password";
-                eye.classList.replace('fa-eye-slash', 'fa-eye');
-            }
-        }
+        const allowedMahasiswa = {
+            "123": "Sakinah",
+            "122": "Iqbal"
+        };
 
+        // --- 2. NAVIGATION TAB ---
         function switchTab(mode) {
             const isLogin = mode === 'login';
             document.getElementById('loginArea').classList.toggle('hidden', !isLogin);
             document.getElementById('registerArea').classList.toggle('hidden', isLogin);
-            
-            const tabL = document.getElementById('tabL');
-            const tabR = document.getElementById('tabR');
-            
-            if (isLogin) {
-                tabL.className = "w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all";
-                tabR.className = "w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400";
-            } else {
-                tabL.className = "w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400";
-                tabR.className = "w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all";
-            }
+            document.getElementById('tabL').className = isLogin ? "w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all" : "w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400";
+            document.getElementById('tabR').className = !isLogin ? "w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all" : "w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400";
             document.getElementById('alertBox').classList.add('hidden');
         }
 
-        function forgotPass() {
-            const id = prompt("Masukkan NUPTK / NIM Anda:");
-            if (!id) return;
-            const saved = localStorage.getItem('user_' + id);
-            if (saved) {
-                const user = JSON.parse(saved);
-                alert("Instruksi reset password telah dikirim ke email terdaftar: " + user.email);
-            } else {
-                alert("ID belum diaktivasi. Silakan daftar akun terlebih dahulu.");
-            }
-        }
-
-        // Handler Registrasi
+        // --- 3. LOGIKA AKTIVASI (REGISTER) ---
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const id = document.getElementById('regId').value;
             const role = document.getElementById('regRole').value;
             const alertBox = document.getElementById('alertBox');
+            
+            let namaResmi = (role === 'dosen') ? allowedDosen[id] : allowedMahasiswa[id];
 
-            // Validasi Khusus Dosen berdasarkan database resmi
-            if (role === 'dosen' && !dosenList[id]) {
-                alertBox.innerText = "NUPTK TIDAK DITEMUKAN PADA DATABASE PRODI.";
-                alertBox.className = "text-[10px] mt-6 text-center font-black bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 block";
+            if (!namaResmi) {
+                alertBox.innerText = "❌ AKSES DITOLAK: NIM/NUPTK TIDAK TERDAFTAR DI PRODI!";
+                alertBox.className = "text-[9px] mt-6 text-center font-black bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 block";
                 return;
             }
 
             const userData = {
                 id: id,
                 role: role,
-                email: document.getElementById('regEmail').value,
-                pass: document.getElementById('regPass').value,
-                name: role === 'dosen' ? dosenList[id] : "Mahasiswa (" + id + ")"
+                name: namaResmi,
+                pass: document.getElementById('regPass').value
             };
 
-            localStorage.setItem('user_' + id, JSON.stringify(userData));
-            alertBox.innerText = "AKUN BERHASIL DIAKTIVASI! SILAKAN LOGIN.";
-            alertBox.className = "text-[10px] mt-6 text-center font-black bg-green-50 text-green-600 p-4 rounded-2xl border border-green-100 block";
+            // Simpan ke database lokal browser
+            localStorage.setItem('user_db_' + id, JSON.stringify(userData));
+            
+            alertBox.innerText = "✅ BERHASIL: AKUN " + namaResmi.toUpperCase() + " TELAH AKTIF!";
+            alertBox.className = "text-[9px] mt-6 text-center font-black bg-green-50 text-green-600 p-4 rounded-2xl border border-green-100 block";
+            
             setTimeout(() => switchTab('login'), 2000);
         });
 
-        // Handler Login
+        // --- 4. LOGIKA LOGIN ---
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const id = document.getElementById('logId').value;
             const pass = document.getElementById('logPass').value;
             const alertBox = document.getElementById('alertBox');
 
-            const savedData = localStorage.getItem('user_' + id);
-            const user = savedData ? JSON.parse(savedData) : null;
+            const savedUser = localStorage.getItem('user_db_' + id);
+            const user = savedUser ? JSON.parse(savedUser) : null;
 
             if (user && user.pass === pass) {
+                // Set Session Aktif
                 localStorage.setItem('current_user', JSON.stringify(user));
-                window.location.href = 'dashboard.html';
+                
+                alertBox.innerText = "SINKRONISASI DATA... MOHON TUNGGU";
+                alertBox.className = "text-[9px] mt-6 text-center font-black bg-blue-50 text-blue-600 p-4 rounded-2xl border block animate-pulse";
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
             } else {
-                alertBox.innerText = "ID ATAU PASSWORD SALAH!";
-                alertBox.className = "text-[10px] mt-6 text-center font-black bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 block";
+                alertBox.innerText = "❌ LOGIN GAGAL: ID ATAU PASSWORD SALAH!";
+                alertBox.className = "text-[9px] mt-6 text-center font-black bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 block";
                 alertBox.classList.remove('hidden');
             }
         });
+
+        function toggleView(inputId, eyeId) {
+            const x = document.getElementById(inputId);
+            const eye = document.getElementById(eyeId);
+            if (x.type === "password") { x.type = "text"; eye.classList.replace('fa-eye', 'fa-eye-slash'); }
+            else { x.type = "password"; eye.classList.replace('fa-eye-slash', 'fa-eye'); }
+        }
     </script>
 </body>
 </html>
