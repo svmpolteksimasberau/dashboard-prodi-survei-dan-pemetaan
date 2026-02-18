@@ -9,70 +9,115 @@
 </head>
 <body class="bg-blue-900 flex items-center justify-center min-h-screen p-6">
 
-    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
-        <div class="flex mb-8 bg-gray-100 rounded-xl p-1">
-            <button type="button" onclick="switchTab('login')" id="tabL" class="w-1/2 py-2 rounded-lg font-bold text-sm bg-white shadow transition-all">Login</button>
-            <button type="button" onclick="switchTab('register')" id="tabR" class="w-1/2 py-2 rounded-lg font-bold text-sm text-gray-500 transition-all">Daftar Akun</button>
+    <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md border-t-8 border-orange-500 transition-all">
+        <div class="flex mb-8 bg-gray-100 rounded-2xl p-1">
+            <button type="button" onclick="switchTab('login')" id="tabL" class="w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all">Login</button>
+            <button type="button" onclick="switchTab('register')" id="tabR" class="w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400 transition-all">Daftar Akun</button>
         </div>
 
         <div class="text-center mb-8">
-            <h1 id="headerTitle" class="text-xl font-black text-blue-900 leading-tight uppercase">
+            <h1 id="headerTitle" class="text-xl font-black text-blue-900 leading-tight uppercase tracking-tighter">
                 Dashboard Survei dan Pemetaan <br>
-                <span class="text-sm font-bold text-orange-600">Politeknik Sinar Mas Berau Coal</span>
+                <span class="text-xs font-bold text-orange-600 tracking-widest">Politeknik Sinar Mas Berau Coal</span>
             </h1>
-            <div class="h-1 w-20 bg-blue-900 mx-auto mt-4 rounded-full"></div>
+            <div class="h-1.5 w-16 bg-blue-900 mx-auto mt-4 rounded-full"></div>
         </div>
 
         <div id="loginArea">
             <form id="loginForm" class="space-y-4">
                 <div class="relative">
-                    <i class="fas fa-user absolute left-3 top-4 text-gray-400"></i>
-                    <input type="text" id="logId" placeholder="NUPTK / NIM" class="w-full p-3 pl-10 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">NUPTK / NIM</label>
+                    <div class="relative mt-1">
+                        <i class="fas fa-user absolute left-4 top-4 text-gray-400"></i>
+                        <input type="text" id="logId" placeholder="Masukkan ID" class="w-full p-4 pl-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-sm" required>
+                    </div>
                 </div>
+                
                 <div class="relative">
-                    <i class="fas fa-lock absolute left-3 top-4 text-gray-400"></i>
-                    <input type="password" id="logPass" placeholder="Password" class="w-full p-3 pl-10 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Password</label>
+                    <div class="relative mt-1">
+                        <i class="fas fa-lock absolute left-4 top-4 text-gray-400"></i>
+                        <input type="password" id="logPass" placeholder="••••••••" class="w-full p-4 pl-12 pr-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-sm" required>
+                        <button type="button" onclick="toggleView('logPass', 'eyeLog')" class="absolute right-4 top-4 text-gray-400 hover:text-blue-900">
+                            <i class="fas fa-eye" id="eyeLog"></i>
+                        </button>
+                    </div>
                 </div>
-                <button type="submit" class="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg text-sm uppercase">Masuk Portal</button>
+
+                <button type="submit" class="w-full bg-blue-900 text-white py-4 rounded-2xl font-black hover:bg-blue-800 transition shadow-lg text-xs uppercase tracking-[0.2em] transform active:scale-95">Masuk Portal</button>
+                
                 <p class="text-center">
-                    <button type="button" onclick="forgotPass()" class="text-[10px] text-blue-600 hover:underline font-bold">Lupa Password?</button>
+                    <button type="button" onclick="forgotPass()" class="text-[10px] text-blue-600 hover:underline font-black uppercase tracking-widest">Lupa Password?</button>
                 </p>
             </form>
         </div>
 
         <div id="registerArea" class="hidden">
             <form id="registerForm" class="space-y-4">
-                <select id="regRole" class="w-full p-3 border rounded-xl bg-gray-50 text-xs font-bold text-blue-900">
-                    <option value="dosen">Registrasi Dosen (NUPTK)</option>
-                    <option value="mahasiswa">Registrasi Mahasiswa (NIM)</option>
-                </select>
-                <input type="text" id="regId" placeholder="NUPTK / NIM" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
-                <input type="email" id="regEmail" placeholder="Email Pemulihan & Notifikasi" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
-                <input type="password" id="regPass" placeholder="Buat Password Bebas" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500" required>
-                <button type="submit" class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold hover:bg-orange-700 transition shadow-lg text-sm uppercase">Aktivasi Akun</button>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Kategori Akun</label>
+                    <select id="regRole" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl font-black text-blue-900 text-xs outline-none focus:ring-2 focus:ring-orange-500">
+                        <option value="dosen">REGISTRASI DOSEN (NUPTK)</option>
+                        <option value="mahasiswa">REGISTRASI MAHASISWA (NIM)</option>
+                    </select>
+                </div>
+
+                <input type="text" id="regId" placeholder="NUPTK / NIM" class="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-semibold text-sm" required>
+                <input type="email" id="regEmail" placeholder="Email Pemulihan" class="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-semibold text-sm" required>
+                
+                <div class="relative">
+                    <input type="password" id="regPass" placeholder="Buat Password" class="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-semibold text-sm pr-12" required>
+                    <button type="button" onclick="toggleView('regPass', 'eyeReg')" class="absolute right-4 top-4 text-gray-400">
+                        <i class="fas fa-eye" id="eyeReg"></i>
+                    </button>
+                </div>
+
+                <button type="submit" class="w-full bg-orange-600 text-white py-4 rounded-2xl font-black hover:bg-orange-700 transition shadow-lg text-xs uppercase tracking-[0.2em] transform active:scale-95">Aktivasi Akun</button>
             </form>
         </div>
 
-        <p id="alertBox" class="text-[10px] mt-4 text-center hidden font-bold p-3 rounded-lg border"></p>
+        <p id="alertBox" class="text-[10px] mt-6 text-center hidden font-black p-4 rounded-2xl border"></p>
     </div>
 
     <script>
-        // Data Dosen Resmi
+        // Data Dosen Resmi Prodi Survei dan Pemetaan
         const dosenList = {
-            "1112099302": "Loryena Ayu Karondia",
-            "1109068901": "Syaiful Muflichin Purnama",
-            "1453779680230023": "Nurya Ramadhania",
-            "2434777678230073": "Irma Yusiyanti",
-            "7435774675230242": "Murdawati",
-            "8960779680230032": "Devika Rahma Damayanti Yusuf"
+            "1112099302": "Loryena Ayu Karondia, S.T., M.T.",
+            "1109068901": "Syaiful Muflichin Purnama, S.T., M.Eng.",
+            "1453779680230023": "Nurya Ramadhania, S.T., M.T.",
+            "2434777678230073": "Irma Yusiyanti, S.T., M.Eng",
+            "7435774675230242": "Murdawati, S.T., M.Sc.",
+            "8960779680230032": "Devika Rahma Damayanti Yusuf, S.T., M.T."
         };
+
+        // Fungsi Toggle Password (Lihat/Sembunyi)
+        function toggleView(inputId, eyeId) {
+            const input = document.getElementById(inputId);
+            const eye = document.getElementById(eyeId);
+            if (input.type === "password") {
+                input.type = "text";
+                eye.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = "password";
+                eye.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
 
         function switchTab(mode) {
             const isLogin = mode === 'login';
             document.getElementById('loginArea').classList.toggle('hidden', !isLogin);
             document.getElementById('registerArea').classList.toggle('hidden', isLogin);
-            document.getElementById('tabL').className = isLogin ? "w-1/2 py-2 rounded-lg font-bold text-sm bg-white shadow transition-all" : "w-1/2 py-2 rounded-lg font-bold text-sm text-gray-500";
-            document.getElementById('tabR').className = !isLogin ? "w-1/2 py-2 rounded-lg font-bold text-sm bg-white shadow transition-all" : "w-1/2 py-2 rounded-lg font-bold text-sm text-gray-500";
+            
+            const tabL = document.getElementById('tabL');
+            const tabR = document.getElementById('tabR');
+            
+            if (isLogin) {
+                tabL.className = "w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all";
+                tabR.className = "w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400";
+            } else {
+                tabL.className = "w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400";
+                tabR.className = "w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all";
+            }
             document.getElementById('alertBox').classList.add('hidden');
         }
 
@@ -82,22 +127,23 @@
             const saved = localStorage.getItem('user_' + id);
             if (saved) {
                 const user = JSON.parse(saved);
-                alert("Instruksi reset password dikirim ke: " + user.email);
+                alert("Instruksi reset password telah dikirim ke email terdaftar: " + user.email);
             } else {
-                alert("ID tidak ditemukan.");
+                alert("ID belum diaktivasi. Silakan daftar akun terlebih dahulu.");
             }
         }
 
+        // Handler Registrasi
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const id = document.getElementById('regId').value;
             const role = document.getElementById('regRole').value;
-            const alert = document.getElementById('alertBox');
+            const alertBox = document.getElementById('alertBox');
 
+            // Validasi Khusus Dosen berdasarkan database resmi
             if (role === 'dosen' && !dosenList[id]) {
-                alert.innerText = "NUPTK TIDAK TERDAFTAR DI DATABASE PRODI.";
-                alert.className = "text-[10px] mt-4 text-center font-bold bg-red-50 text-red-600 p-3 rounded-lg border border-red-200 block";
-                alert.classList.remove('hidden');
+                alertBox.innerText = "NUPTK TIDAK DITEMUKAN PADA DATABASE PRODI.";
+                alertBox.className = "text-[10px] mt-6 text-center font-black bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 block";
                 return;
             }
 
@@ -110,17 +156,17 @@
             };
 
             localStorage.setItem('user_' + id, JSON.stringify(userData));
-            alert.innerText = "AKUN BERHASIL DIAKTIVASI! SILAKAN LOGIN.";
-            alert.className = "text-[10px] mt-4 text-center font-bold bg-green-50 text-green-600 p-3 rounded-lg border border-green-200 block";
-            alert.classList.remove('hidden');
+            alertBox.innerText = "AKUN BERHASIL DIAKTIVASI! SILAKAN LOGIN.";
+            alertBox.className = "text-[10px] mt-6 text-center font-black bg-green-50 text-green-600 p-4 rounded-2xl border border-green-100 block";
             setTimeout(() => switchTab('login'), 2000);
         });
 
+        // Handler Login
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const id = document.getElementById('logId').value;
             const pass = document.getElementById('logPass').value;
-            const alert = document.getElementById('alertBox');
+            const alertBox = document.getElementById('alertBox');
 
             const savedData = localStorage.getItem('user_' + id);
             const user = savedData ? JSON.parse(savedData) : null;
@@ -129,9 +175,9 @@
                 localStorage.setItem('current_user', JSON.stringify(user));
                 window.location.href = 'dashboard.html';
             } else {
-                alert.innerText = "ID ATAU PASSWORD SALAH!";
-                alert.className = "text-[10px] mt-4 text-center font-bold bg-red-50 text-red-600 p-3 rounded-lg border border-red-200 block";
-                alert.classList.remove('hidden');
+                alertBox.innerText = "ID ATAU PASSWORD SALAH!";
+                alertBox.className = "text-[10px] mt-6 text-center font-black bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 block";
+                alertBox.classList.remove('hidden');
             }
         });
     </script>
