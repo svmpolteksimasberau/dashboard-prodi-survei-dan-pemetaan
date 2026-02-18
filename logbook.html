@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logbook Prakerin - PSBC</title>
+    <title>Logbook Digital Prakerin - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #1e3a8a; }
-        .tab-btn.active { background-color: #1e3a8a; color: white; transform: scale(1.05); shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .tab-btn.active { background-color: #1e3a8a; color: white; transform: scale(1.05); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2); }
         .glass-card { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); }
         .input-focus:focus { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2); }
     </style>
@@ -23,9 +23,9 @@
             </div>
         </div>
         <h1 class="font-black text-2xl uppercase tracking-tighter leading-tight">Logbook Prakerin</h1>
-        <h2 class="text-orange-400 font-bold text-xs uppercase tracking-[0.2em] mt-1">Survei dan Pemetaan</h2>
+        <h2 class="text-orange-400 font-bold text-xs uppercase tracking-[0.2em] mt-1 italic">Survei dan Pemetaan</h2>
         <div class="mt-3 py-1 px-4 bg-blue-800/50 rounded-full inline-block border border-blue-700">
-            <p class="text-[9px] font-medium tracking-widest text-blue-100">Politeknik Sinar Mas Berau Coal</p>
+            <p class="text-[9px] font-medium tracking-widest text-blue-100 uppercase">Politeknik Sinar Mas Berau Coal</p>
         </div>
     </div>
 
@@ -36,8 +36,8 @@
                 <i class="fas fa-user-graduate"></i>
             </div>
             <div>
-                <h3 id="userName" class="font-black text-blue-900 text-sm uppercase leading-none italic">Memuat Nama...</h3>
-                <p id="userId" class="text-[10px] font-bold text-gray-400 mt-1 italic tracking-widest">NIM: --</p>
+                <h3 id="userName" class="font-black text-blue-900 text-sm uppercase leading-none italic">Memuat...</h3>
+                <p id="userId" class="text-[10px] font-bold text-gray-400 mt-1 italic tracking-widest uppercase">NIM: --</p>
             </div>
         </div>
 
@@ -47,24 +47,24 @@
         </div>
 
         <div id="pane-form" class="space-y-5">
-            <div id="gps-status" class="hidden p-3 bg-green-50 text-green-700 text-[9px] font-black rounded-xl text-center uppercase border border-green-200">
-                <i class="fas fa-check-circle mr-1"></i> Lokasi GPS Terdeteksi & Terkunci
-            </div>
-
-            <div class="relative">
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70 italic">Tanggal Kegiatan</label>
-                <input type="date" id="tgl_kegiatan" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none mt-1 input-focus transition-all">
+            <input type="hidden" id="editRowId"> <div id="gps-status" class="hidden p-3 bg-green-50 text-green-700 text-[9px] font-black rounded-xl text-center uppercase border border-green-200">
+                <i class="fas fa-check-circle mr-1"></i> GPS Terkunci & Valid
             </div>
 
             <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70 italic">Lokasi / Area Kerja</label>
-                <input type="text" id="lokasi" placeholder="Misal: Pit C, North Area" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none mt-1 input-focus transition-all shadow-inner">
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70">Tanggal Pekerjaan *</label>
+                <input type="date" id="tgl_kegiatan" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none input-focus transition-all">
             </div>
 
             <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70 italic">Kategori (Auto-Score)</label>
-                <select id="jenis" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none mt-1 input-focus transition-all italic">
-                    <option value="">-- Pilih Jenis Pekerjaan --</option>
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70">Lokasi / Area Kerja *</label>
+                <input type="text" id="lokasi" placeholder="Misal: Pit G South Area" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none input-focus transition-all shadow-inner">
+            </div>
+
+            <div>
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70">Kategori Pekerjaan *</label>
+                <select id="jenis" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none input-focus transition-all italic">
+                    <option value="">-- Pilih Kategori --</option>
                     <option value="Survei">Survei (10 Poin)</option>
                     <option value="Non-Survei">Non-Survei (5 Poin)</option>
                     <option value="Administrasi">Administrasi (3 Poin)</option>
@@ -73,70 +73,60 @@
             </div>
 
             <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70 italic">Detail Tugas Hari Ini</label>
-                <textarea id="deskripsi" placeholder="Jelaskan secara singkat rincian kegiatan..." rows="3" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none mt-1 input-focus transition-all shadow-inner"></textarea>
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70">Detail Tugas Hari Ini *</label>
+                <textarea id="deskripsi" placeholder="Jelaskan rincian kegiatan..." rows="3" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none input-focus transition-all shadow-inner"></textarea>
+            </div>
+
+            <div>
+                <label class="text-[9px] font-black text-orange-600 uppercase ml-5 mb-1 block italic opacity-70">Kendala (Opsional)</label>
+                <textarea id="kendala" placeholder="Misal: Alat trouble atau cuaca buruk..." rows="2" class="w-full p-4 bg-orange-50/50 rounded-2xl border border-orange-100 font-bold text-[11px] outline-none input-focus italic"></textarea>
             </div>
 
             <div class="bg-blue-50/50 p-6 rounded-[2rem] border-2 border-dashed border-blue-100 text-center">
-                <label class="text-[9px] font-black text-blue-900 uppercase block mb-3 italic">Lampiran Bukti Foto</label>
+                <label class="text-[9px] font-black text-blue-900 uppercase block mb-3 italic">Lampiran Foto Dokumentasi *</label>
                 <input type="file" id="fotoInput" accept="image/*" class="text-[10px] font-bold text-gray-400 file:bg-blue-900 file:text-white file:rounded-xl file:border-0 file:px-5 file:py-2 file:mr-4 file:uppercase file:text-[9px] file:font-black">
+                <p id="editFotoInfo" class="hidden text-[8px] text-blue-500 mt-2 font-bold italic">Abaikan jika tidak ingin mengganti foto lama</p>
             </div>
 
-            <button onclick="simpanLaporan()" id="btnSimpan" class="w-full bg-orange-500 text-white font-black py-6 rounded-[2rem] shadow-xl uppercase tracking-[0.25em] mt-6 active:scale-95 hover:bg-orange-600 transition-all text-sm border-b-4 border-orange-700">
-                Kirim Laporan
+            <button onclick="simpanLaporan()" id="btnSimpan" class="w-full bg-orange-500 text-white font-black py-6 rounded-[2rem] shadow-xl uppercase tracking-[0.25em] mt-6 active:scale-95 transition-all text-sm border-b-4 border-orange-700">
+                Kirim Laporan & GPS
             </button>
+            <button onclick="cancelEdit()" id="btnCancelEdit" class="hidden w-full bg-gray-200 text-gray-500 font-black py-4 rounded-2xl uppercase text-[10px] mt-2">Batal Edit</button>
         </div>
 
         <div id="pane-history" class="hidden space-y-6">
             <div class="bg-blue-900 p-8 rounded-[3rem] shadow-2xl text-center border-b-8 border-orange-500 relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10">
-                    <i class="fas fa-trophy text-white text-6xl"></i>
-                </div>
+                <div class="absolute top-0 right-0 p-4 opacity-10"><i class="fas fa-trophy text-white text-6xl"></i></div>
                 <p class="text-[9px] font-black text-orange-400 uppercase tracking-[0.4em] mb-2 italic">Akumulasi Skor</p>
                 <h2 id="overallScore" class="text-6xl font-black text-white italic tracking-tighter">0</h2>
                 <div class="h-1 w-20 bg-orange-500 mx-auto mt-4 rounded-full"></div>
             </div>
-
             <div id="loading" class="text-center py-10 font-black text-blue-900 text-[10px] animate-pulse uppercase tracking-[0.3em] italic">Sinkronisasi Cloud...</div>
             <div id="riwayatList" class="space-y-5 pb-10"></div>
         </div>
 
         <div class="mt-12 pt-8 border-t border-gray-100 text-center">
             <button onclick="logout()" class="text-gray-300 font-black text-[10px] uppercase tracking-[0.3em] italic hover:text-red-500 transition-all">
-                <i class="fas fa-sign-out-alt mr-2"></i> Keluar Sistem
+                <i class="fas fa-power-off mr-2"></i> Keluar Sistem
             </button>
-            <p class="text-[8px] text-gray-300 mt-4 uppercase font-bold tracking-widest">Digital Logbook © 2026</p>
         </div>
     </div>
 
     <script>
-        // --- KONFIGURASI ---
         const scriptURL = "https://script.google.com/macros/s/AKfycbxawq_0J0vfivnxCKy8uEnmUICkh5lHScbw5A7EjPil3IjZ_XYLoFx9Cd5pJyGJW8J8/exec";
         const user = JSON.parse(localStorage.getItem('current_user'));
-        const MAX_IDLE_TIME = 60 * 60 * 1000; // 1 Jam
+        const MAX_IDLE_TIME = 60 * 60 * 1000;
         let idleTimer;
+        let listData = [];
 
-        // --- PROTEKSI & IDENTITY ---
-        if(!user || user.role !== "MAHASISWA") {
-            window.location.href = 'index.html';
-        } else {
-            document.getElementById('userName').innerText = "Halo, " + user.name + "!";
-            document.getElementById('userId').innerText = "NIM: " + user.id;
-        }
+        if(!user || user.role !== "MAHASISWA") { window.location.href = 'index.html'; }
+        else { document.getElementById('userName').innerText = "Halo, " + user.name + "!"; document.getElementById('userId').innerText = "NIM: " + user.id; }
 
-        // --- KEAMANAN: IDLE TIMEOUT ---
-        function resetIdleTimer() {
-            clearTimeout(idleTimer);
-            idleTimer = setTimeout(() => {
-                alert("Sesi berakhir demi keamanan. Silakan login kembali.");
-                logout();
-            }, MAX_IDLE_TIME);
-        }
-        document.onmousemove = resetIdleTimer;
-        document.onkeypress = resetIdleTimer;
-        document.ontouchstart = resetIdleTimer;
+        // --- SECURITY: IDLE TIMEOUT ---
+        function resetIdleTimer() { clearTimeout(idleTimer); idleTimer = setTimeout(() => { alert("Sesi Berakhir."); logout(); }, MAX_IDLE_TIME); }
+        document.onmousemove = resetIdleTimer; document.ontouchstart = resetIdleTimer;
 
-        // --- NAVIGASI ---
+        // --- NAVIGATION ---
         function switchTab(tab) {
             document.getElementById('pane-form').classList.toggle('hidden', tab !== 'form');
             document.getElementById('pane-history').classList.toggle('hidden', tab !== 'history');
@@ -145,118 +135,122 @@
             if(tab === 'history') fetchRiwayatCloud();
         }
 
-        // --- FUNGSI KIRIM ---
+        // --- CRUD: SIMPAN/UPDATE ---
         async function simpanLaporan() {
+            const editId = document.getElementById('editRowId').value;
             const btn = document.getElementById('btnSimpan');
             const tgl = document.getElementById('tgl_kegiatan').value;
             const lok = document.getElementById('lokasi').value;
             const kat = document.getElementById('jenis').value;
             const des = document.getElementById('deskripsi').value;
+            const ken = document.getElementById('kendala').value || "-";
             const fotoFile = document.getElementById('fotoInput').files[0];
 
-            if (!tgl || !lok || !kat || !des || !fotoFile) return alert("❌ Data Belum Lengkap! Pastikan Foto sudah dipilih.");
-            if (des.length < 10) return alert("❌ Deskripsi minimal 10 karakter!");
+            if (!tgl || !lok || !kat || !des) return alert("❌ Kolom wajib belum lengkap!");
+            if (!editId && !fotoFile) return alert("❌ Foto wajib diunggah!");
 
-            btn.disabled = true;
-            btn.innerText = "MENGUNCI GPS...";
-
+            btn.disabled = true; btn.innerText = "MENGUNCI GPS...";
+            
             let mapsLink = "-";
             try {
                 const pos = await new Promise((resolve, reject) => {
                     navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 8000 });
                 });
                 mapsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                document.getElementById('gps-status').classList.remove('hidden');
-            } catch (err) {
-                alert("❌ GPS ERROR! Pastikan lokasi HP menyala agar absen valid.");
-                btn.disabled = false; btn.innerText = "Kirim Laporan";
-                return;
-            }
+            } catch (err) { alert("❌ GPS Gagal! Aktifkan GPS HP."); btn.disabled = false; btn.innerText = "Kirim Laporan"; return; }
 
             let skorOtomatis = (kat === "Survei") ? 10 : (kat === "Non-Survei" ? 5 : 3);
-            btn.innerText = "UPLOADING...";
-            const reader = new FileReader();
-            const base64Foto = await new Promise(resolve => {
-                reader.onload = e => resolve(e.target.result.split(',')[1]);
-                reader.readAsDataURL(fotoFile);
-            });
+            let base64Foto = "";
+            if(fotoFile) {
+                btn.innerText = "UPLOADING...";
+                const reader = new FileReader();
+                base64Foto = await new Promise(resolve => {
+                    reader.onload = e => resolve(e.target.result.split(',')[1]);
+                    reader.readAsDataURL(fotoFile);
+                });
+            }
 
             try {
-                const response = await fetch(scriptURL, {
+                await fetch(scriptURL, {
                     method: 'POST',
                     body: JSON.stringify({
                         action: "addLogbook", nim: user.id, nama: user.name,
                         tanggal: tgl, lokasi: lok, jenis: kat, deskripsi: des,
-                        foto: base64Foto, rowId: "ID-" + Date.now(),
+                        kendala: ken, foto: base64Foto, 
+                        rowId: editId || "ID-" + Date.now(),
                         skor: skorOtomatis, geotagging: mapsLink 
                     })
                 });
-                const res = await response.json();
-                if(res.success) {
-                    alert("✅ LAPORAN BERHASIL DISIMPAN!");
-                    location.reload();
-                }
-            } catch (e) {
-                alert("❌ KONEKSI ERROR!");
-                btn.disabled = false; btn.innerText = "Kirim Laporan";
-            }
+                alert("✅ BERHASIL!"); location.reload();
+            } catch (e) { alert("❌ ERROR KONEKSI!"); btn.disabled = false; }
         }
 
-        // --- FUNGSI RIWAYAT ---
+        // --- CRUD: READ ---
         async function fetchRiwayatCloud() {
             const container = document.getElementById('riwayatList');
             const scoreLabel = document.getElementById('overallScore');
             const loading = document.getElementById('loading');
-            
-            loading.classList.remove('hidden');
-            container.innerHTML = "";
-
+            loading.classList.remove('hidden'); container.innerHTML = "";
             try {
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "readLogbook", nim: user.id })
-                });
-                const data = await response.json();
+                const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "readLogbook", nim: user.id }) });
+                listData = await response.json();
                 loading.classList.add('hidden');
-
                 let totalScore = 0;
-                if (data.length === 0) {
-                    container.innerHTML = `<p class="text-center text-[10px] font-bold text-gray-300 uppercase mt-10">Data Kosong.</p>`;
-                    scoreLabel.innerText = "0"; return;
-                }
-
-                data.forEach(item => {
-                    let s = parseInt(item.skor) || 0;
-                    totalScore += s;
+                listData.forEach((item, index) => {
+                    let s = parseInt(item.skor) || 0; totalScore += s;
                     container.innerHTML += `
                         <div class="bg-gray-50 p-6 rounded-[2.5rem] border-l-[12px] border-blue-900 shadow-sm relative mb-4">
-                            <div class="flex justify-between items-start mb-3">
+                            <div class="flex justify-between items-start mb-2">
                                 <span class="text-[9px] font-black text-orange-600 uppercase italic italic tracking-tighter">${item.tanggal}</span>
-                                <span class="text-[8px] bg-blue-900 text-white px-3 py-1 rounded-full font-black uppercase tracking-widest">${item.jenis}</span>
+                                <div class="flex gap-3">
+                                    <button onclick="startEdit(${index})" class="text-blue-500 text-[10px]"><i class="fas fa-edit"></i></button>
+                                    <button onclick="hapusLaporan('${item.rowId}')" class="text-red-400 text-[10px]"><i class="fas fa-trash"></i></button>
+                                </div>
                             </div>
-                            <h3 class="font-black text-blue-900 text-sm uppercase leading-tight mb-2">${item.lokasi}</h3>
-                            <p class="text-[11px] text-gray-500 italic leading-relaxed line-clamp-2">"${item.deskripsi}"</p>
+                            <h3 class="font-black text-blue-900 text-sm uppercase leading-tight mb-1">${item.lokasi}</h3>
+                            <p class="text-[11px] text-gray-500 italic leading-relaxed">"${item.deskripsi}"</p>
+                            ${item.kendala && item.kendala !== "-" ? `<p class="text-[9px] text-red-500 font-bold mt-2 uppercase italic"><i class="fas fa-exclamation-triangle mr-1"></i> Kendala: ${item.kendala}</p>` : ""}
                             <div class="mt-5 pt-4 border-t border-gray-200 flex justify-between items-center">
-                                <div class="bg-orange-100 px-4 py-1 rounded-full border border-orange-200 shadow-sm">
+                                <div class="bg-orange-100 px-4 py-1 rounded-full border border-orange-200">
                                     <span class="text-[9px] font-black text-orange-600 uppercase italic tracking-widest">SKOR: ${s}</span>
                                 </div>
-                                <div class="flex gap-3">
-                                    ${item.geotagging && item.geotagging !== "-" ? `<a href="${item.geotagging}" target="_blank" class="text-green-600 text-[10px] font-black hover:scale-110 transition-transform"><i class="fas fa-map-marker-alt"></i></a>` : ""}
-                                    ${item.foto && item.foto !== "-" ? `<a href="${item.foto}" target="_blank" class="text-blue-600 text-[10px] font-black hover:scale-110 transition-transform"><i class="fas fa-camera"></i></a>` : ""}
+                                <div class="flex gap-4">
+                                    <a href="${item.geotagging}" target="_blank" class="text-green-600 text-[11px]"><i class="fas fa-map-marker-alt"></i></a>
+                                    <a href="${item.foto}" target="_blank" class="text-blue-600 text-[11px]"><i class="fas fa-camera"></i></a>
                                 </div>
                             </div>
                         </div>`;
                 });
                 scoreLabel.innerText = totalScore;
-            } catch (e) {
-                loading.innerText = "GAGAL SINKRON!";
-            }
+            } catch (e) { loading.innerText = "GAGAL SINKRON!"; }
         }
 
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index.html';
+        // --- CRUD: EDIT & DELETE ---
+        function startEdit(index) {
+            const item = listData[index];
+            document.getElementById('editRowId').value = item.rowId;
+            document.getElementById('tgl_kegiatan').value = item.tanggal;
+            document.getElementById('lokasi').value = item.lokasi;
+            document.getElementById('jenis').value = item.jenis;
+            document.getElementById('deskripsi').value = item.deskripsi;
+            document.getElementById('kendala').value = (item.kendala === "-") ? "" : item.kendala;
+            document.getElementById('btnSimpan').innerText = "Update Laporan";
+            document.getElementById('btnCancelEdit').classList.remove('hidden');
+            document.getElementById('editFotoInfo').classList.remove('hidden');
+            switchTab('form');
         }
+
+        function cancelEdit() { location.reload(); }
+
+        async function hapusLaporan(rowId) {
+            if(!confirm("Hapus laporan ini secara permanen di Cloud?")) return;
+            try {
+                await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "deleteLogbook", rowId: rowId }) });
+                alert("TERHAPUS!"); fetchRiwayatCloud();
+            } catch (e) { alert("GAGAL!"); }
+        }
+
+        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
     </script>
 </body>
 </html>
