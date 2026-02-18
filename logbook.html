@@ -9,15 +9,15 @@
 </head>
 <body class="bg-gray-100 p-4 text-xs font-sans">
 
-    <div class="max-w-2xl mx-auto space-y-6 pb-10">
+    <div class="max-w-2xl mx-auto space-y-6 pb-20">
         <div class="flex justify-between items-center px-2">
             <a href="dashboard.html" class="font-black text-blue-900 uppercase tracking-tighter"><i class="fas fa-arrow-left"></i> Dashboard</a>
-            <span id="userTag" class="bg-blue-100 text-blue-900 px-3 py-1 rounded-full font-black text-[9px] uppercase"></span>
+            <span id="userTag" class="bg-blue-900 text-white px-4 py-1.5 rounded-full font-black text-[9px] uppercase shadow-md"></span>
         </div>
 
         <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border-t-8 border-orange-500">
             <h2 class="font-black text-blue-900 uppercase mb-5 flex items-center gap-2 text-sm">
-                <i class="fas fa-pencil-alt text-orange-500"></i> Form Kegiatan Harian
+                <i class="fas fa-edit text-orange-500"></i> Logbook Harian
             </h2>
             
             <form id="formLog" class="space-y-4">
@@ -28,7 +28,7 @@
                     </div>
                     <div>
                         <label class="font-bold text-gray-400 uppercase text-[9px] ml-1">Lokasi Site</label>
-                        <input type="text" id="lokasi" placeholder="Site A / Kantor" required class="w-full p-3 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-900">
+                        <input type="text" id="lokasi" placeholder="Lokasi Pekerjaan" required class="w-full p-3 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-900">
                     </div>
                 </div>
 
@@ -37,43 +37,56 @@
                     <div class="grid grid-cols-3 gap-2 mt-1">
                         <label class="cursor-pointer">
                             <input type="radio" name="jenis" value="Survey" checked class="hidden peer">
-                            <div class="text-center p-3 bg-gray-50 rounded-2xl border peer-checked:bg-blue-900 peer-checked:text-white transition-all font-black text-[8px]">SURVEY (+10)</div>
+                            <div class="text-center p-3 bg-gray-50 rounded-2xl border peer-checked:bg-blue-900 peer-checked:text-white transition-all font-black text-[8px]">SURVEY</div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="jenis" value="Non-Survey" class="hidden peer">
-                            <div class="text-center p-3 bg-gray-50 rounded-2xl border peer-checked:bg-blue-900 peer-checked:text-white transition-all font-black text-[8px]">NON (+5)</div>
+                            <div class="text-center p-3 bg-gray-50 rounded-2xl border peer-checked:bg-blue-900 peer-checked:text-white transition-all font-black text-[8px]">NON-SURVEY</div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="jenis" value="Administrasi" class="hidden peer">
-                            <div class="text-center p-3 bg-gray-50 rounded-2xl border peer-checked:bg-blue-900 peer-checked:text-white transition-all font-black text-[8px]">ADMIN (+3)</div>
+                            <div class="text-center p-3 bg-gray-50 rounded-2xl border peer-checked:bg-blue-900 peer-checked:text-white transition-all font-black text-[8px]">ADMIN</div>
                         </label>
                     </div>
                 </div>
 
-                <textarea id="desk" rows="3" placeholder="Deskripsi detail pekerjaan..." required class="w-full p-3 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-900"></textarea>
+                <textarea id="desk" rows="3" placeholder="Apa yang dikerjakan hari ini? (Sebutkan alat/hasil)" required class="w-full p-3 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-900"></textarea>
 
-                <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200 text-center">
+                <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200 text-center relative">
                     <input type="file" id="foto" accept="image/*" class="hidden" onchange="previewImg(this)">
                     <div onclick="document.getElementById('foto').click()" class="cursor-pointer">
                         <i class="fas fa-camera text-gray-300 text-xl mb-1"></i>
-                        <p id="fotoName" class="font-bold text-[9px] text-gray-400 uppercase">Lampirkan Foto Bukti</p>
+                        <p id="fotoName" class="font-bold text-[9px] text-gray-400 uppercase">Lampirkan Bukti Foto</p>
                     </div>
+                    <img id="imgPrev" class="hidden mt-2 rounded-lg max-h-32 mx-auto shadow-sm">
                 </div>
 
                 <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase tracking-widest shadow-lg active:scale-95 transition-all">
-                    Simpan Permanen
+                    Kirim & Dapatkan Poin
                 </button>
             </form>
         </div>
 
-        <div class="space-y-4">
-            <h3 class="font-black text-blue-900 uppercase px-2 text-[10px] tracking-widest">Riwayat Terakhir</h3>
-            <div id="historyList" class="space-y-4"></div>
+        <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-xl flex justify-between items-center text-white mx-2">
+            <div>
+                <p class="font-bold uppercase text-[9px] text-blue-300 tracking-widest">Total Akumulasi Skor</p>
+                <h1 class="text-4xl font-black italic" id="totalScoreText">0</h1>
+            </div>
+            <div class="text-right">
+                <i class="fas fa-award fa-3x text-orange-400 opacity-50"></i>
+            </div>
+        </div>
+
+        <div class="space-y-4 px-2">
+            <h3 class="font-black text-blue-900 uppercase text-[10px] tracking-widest flex items-center gap-2">
+                <i class="fas fa-history text-orange-500"></i> Riwayat Kegiatan Terperinci
+            </h3>
+            <div id="historyList" class="space-y-5"></div>
         </div>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbySPUPT6QbAOW58nzAOpwAQiTPnJRa39Y6jhFMaXuh_bNssvoJQkoMT8n8XPWSGhqG-VQ/exec";
+        const scriptURL = "PASTE_URL_WEB_APP_ANDA_DISINI";
         const user = JSON.parse(localStorage.getItem('current_user'));
         const storageKey = 'log_' + (user ? user.id : 'guest');
         let logs = JSON.parse(localStorage.getItem(storageKey)) || [];
@@ -81,7 +94,16 @@
         if(user) document.getElementById('userTag').innerText = user.name;
 
         function previewImg(input) {
-            if(input.files[0]) document.getElementById('fotoName').innerText = input.files[0].name;
+            const preview = document.getElementById('imgPrev');
+            if(input.files[0]) {
+                document.getElementById('fotoName').innerText = input.files[0].name;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         async function convertBase64(file) {
@@ -95,13 +117,14 @@
         document.getElementById('formLog').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
-            btn.disabled = true; btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> MENGIRIM...';
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROSES SIMPAN...';
 
             const rowId = "RID-" + Date.now();
             const file = document.getElementById('foto').files[0];
             const base64 = file ? await convertBase64(file) : "";
+            const previewFoto = file ? document.getElementById('imgPrev').src : "";
             const jenis = document.querySelector('input[name="jenis"]:checked').value;
-            const skor = jenis === 'Survey' ? 10 : (jenis === 'Non-Survey' ? 5 : 3);
+            const poin = jenis === 'Survey' ? 10 : (jenis === 'Non-Survey' ? 5 : 3);
 
             const payload = {
                 action: "addLogbook",
@@ -110,7 +133,10 @@
                 lokasi: document.getElementById('lokasi').value,
                 jenis: jenis,
                 deskripsi: document.getElementById('desk').value,
-                foto: base64, rowId: rowId, skor: skor
+                foto: base64,
+                localFoto: previewFoto, // Disimpan lokal untuk tampilan riwayat
+                rowId: rowId,
+                skor: poin
             };
 
             try {
@@ -118,39 +144,64 @@
                 if(res.ok) {
                     logs.unshift(payload);
                     localStorage.setItem(storageKey, JSON.stringify(logs));
-                    alert("Berhasil Disimpan!");
+                    alert("Poin Berhasil Ditambahkan!");
                     location.reload();
                 }
-            } catch(err) { alert("Gagal Sinkronisasi!"); }
-            btn.disabled = false; btn.innerText = "Simpan Permanen";
+            } catch(err) { alert("Gagal Sinkron ke Google Sheets!"); }
+            btn.disabled = false; btn.innerText = "Kirim & Dapatkan Poin";
         };
 
         function render() {
             const container = document.getElementById('historyList');
-            container.innerHTML = logs.map((l, i) => `
-                <div class="bg-white p-5 rounded-[2rem] shadow-md border-l-8 ${l.jenis === 'Survey' ? 'border-blue-900' : l.jenis === 'Non-Survey' ? 'border-orange-500' : 'border-gray-400'}">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex gap-1">
-                            <span class="bg-gray-100 text-[7px] font-black px-2 py-1 rounded-full text-gray-500 uppercase">${l.jenis}</span>
-                            <span class="bg-green-100 text-green-700 text-[7px] font-black px-2 py-1 rounded-full uppercase">+${l.skor} POIN</span>
+            const totalScoreText = document.getElementById('totalScoreText');
+            let totalScore = 0;
+
+            if(logs.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 font-bold py-10 uppercase tracking-widest">Belum ada riwayat kegiatan</p>`;
+                return;
+            }
+
+            container.innerHTML = logs.map((l, i) => {
+                totalScore += l.skor;
+                return `
+                <div class="bg-white rounded-[2.5rem] shadow-lg overflow-hidden border-l-[12px] ${l.jenis === 'Survey' ? 'border-blue-900' : l.jenis === 'Non-Survey' ? 'border-orange-500' : 'border-gray-400'}">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-black text-[8px] uppercase tracking-wider">${l.jenis}</span>
+                                <span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-black text-[8px] uppercase tracking-wider">+${l.skor} POIN</span>
+                            </div>
+                            <button onclick="hapusCloud('${l.rowId}', ${i})" class="text-gray-200 hover:text-red-500 transition"><i class="fas fa-trash-alt text-xs"></i></button>
                         </div>
-                        <button onclick="hapusCloud('${l.rowId}', ${i})" class="text-gray-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                        
+                        <div class="mb-3">
+                            <h4 class="text-blue-900 font-black text-[12px] uppercase tracking-tighter">${l.tanggal}</h4>
+                            <p class="text-orange-500 font-black text-[9px] uppercase"><i class="fas fa-map-marker-alt mr-1"></i> ${l.lokasi}</p>
+                        </div>
+
+                        <p class="text-gray-600 leading-relaxed font-medium mb-4 text-[10px] bg-gray-50 p-3 rounded-2xl">${l.deskripsi}</p>
+                        
+                        ${l.localFoto ? `<img src="${l.localFoto}" class="w-full h-40 object-cover rounded-[1.5rem] shadow-inner mb-2 border border-gray-100">` : ''}
+                        
+                        <div class="flex justify-end pt-2">
+                             <p class="text-[8px] text-gray-300 font-bold uppercase tracking-widest italic">ID: ${l.rowId}</p>
+                        </div>
                     </div>
-                    <p class="font-black text-blue-900 text-[11px] uppercase">${l.tanggal}</p>
-                    <p class="text-orange-600 font-bold uppercase text-[9px] mb-2">${l.lokasi}</p>
-                    <p class="text-gray-600 leading-tight">${l.deskripsi}</p>
                 </div>
-            `).join('');
+                `;
+            }).join('');
+
+            totalScoreText.innerText = totalScore;
         }
 
         window.hapusCloud = async (rid, index) => {
-            if(!confirm("Hapus data ini dari cloud?")) return;
+            if(!confirm("Hapus data permanen? Skor Anda akan berkurang.")) return;
             try {
                 await fetch(scriptURL, { method: 'POST', body: JSON.stringify({action: "deleteLogbook", rowId: rid}) });
                 logs.splice(index, 1);
                 localStorage.setItem(storageKey, JSON.stringify(logs));
                 render();
-            } catch(e) { alert("Gagal menghapus!"); }
+            } catch(e) { alert("Gagal Menghapus!"); }
         };
 
         render();
