@@ -2,49 +2,144 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logbook Mahasiswa - Survei & Pemetaan</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 p-6">
-    <div class="container mx-auto max-w-4xl">
-        <h1 class="text-2xl font-bold mb-6 text-blue-900 uppercase">Logbook Kegiatan Harian</h1>
-        
-        <div class="bg-white p-8 rounded-2xl shadow-lg border-t-8 border-yellow-500">
-            <form id="logForm" class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="date" id="tglLog" class="p-3 border rounded" required>
-                    <input type="text" id="lokasi" placeholder="Lokasi (Contoh: Workshop/Pit A)" class="p-3 border rounded" required>
-                </div>
-                <textarea id="kegiatan" rows="4" class="w-full p-3 border rounded" placeholder="Detail kegiatan yang dilakukan hari ini..." required></textarea>
-                <div class="flex items-center gap-4">
-                    <input type="file" class="text-xs">
-                    <button class="flex-1 bg-yellow-500 text-blue-900 font-bold py-3 rounded-xl shadow-md">KIRIM LOGBOOK</button>
-                </div>
-            </form>
+<body class="bg-gray-100 p-4 md:p-8 font-sans">
+
+    <div class="container mx-auto max-w-6xl">
+        <div class="flex justify-between items-center mb-8">
+            <a href="dashboard.html" class="text-blue-900 font-bold flex items-center gap-2 hover:underline text-sm">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <div class="bg-orange-600 text-white px-6 py-2 rounded-2xl font-black shadow-lg">
+                LOGBOOK HARIAN
+            </div>
         </div>
 
-        <div id="historyLog" class="mt-8 space-y-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <form id="logForm" class="bg-white p-6 rounded-[2.5rem] shadow-xl border-t-8 border-orange-500 space-y-4 sticky top-10">
+                    <h3 class="font-black text-blue-900 uppercase text-xs">Laporan Survei Lapangan</h3>
+                    
+                    <input type="hidden" id="editRowId">
+
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Lokasi Survei / Site</label>
+                        <input type="text" id="lokasi" placeholder="Contoh: Pit Ganal / Area Reklamasi" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" required>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Deskripsi Kegiatan</label>
+                        <textarea id="desk" rows="4" placeholder="Apa yang Anda kerjakan hari ini?" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" required></textarea>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Kendala Lapangan</label>
+                        <input type="text" id="kendala" placeholder="Contoh: Cuaca Hujan / Alat Error" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500">
+                    </div>
+
+                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest shadow-lg transform active:scale-95 transition-all">
+                        SUBMIT LOGBOOK
+                    </button>
+                </form>
             </div>
+
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-[2.5rem] shadow-lg overflow-hidden">
+                    <div class="p-6 bg-gray-50 border-b">
+                        <h3 class="font-black text-xs uppercase text-gray-500 tracking-widest">Riwayat Kegiatan Anda</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-[10px] text-gray-400 uppercase font-black">
+                                <tr>
+                                    <th class="p-5">Lokasi</th>
+                                    <th class="p-5">Detail Kegiatan</th>
+                                    <th class="p-5 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logBody" class="divide-y divide-gray-100 text-xs"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
     <script>
+        const scriptURL = 'YOUR_APPS_SCRIPT_URL_HERE'; // Gunakan URL Versi 5 Anda
+        const user = JSON.parse(localStorage.getItem('current_user'));
+        
+        if (!user || user.role !== 'mahasiswa') {
+            alert("Akses ditolak. Halaman ini khusus Mahasiswa.");
+            window.location.href = 'dashboard.html';
+        }
+
+        const storageKey = 'logbook_' + user.id;
+        let logList = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+        function render() {
+            const body = document.getElementById('logBody');
+            body.innerHTML = logList.length ? "" : "<tr><td colspan='3' class='p-10 text-center text-gray-300 font-bold'>Belum ada laporan</td></tr>";
+            
+            [...logList].reverse().forEach((item, index) => {
+                const realIdx = logList.length - 1 - index;
+                body.insertAdjacentHTML('beforeend', `
+                    <tr class="hover:bg-orange-50 transition-all">
+                        <td class="p-5 font-black text-orange-600 uppercase">${item.lokasi}</td>
+                        <td class="p-5">
+                            <p class="font-bold text-gray-800">${item.deskripsi}</p>
+                            <span class="text-[9px] text-gray-400 uppercase font-bold">Kendala: ${item.kendala || '-'}</span>
+                        </td>
+                        <td class="p-5 text-center">
+                            <button onclick="hapusLog(${realIdx}, '${item.rowId}')" class="w-8 h-8 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>`);
+            });
+        }
+
         document.getElementById('logForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const tgl = document.getElementById('tglLog').value;
-            const lok = document.getElementById('lokasi').value;
-            const isi = document.getElementById('kegiatan').value;
+            const btn = document.getElementById('btnSubmit');
+            btn.innerText = "SINKRONISASI...";
+            btn.disabled = true;
 
-            const entry = `
-                <div class="bg-white p-4 rounded-xl border shadow-sm">
-                    <div class="flex justify-between font-bold text-blue-900">
-                        <span>📅 ${tgl}</span>
-                        <span class="text-xs uppercase bg-blue-100 px-2 py-1 rounded">📍 ${lok}</span>
-                    </div>
-                    <p class="mt-2 text-gray-600 text-sm italic border-l-4 border-yellow-500 pl-4">${isi}</p>
-                </div>
-            `;
-            document.getElementById('historyLog').insertAdjacentHTML('afterbegin', entry);
-            this.reset();
+            const rowId = "LOG-" + Date.now();
+            const payload = {
+                action: "INSERT",
+                type: "LOGBOOK",
+                id: user.id,
+                nama: user.name,
+                lokasi: document.getElementById('lokasi').value,
+                deskripsi: document.getElementById('desk').value,
+                kendala: document.getElementById('kendala').value,
+                rowId: rowId
+            };
+
+            fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) })
+            .then(() => {
+                logList.push(payload);
+                localStorage.setItem(storageKey, JSON.stringify(logList));
+                alert("Logbook Berhasil Terkirim!");
+                location.reload();
+            });
         });
+
+        window.hapusLog = function(idx, rowId) {
+            if(confirm("Hapus laporan ini dari database prodi?")) {
+                fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "LOGBOOK", rowId: rowId }) });
+                logList.splice(idx, 1);
+                localStorage.setItem(storageKey, JSON.stringify(logList));
+                location.reload();
+            }
+        };
+
+        render();
     </script>
 </body>
 </html>
