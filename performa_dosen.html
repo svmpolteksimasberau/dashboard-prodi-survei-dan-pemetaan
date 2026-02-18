@@ -1,109 +1,26 @@
-<script>
-    // 1. Inisialisasi Data & Cek Login
-    const currentUser = JSON.parse(localStorage.getItem('current_user'));
-    
-    // Jika tidak ada user login, kembalikan ke index
-    if (!currentUser) {
-        window.location.href = 'index.html';
-    }
+const scriptURL = 'https://script.google.com/macros/s/AKfycbxGaNDSN36le9F818_bbZ3AhZGzcyL6DfbqEwCNBy4zlQpAPqNGZt4KIKyc6f0gWf9Neg/exec';
 
-    // Ambil Skor & History dari LocalStorage (Gunakan ID Unik User)
-    let currentTotalScore = parseInt(localStorage.getItem('kpi_score_' + currentUser.id)) || 0;
-    let kpiHistory = JSON.parse(localStorage.getItem('kpi_history_' + currentUser.id)) || [];
+// Pastikan fungsi fetch mengirim data dengan struktur yang benar
+document.getElementById('kpiForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const kat = document.getElementById('kat').value;
+    const dsk = document.getElementById('desk').value;
 
-    // Tampilkan Skor Awal
-    document.getElementById('totalSkorDisplay').innerText = currentTotalScore;
-
-    // 2. Setup Grafik (Chart.js)
-    const counts = { Pengajaran: 0, Penelitian: 0, Pengabdian: 0, Administrasi: 0 };
-    
-    // Hitung distribusi dari history yang sudah ada untuk grafik
-    kpiHistory.forEach(item => {
-        if (counts[item.kategori] !== undefined) {
-            counts[item.kategori]++;
-        }
-    });
-
-    const ctx = document.getElementById('miniChart').getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Pengajaran', 'Penelitian', 'Pengabdian', 'Administrasi'],
-            datasets: [{
-                label: 'Aktivitas',
-                data: Object.values(counts),
-                backgroundColor: ['#1e3a8a', '#16a34a', '#ca8a04', '#dc2626'],
-                borderRadius: 10
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { 
-                y: { beginAtZero: true, display: false }, 
-                x: { grid: { display: false }, ticks: { font: { size: 9, weight: 'bold' } } } 
-            }
-        }
-    });
-
-    // 3. Fungsi Render Tabel (Agar data tampil permanen)
-    function renderHistoryTable() {
-        const body = document.getElementById('histBody');
-        body.innerHTML = ""; // Kosongkan dulu sebelum isi ulang
-        
-        // Urutkan dari yang terbaru (paling atas)
-        const sortedHistory = [...kpiHistory].reverse();
-
-        sortedHistory.forEach(item => {
-            const row = `
-                <tr class="hover:bg-blue-50 transition border-l-4 border-transparent hover:border-blue-900">
-                    <td class="p-4 font-bold text-gray-500 text-[10px]">${item.tanggal}</td>
-                    <td class="p-4">
-                        <span class="text-[10px] font-black uppercase text-blue-900 tracking-tighter">${item.kategori}</span><br>
-                        <span class="text-gray-400 font-normal italic leading-relaxed text-[11px]">${item.deskripsi}</span>
-                    </td>
-                    <td class="p-4 text-center font-black text-blue-900">+5</td>
-                </tr>
-            `;
-            body.insertAdjacentHTML('beforeend', row);
-        });
-    }
-
-    // Jalankan render saat halaman dibuka
-    renderHistoryTable();
-
-    // 4. Logika Simpan Data (Event Submit)
-    document.getElementById('kpiForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const tgl = document.getElementById('tgl').value;
-        const kat = document.getElementById('kat').value;
-        const dsk = document.getElementById('desk').value;
-
-        // Update Skor & Simpan Permanen
-        currentTotalScore += 5;
-        localStorage.setItem('kpi_score_' + currentUser.id, currentTotalScore);
-        document.getElementById('totalSkorDisplay').innerText = currentTotalScore;
-
-        // Tambah ke Array History & Simpan Permanen (JSON)
-        const newItem = { tanggal: tgl, kategori: kat, deskripsi: dsk };
-        kpiHistory.push(newItem);
-        localStorage.setItem('kpi_history_' + currentUser.id, JSON.stringify(kpiHistory));
-
-        // Update Grafik
-        counts[kat]++;
-        myChart.data.datasets[0].data = Object.values(counts);
-        myChart.update();
-
-        // Refresh Tabel
-        renderHistoryTable();
-
-        // Feedback Visual
-        const scoreDisplay = document.getElementById('totalSkorDisplay');
-        scoreDisplay.classList.add('scale-110', 'text-yellow-400');
-        setTimeout(() => scoreDisplay.classList.remove('scale-110', 'text-yellow-400'), 300);
-
-        this.reset();
-        alert("Data Berhasil Disimpan Permanen!");
-    });
-</script>
+    fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify({
+            type: "KPI",
+            id: currentUser.id,
+            nama: currentUser.name,
+            kategori: kat,
+            deskripsi: dsk,
+            poin: 5
+        })
+    })
+    .then(response => {
+        alert("Data KPI Berhasil Terkirim ke Cloud!");
+        // Tambahkan fungsi simpan lokal agar tabel di bawah langsung terisi
+        saveToLocal(kat, dsk);
+    })
+    .catch(error => console.error('Error!', error.message));
+});
