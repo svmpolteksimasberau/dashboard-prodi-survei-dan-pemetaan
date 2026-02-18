@@ -3,59 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logbook Survei - PSBC</title>
+    <title>Logbook PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 p-4 text-xs font-sans pb-20">
+<body class="bg-slate-50 font-sans pb-10">
 
-    <div class="max-w-2xl mx-auto space-y-6">
-        <div class="flex justify-between items-center px-2">
-            <h1 class="font-black text-blue-900 text-lg uppercase tracking-tighter">Logbook <span class="text-orange-500">PSBC</span></h1>
-            <div id="totalScoreCard" class="bg-blue-900 text-white px-4 py-2 rounded-2xl shadow-lg">
-                <p class="text-[7px] uppercase font-bold opacity-70">Total Skor</p>
-                <p id="totalScoreText" class="text-lg font-black italic">0</p>
+    <nav class="bg-blue-900 text-white p-5 shadow-2xl sticky top-0 z-50 rounded-b-[2rem]">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-map-marked-alt text-orange-400 text-xl"></i>
+                <h1 class="font-black uppercase tracking-tighter text-sm">Logbook Survei <br> <span class="text-[9px] text-orange-400">Poltek Simas BC</span></h1>
             </div>
+            <a href="dashboard.html" class="bg-white/10 p-3 rounded-2xl hover:bg-white/20 transition"><i class="fas fa-home"></i></a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 mt-6 max-w-2xl space-y-6">
+        
+        <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-xl text-white flex justify-between items-center">
+            <div>
+                <p id="userNameDisplay" class="font-black text-xs uppercase text-orange-400 mb-1">Nama Mahasiswa</p>
+                <p class="text-[8px] uppercase tracking-[0.3em] opacity-60">Total Skor Akumulasi</p>
+                <h2 id="totalScore" class="text-4xl font-black italic mt-1">0</h2>
+            </div>
+            <i class="fas fa-trophy text-5xl opacity-20"></i>
         </div>
 
-        <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border-t-8 border-orange-500">
-            <form id="formLog" class="space-y-4">
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border-t-8 border-orange-500">
+            <form id="logForm" class="space-y-4">
                 <input type="hidden" id="editRowId">
                 <input type="hidden" id="existingFoto">
                 
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="date" id="tgl" required onclick="this.showPicker()" class="p-3 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900">
-                    <input type="text" id="lokasi" placeholder="Lokasi" required class="p-3 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900">
-                </div>
-
-                <div class="grid grid-cols-3 gap-2">
-                    <label class="cursor-pointer"><input type="radio" name="jenis" value="Survey" checked class="hidden peer"><div class="text-center p-2 bg-gray-50 rounded-xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px]">SURVEY</div></label>
-                    <label class="cursor-pointer"><input type="radio" name="jenis" value="Non-Survey" class="hidden peer"><div class="text-center p-2 bg-gray-50 rounded-xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px]">NON-SURVEY</div></label>
-                    <label class="cursor-pointer"><input type="radio" name="jenis" value="Administrasi" class="hidden peer"><div class="text-center p-2 bg-gray-50 rounded-xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px]">ADMIN</div></label>
-                </div>
-
-                <textarea id="desk" rows="3" placeholder="Deskripsi pekerjaan..." required class="w-full p-3 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900"></textarea>
-
-                <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200 text-center relative">
-                    <input type="file" id="foto" accept="image/*" class="hidden" onchange="previewImg(this)">
-                    <div onclick="document.getElementById('foto').click()" class="cursor-pointer text-gray-400">
-                        <i class="fas fa-camera mb-1"></i> <p id="fotoName" class="text-[9px] font-bold uppercase">Ganti Foto (Opsional)</p>
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-bold text-gray-400 uppercase ml-2">Tanggal</label>
+                        <input type="date" id="tgl" required onclick="this.showPicker()" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs font-bold">
                     </div>
-                    <img id="imgPrev" class="hidden mt-2 rounded-xl max-h-32 mx-auto shadow-md">
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-bold text-gray-400 uppercase ml-2">Lokasi Pekerjaan</label>
+                        <input type="text" id="lokasi" placeholder="Site A / Kantor" required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs font-bold">
+                    </div>
                 </div>
 
-                <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase shadow-lg active:scale-95 transition-all">Simpan Data</button>
+                <div class="space-y-1">
+                    <label class="text-[9px] font-bold text-gray-400 uppercase ml-2">Kategori Kegiatan</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer"><input type="radio" name="jenis" value="Survey" checked class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all">SURVEY</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="jenis" value="Non-Survey" class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all">NON-SURVEY</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="jenis" value="Administrasi" class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all">ADMIN</div></label>
+                    </div>
+                </div>
+
+                <textarea id="desk" rows="3" placeholder="Apa yang Anda kerjakan hari ini?" required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs"></textarea>
+
+                <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200 text-center relative group">
+                    <input type="file" id="foto" accept="image/*" class="hidden" onchange="previewImg(this)">
+                    <div onclick="document.getElementById('foto').click()" class="cursor-pointer text-gray-400 py-2">
+                        <i class="fas fa-camera text-xl mb-1"></i>
+                        <p id="fotoName" class="text-[8px] font-black uppercase">Klik Lampirkan Foto Bukti</p>
+                    </div>
+                    <img id="imgPrev" class="hidden mt-2 rounded-2xl max-h-40 mx-auto shadow-lg border-4 border-white">
+                </div>
+
+                <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase tracking-widest shadow-lg active:scale-95 hover:bg-blue-800 transition-all">Simpan Logbook</button>
             </form>
         </div>
 
-        <div id="historyList" class="space-y-4 px-1"></div>
+        <div class="space-y-4">
+            <h3 class="font-black text-blue-900 uppercase text-xs tracking-widest ml-2 flex items-center gap-2">
+                <i class="fas fa-history text-orange-500"></i> Riwayat Kegiatan
+            </h3>
+            <div id="historyList" class="space-y-4"></div>
+        </div>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxgGwN6t4R5n4p7NdcH8PT1B6xm_R9Nub-AgXmv9W1noO_StACJS5s1AYY21WskmnwOzA/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwdWWpdrcGNxc8N3r8V2oin1_JxRagfwRnvZnwrjsKU-8XEGRvTHjwQU1dsgKov3DOU/exec";
         const user = JSON.parse(localStorage.getItem('current_user'));
         const storageKey = 'log_' + (user ? user.id : 'guest');
         let logs = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+        if(user) document.getElementById('userNameDisplay').innerText = user.name;
 
         function previewImg(input) {
             const preview = document.getElementById('imgPrev');
@@ -74,66 +103,80 @@
             });
         }
 
-        document.getElementById('formLog').onsubmit = async (e) => {
+        document.getElementById('logForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
-            btn.disabled = true; btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> SINKRONASI...';
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sinkronasi...';
 
             const editId = document.getElementById('editRowId').value;
             const rowId = editId || "RID-" + Date.now();
             const file = document.getElementById('foto').files[0];
             const base64 = file ? await convertBase64(file) : "";
-            const jenisValue = document.querySelector('input[name="jenis"]:checked').value;
-            const poin = jenisValue === 'Survey' ? 10 : (jenisValue === 'Non-Survey' ? 5 : 3);
+            const jenis = document.querySelector('input[name="jenis"]:checked').value;
+            const skor = jenis === 'Survey' ? 10 : (jenis === 'Non-Survey' ? 5 : 3);
 
             const payload = {
                 action: "addLogbook",
                 nim: user.id, nama: user.name,
                 tanggal: document.getElementById('tgl').value,
                 lokasi: document.getElementById('lokasi').value,
-                jenis: jenisValue,
+                jenis: jenis,
                 deskripsi: document.getElementById('desk').value,
                 foto: base64,
                 existingFoto: document.getElementById('existingFoto').value,
-                rowId: rowId, skor: poin
+                rowId: rowId, skor: skor
             };
 
             try {
+                // KIRIM DATA
                 await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-                
+
+                // UPDATE LOKAL
                 if(editId) {
                     const idx = logs.findIndex(l => l.rowId === editId);
-                    logs[idx] = { ...payload, localFoto: document.getElementById('imgPrev').src };
+                    logs[idx] = { ...payload, localFoto: file ? document.getElementById('imgPrev').src : payload.existingFoto };
                 } else {
-                    logs.unshift({ ...payload, localFoto: document.getElementById('imgPrev').src });
+                    logs.unshift({ ...payload, localFoto: file ? document.getElementById('imgPrev').src : "" });
                 }
 
                 localStorage.setItem(storageKey, JSON.stringify(logs));
-                alert("Data Berhasil Disimpan!");
+                alert("Data Berhasil Disinkronkan!");
                 location.reload();
-            } catch(err) { alert("Gagal Sinkron!"); }
+            } catch(err) {
+                alert("Gagal Terhubung!");
+            }
         };
 
         function render() {
             const container = document.getElementById('historyList');
             let total = 0;
+            if(logs.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-gray-300 font-bold uppercase text-[10px] tracking-widest">Belum ada riwayat</div>`;
+                return;
+            }
             container.innerHTML = logs.map((l, i) => {
                 total += l.skor;
                 return `
-                <div class="bg-white p-5 rounded-[2.5rem] shadow-md border-l-8 ${l.jenis === 'Survey' ? 'border-blue-900' : 'border-orange-500'}">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="bg-gray-100 text-[7px] font-black px-2 py-1 rounded-full text-gray-500 uppercase">${l.jenis} (+${l.skor})</span>
-                        <div class="flex gap-2 text-gray-300">
-                            <button onclick="editLog(${i})"><i class="fas fa-pencil-alt hover:text-blue-900"></i></button>
-                            <button onclick="hapusLog('${l.rowId}', ${i})"><i class="fas fa-trash-alt hover:text-red-500"></i></button>
+                <div class="bg-white p-6 rounded-[2.5rem] shadow-lg border-l-[12px] ${l.jenis === 'Survey' ? 'border-blue-900' : 'border-orange-500'} relative">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex gap-2">
+                            <span class="bg-gray-100 text-[7px] font-black px-3 py-1 rounded-full text-gray-500 uppercase">${l.jenis}</span>
+                            <span class="bg-orange-100 text-orange-600 text-[7px] font-black px-3 py-1 rounded-full uppercase">+${l.skor} Poin</span>
+                        </div>
+                        <div class="flex gap-3 text-gray-300">
+                            <button onclick="editLog(${i})" class="hover:text-blue-900 transition"><i class="fas fa-pencil-alt"></i></button>
+                            <button onclick="hapusLog('${l.rowId}', ${i})" class="hover:text-red-500 transition"><i class="fas fa-trash-alt"></i></button>
                         </div>
                     </div>
-                    <p class="font-black text-blue-900 text-[11px] uppercase">${l.tanggal}</p>
-                    <p class="text-gray-600 mb-2 leading-tight">${l.deskripsi}</p>
-                    ${l.localFoto ? `<img src="${l.localFoto}" class="w-full h-32 object-cover rounded-2xl shadow-sm">` : ''}
+                    <div class="mb-3">
+                        <h4 class="text-blue-900 font-black text-xs uppercase">${l.tanggal}</h4>
+                        <p class="text-orange-500 font-black text-[9px] uppercase tracking-tighter">${l.lokasi}</p>
+                    </div>
+                    <p class="text-gray-600 text-[10px] leading-relaxed mb-4 bg-gray-50 p-4 rounded-2xl">${l.deskripsi}</p>
+                    ${l.localFoto ? `<img src="${l.localFoto}" class="w-full h-40 object-cover rounded-2xl shadow-inner border border-gray-100">` : ''}
                 </div>`;
             }).join('');
-            document.getElementById('totalScoreText').innerText = total;
+            document.getElementById('totalScore').innerText = total;
         }
 
         window.editLog = (i) => {
@@ -144,20 +187,25 @@
             document.getElementById('desk').value = l.deskripsi;
             document.getElementById('existingFoto').value = l.localFoto;
             document.querySelector(`input[name="jenis"][value="${l.jenis}"]`).checked = true;
+            if(l.localFoto) {
+                document.getElementById('imgPrev').src = l.localFoto;
+                document.getElementById('imgPrev').classList.remove('hidden');
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            document.getElementById('btnSubmit').innerText = "Update Data Logbook";
+            document.getElementById('btnSubmit').innerText = "Update Logbook";
         };
 
         window.hapusLog = async (rid, i) => {
-            if(!confirm("Hapus data permanen?")) return;
-            await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: "deleteLogbook", rowId: rid}) });
-            logs.splice(i, 1);
-            localStorage.setItem(storageKey, JSON.stringify(logs));
-            render();
+            if(!confirm("Hapus data permanen di Google Sheets?")) return;
+            try {
+                await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: "deleteLogbook", rowId: rid}) });
+                logs.splice(i, 1);
+                localStorage.setItem(storageKey, JSON.stringify(logs));
+                render();
+            } catch(e) { alert("Gagal Menghapus!"); }
         };
 
         render();
     </script>
 </body>
 </html>
-
