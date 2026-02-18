@@ -37,16 +37,6 @@
                 <i class="fas fa-trophy text-5xl opacity-20 text-yellow-400"></i>
             </div>
         </div>
-    <div class="container mx-auto px-4 mt-6 max-w-2xl space-y-6">
-        
-        <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-xl text-white flex justify-between items-center">
-            <div>
-                <p id="userNameDisplay" class="font-black text-xs uppercase text-orange-400 mb-1">Nama Mahasiswa</p>
-                <p class="text-[8px] uppercase tracking-[0.3em] opacity-60">Total Skor Akumulasi</p>
-                <h2 id="totalScore" class="text-4xl font-black italic mt-1">0</h2>
-            </div>
-            <i class="fas fa-trophy text-5xl opacity-20"></i>
-        </div>
 
         <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border-t-8 border-orange-500">
             <form id="logForm" class="space-y-4">
@@ -75,7 +65,7 @@
 
                 <textarea id="desk" rows="3" placeholder="Apa yang Anda kerjakan hari ini?" required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs"></textarea>
 
-                <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200 text-center relative group">
+                <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200 text-center relative">
                     <input type="file" id="foto" accept="image/*" class="hidden" onchange="previewImg(this)">
                     <div onclick="document.getElementById('foto').click()" class="cursor-pointer text-gray-400 py-2">
                         <i class="fas fa-camera text-xl mb-1"></i>
@@ -97,7 +87,9 @@
     </div>
 
     <script>
+        // MASUKKAN URL WEB APP ANDA DI SINI
         const scriptURL = "https://script.google.com/macros/s/AKfycbwdWWpdrcGNxc8N3r8V2oin1_JxRagfwRnvZnwrjsKU-8XEGRvTHjwQU1dsgKov3DOU/exec";
+        
         const user = JSON.parse(localStorage.getItem('current_user'));
         const storageKey = 'log_' + (user ? user.id : 'guest');
         let logs = JSON.parse(localStorage.getItem(storageKey)) || [];
@@ -146,10 +138,8 @@
             };
 
             try {
-                // KIRIM DATA
                 await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
 
-                // UPDATE LOKAL
                 if(editId) {
                     const idx = logs.findIndex(l => l.rowId === editId);
                     logs[idx] = { ...payload, localFoto: file ? document.getElementById('imgPrev').src : payload.existingFoto };
@@ -182,8 +172,8 @@
                             <span class="bg-orange-100 text-orange-600 text-[7px] font-black px-3 py-1 rounded-full uppercase">+${l.skor} Poin</span>
                         </div>
                         <div class="flex gap-3 text-gray-300">
-                            <button onclick="editLog(${i})" class="hover:text-blue-900 transition"><i class="fas fa-pencil-alt"></i></button>
-                            <button onclick="hapusLog('${l.rowId}', ${i})" class="hover:text-red-500 transition"><i class="fas fa-trash-alt"></i></button>
+                            <button onclick="editLog(${i})" class="hover:text-blue-900 transition"><i class="fas fa-pencil-alt text-xs"></i></button>
+                            <button onclick="hapusLog('${l.rowId}', ${i})" class="hover:text-red-500 transition"><i class="fas fa-trash-alt text-xs"></i></button>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -227,4 +217,3 @@
     </script>
 </body>
 </html>
-
