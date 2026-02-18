@@ -22,10 +22,10 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-1">
-                <form id="luaranForm" class="bg-white p-6 rounded-[2.5rem] shadow-lg border-t-8 border-green-600 space-y-5 sticky top-24 transition-all">
+                <form id="luaranForm" class="bg-white p-6 rounded-[2.5rem] shadow-lg border-t-8 border-green-600 space-y-5 sticky top-24">
                     <div>
                         <h3 id="formTitle" class="font-black text-blue-900 uppercase text-sm tracking-tight">Input Luaran & Publikasi</h3>
-                        <p id="formSubtitle" class="text-[10px] text-gray-400 font-bold uppercase mt-1">Prodi Survei dan Pemetaan</p>
+                        <p id="formSubtitle" class="text-[10px] text-gray-400 font-bold uppercase mt-1">Politeknik Sinar Mas Berau Coal</p>
                     </div>
                     
                     <input type="hidden" id="editRowId">
@@ -84,7 +84,7 @@
     </div>
 
     <script>
-        // URL Web App Terbaru Anda
+        // URL WEB APP TERBARU (Version 4)
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwez4MS_W9q2vFBtAqhZfqaVaxT_YKdNO6MNrmv94b9LWDQuSvokf4wK4EZVo1K8WMJDQ/exec';
         
         const user = JSON.parse(localStorage.getItem('current_user'));
@@ -98,32 +98,32 @@
             body.innerHTML = "";
             
             if (luaranList.length === 0) {
-                body.innerHTML = `<tr><td colspan="3" class="p-10 text-center text-gray-300 font-bold italic uppercase tracking-widest">Belum ada data luaran</td></tr>`;
+                body.innerHTML = `<tr><td colspan="3" class="p-10 text-center text-gray-300 font-bold italic uppercase tracking-widest">Belum ada data luaran terinput</td></tr>`;
                 return;
             }
 
             [...luaranList].reverse().forEach((item, index) => {
                 const realIndex = luaranList.length - 1 - index;
                 body.insertAdjacentHTML('beforeend', `
-                    <tr class="hover:bg-green-50/50 transition-all">
+                    <tr class="hover:bg-green-50 transition-all border-b border-gray-100">
                         <td class="p-5">
-                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg font-black text-[9px] uppercase">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg font-black text-[9px] uppercase tracking-tighter">
                                 ${item.jenis}
                             </span>
                         </td>
                         <td class="p-5">
-                            <p class="font-black text-gray-800 text-[11px] uppercase leading-tight mb-1">${item.judul}</p>
-                            <a href="${item.link}" target="_blank" class="text-[10px] text-blue-500 font-bold italic underline">
+                            <p class="font-black text-gray-800 text-[11px] leading-tight mb-1 uppercase">${item.judul}</p>
+                            <a href="${item.link}" target="_blank" class="text-[10px] text-blue-500 hover:text-blue-700 flex items-center gap-1 font-bold italic underline">
                                 <i class="fas fa-external-link-alt text-[8px]"></i> Lihat Link
                             </a>
                         </td>
                         <td class="p-5 text-center">
                             <div class="flex justify-center items-center gap-3">
-                                <button onclick="startEdit(${realIndex})" class="text-blue-400 hover:text-blue-600 p-2">
-                                    <i class="fas fa-edit"></i>
+                                <button onclick="startEdit(${realIndex})" class="w-9 h-9 flex items-center justify-center bg-blue-50 text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all shadow-sm">
+                                    <i class="fas fa-edit text-xs"></i>
                                 </button>
-                                <button onclick="hapusLuaran(${realIndex}, '${item.rowId}')" class="text-red-400 hover:text-red-600 p-2 bg-red-50 rounded-lg">
-                                    <i class="fas fa-trash-alt"></i>
+                                <button onclick="hapusLuaran(${realIndex}, '${item.rowId}')" class="w-9 h-9 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                                    <i class="fas fa-trash-alt text-xs"></i>
                                 </button>
                             </div>
                         </td>
@@ -131,14 +131,14 @@
             });
         }
 
-        // HANDLER SUBMIT (INSERT & UPDATE)
+        // SUBMIT (INSERT ATAU UPDATE)
         document.getElementById('luaranForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
             const editRowId = document.getElementById('editRowId').value;
             const isEdit = !!editRowId;
 
-            btn.innerText = "SINKRONISASI CLOUD...";
+            btn.innerText = "SUBMITTING...";
             btn.disabled = true;
 
             const rowId = isEdit ? editRowId : "ID-" + Date.now();
@@ -154,10 +154,7 @@
                 rowId: rowId
             };
 
-            fetch(scriptURL, { 
-                method: 'POST', 
-                body: JSON.stringify(payload) 
-            })
+            fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) })
             .then(() => {
                 if (isEdit) {
                     const idx = luaranList.findIndex(item => item.rowId === rowId);
@@ -168,21 +165,20 @@
                 
                 localStorage.setItem('luaran_list_' + user.id, JSON.stringify(luaranList));
                 localStorage.setItem('luaran_count_' + user.id, luaranList.length);
-                alert(isEdit ? "Data Berhasil Diperbarui!" : "Data Berhasil Disimpan ke Cloud!");
+                alert(isEdit ? "Data Berhasil Diperbarui!" : "Data Tersimpan ke Cloud Drive!");
                 location.reload();
             })
             .catch(() => {
-                alert("Gagal terhubung ke Server Cloud.");
+                alert("Gagal koneksi ke Cloud.");
                 btn.innerText = "SUBMIT";
                 btn.disabled = false;
             });
         });
 
-        // FUNGSI EDIT
+        // FUNGSI AKTIFKAN MODE EDIT
         window.startEdit = function(idx) {
             const item = luaranList[idx];
-            document.getElementById('formTitle').innerText = "Mode Edit Data";
-            document.getElementById('formSubtitle').innerText = "Memperbaiki data yang sudah ada";
+            document.getElementById('formTitle').innerText = "MODE EDIT DATA";
             document.getElementById('editRowId').value = item.rowId;
             document.getElementById('jenisLuaran').value = item.jenis;
             document.getElementById('judul').value = item.judul;
@@ -194,13 +190,12 @@
 
         document.getElementById('btnBatal').onclick = () => location.reload();
 
-        // FUNGSI HAPUS SINKRON
+        // FUNGSI HAPUS SINKRON KE SHEETS
         window.hapusLuaran = function(idx, rowId) {
             if (confirm("Hapus data ini secara permanen dari Cloud Drive Prodi?")) {
-                // Kirim perintah DELETE ke Apps Script
                 fetch(scriptURL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "DELETE", rowId: rowId })
+                    body: JSON.stringify({ action: "DELETE", type: "LUARAN", rowId: rowId })
                 });
 
                 luaranList.splice(idx, 1);
