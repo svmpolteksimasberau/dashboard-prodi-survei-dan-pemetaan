@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Logbook - PSBC</title>
+    <title>Login Portal - Prodi Survei & Pemetaan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -15,21 +15,21 @@
 
     <div class="bg-white w-full max-w-sm p-10 rounded-[3rem] shadow-2xl text-center border-b-[10px] border-orange-500">
         <div class="mb-8">
-            <i class="fas fa-user-circle text-blue-900 text-6xl mb-4"></i>
-            <h1 class="font-black text-2xl text-blue-900 uppercase tracking-tighter leading-none">Akses Mahasiswa</h1>
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Prodi Survei & Pemetaan</p>
+            <i class="fas fa-university text-blue-900 text-6xl mb-4"></i>
+            <h1 class="font-black text-2xl text-blue-900 uppercase tracking-tighter leading-none">Portal Akses</h1>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2 italic">Politeknik Sinar Mas Berau Coal</p>
         </div>
 
         <div class="space-y-4">
             <div class="text-left">
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-4">Nomor Induk Mahasiswa (NIM)</label>
-                <input type="number" id="nimInput" placeholder="Masukkan NIM (Contoh: 121)" 
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-4">NIM Mahasiswa / NIDN Dosen</label>
+                <input type="number" id="idInput" placeholder="Masukkan ID Anda" 
                     class="w-full p-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-bold text-center mt-1 border border-gray-100">
             </div>
             
             <div class="text-left">
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-4">PIN / Password</label>
-                <input type="password" id="passInput" placeholder="Masukkan PIN Bebas" 
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-4">PIN Keamanan</label>
+                <input type="password" id="passInput" placeholder="Masukkan PIN" 
                     class="w-full p-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-bold text-center mt-1 border border-gray-100">
             </div>
             
@@ -39,39 +39,39 @@
             </button>
         </div>
 
-        <div class="mt-8 p-4 bg-orange-50 rounded-2xl border border-orange-100">
-            <p class="text-[8px] text-orange-700 font-bold leading-relaxed">
-                <i class="fas fa-lightbulb mr-1"></i> INFO PENDAFTARAN:<br>
-                Jika NIM terdaftar tapi belum punya PIN, silakan masukkan PIN baru keinginan Anda. Sistem akan menyimpannya secara otomatis.
+        
+        <div class="mt-8 p-4 bg-blue-50 rounded-2xl border border-blue-100">
+            <p class="text-[8px] text-blue-800 font-bold leading-relaxed">
+                <i class="fas fa-info-circle mr-1"></i> LOGIN PERTAMA?<br>
+                Gunakan ID terdaftar dan buat PIN baru keinginan Anda. PIN akan tersimpan otomatis.
             </p>
         </div>
     </div>
 
     <script>
-        // PASTI KAN URL INI ADALAH URL DARI "NEW DEPLOYMENT" TERBARU
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxkczI1AQXLfpxw3mF3iSNjGiXaCao3eKw_pu3bJQwVZ4LlQBL3B0dZEW9tX2L8enYk/exec";
+        // GANTI DENGAN URL WEB APP HASIL DEPLOY APPS SCRIPT ANDA
+        const scriptURL = "PASTE_URL_WEB_APP_ANDA_DISINI";
 
         async function handleLogin() {
-            const nim = document.getElementById('nimInput').value;
+            const idUser = document.getElementById('idInput').value;
             const pass = document.getElementById('passInput').value;
             const btn = document.getElementById('btnLogin');
 
-            if(!nim || !pass) {
-                alert("NIM dan PIN tidak boleh kosong!");
+            if(!idUser || !pass) {
+                alert("ID (NIM/NIDN) dan PIN wajib diisi!");
                 return;
             }
 
-            // Tampilan Loading
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Menghubungkan...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Verifikasi...';
 
             try {
                 const response = await fetch(scriptURL, {
                     method: 'POST',
                     body: JSON.stringify({ 
                         action: "login", 
-                        nim: nim.toString(), 
-                        password: pass.toString() 
+                        id_user: idUser, 
+                        password: pass 
                     })
                 });
                 
@@ -80,14 +80,19 @@
                 if(result.success) {
                     if(result.msg) alert(result.msg); 
                     
-                    // Simpan ke memori browser
+                    // Simpan data user ke memori browser
                     localStorage.setItem('current_user', JSON.stringify({ 
-                        id: result.nim, 
-                        name: result.nama 
+                        id: result.id, 
+                        name: result.nama,
+                        role: result.role 
                     }));
 
-                    // Pindah ke halaman logbook
-                    window.location.href = 'logbook.html'; 
+                    // LOGIKA PENGALIHAN (REDIRECT)
+                    if(result.role === "DOSEN") {
+                        window.location.href = 'performa_dosen.html';
+                    } else {
+                        window.location.href = 'logbook.html';
+                    }
                 } else {
                     alert("Gagal: " + result.msg);
                     btn.disabled = false;
@@ -95,7 +100,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert("Error: Tidak bisa menjangkau database Cloud.");
+                alert("Kesalahan koneksi ke server Cloud.");
                 btn.disabled = false;
                 btn.innerText = "Masuk ke Sistem";
             }
