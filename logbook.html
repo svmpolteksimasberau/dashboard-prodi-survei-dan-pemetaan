@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logbook PRAKERIN - PSBC</title>
+    <title>Logbook PRAKERIN - Survei & Pemetaan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -16,7 +16,6 @@
                 <div>
                     <h1 class="font-black uppercase tracking-tighter text-xs leading-none">Logbook PRAKERIN</h1>
                     <p class="text-[8px] text-yellow-400 font-bold uppercase tracking-widest mt-1">Survei dan Pemetaan</p>
-                    <p class="text-[7px] text-white/60 font-medium uppercase leading-none">Politeknik Sinar Mas Berau Coal</p>
                 </div>
             </div>
             <a href="dashboard.html" class="bg-white/10 p-3 rounded-2xl hover:bg-white/20 transition"><i class="fas fa-home"></i></a>
@@ -25,13 +24,19 @@
 
     <div class="container mx-auto px-4 mt-6 max-w-2xl space-y-6">
         
-        <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-xl text-white flex justify-between items-center border-b-4 border-yellow-400">
-            <div>
-                <p id="userNameDisplay" class="font-black text-xs uppercase text-yellow-400 mb-1">Loading...</p>
-                <p class="text-[8px] uppercase tracking-[0.3em] opacity-60">Total Skor Akumulasi</p>
-                <h2 id="totalScore" class="text-4xl font-black italic mt-1">0</h2>
+        <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-xl text-white border-b-4 border-yellow-400">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p id="userNameDisplay" class="font-black text-xs uppercase text-yellow-400 mb-1">Loading...</p>
+                    <p class="text-[8px] uppercase tracking-[0.3em] opacity-60">Total Skor Akumulasi</p>
+                    <h2 id="totalScore" class="text-4xl font-black italic mt-1">0</h2>
+                </div>
+                <i class="fas fa-trophy text-5xl opacity-20 text-yellow-400"></i>
             </div>
-            <i class="fas fa-trophy text-5xl opacity-20 text-yellow-400"></i>
+            <div class="mt-4 pt-4 border-t border-white/10 flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <p class="text-[7px] font-bold uppercase tracking-widest text-white/50">Geotagging System Ready</p>
+            </div>
         </div>
 
         <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border-t-8 border-orange-500">
@@ -40,26 +45,17 @@
                 <input type="hidden" id="existingFoto">
                 
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="space-y-1">
-                        <label class="text-[9px] font-bold text-gray-400 uppercase ml-2">Tanggal</label>
-                        <input type="date" id="tgl" required onclick="this.showPicker()" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs font-bold">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[9px] font-bold text-gray-400 uppercase ml-2">Lokasi Pekerjaan</label>
-                        <input type="text" id="lokasi" placeholder="Site A / Kantor" required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs font-bold">
-                    </div>
+                    <input type="date" id="tgl" required onclick="this.showPicker()" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs font-bold">
+                    <input type="text" id="lokasi" placeholder="Lokasi Pekerjaan" required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs font-bold">
                 </div>
 
-                <div class="space-y-1">
-                    <label class="text-[9px] font-bold text-gray-400 uppercase ml-2">Kategori Kegiatan</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <label class="cursor-pointer"><input type="radio" name="jenis" value="Survey" checked class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all">SURVEY</div></label>
-                        <label class="cursor-pointer"><input type="radio" name="jenis" value="Non-Survey" class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all">NON-SURVEY</div></label>
-                        <label class="cursor-pointer"><input type="radio" name="jenis" value="Administrasi" class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all">ADMIN</div></label>
-                    </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <label class="cursor-pointer"><input type="radio" name="jenis" value="Survey" checked class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all uppercase">Survey</div></label>
+                    <label class="cursor-pointer"><input type="radio" name="jenis" value="Non-Survey" class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all uppercase">Non-Survey</div></label>
+                    <label class="cursor-pointer"><input type="radio" name="jenis" value="Administrasi" class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all uppercase">Admin</div></label>
                 </div>
 
-                <textarea id="desk" rows="3" placeholder="Apa yang Anda kerjakan hari ini?" required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs"></textarea>
+                <textarea id="desk" rows="3" placeholder="Deskripsi detail pekerjaan hari ini..." required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs"></textarea>
 
                 <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200 text-center relative">
                     <input type="file" id="foto" accept="image/*" class="hidden" onchange="previewImg(this)">
@@ -70,27 +66,37 @@
                     <img id="imgPrev" class="hidden mt-2 rounded-2xl max-h-40 mx-auto shadow-lg border-4 border-white">
                 </div>
 
-                <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase tracking-widest shadow-lg active:scale-95 hover:bg-blue-800 transition-all">Simpan Logbook</button>
+                <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase tracking-widest shadow-lg active:scale-95 hover:bg-blue-800 transition-all">Simpan Logbook & GPS</button>
             </form>
         </div>
 
         <div class="space-y-4">
             <h3 class="font-black text-blue-900 uppercase text-xs tracking-widest ml-2 flex items-center gap-2">
-                <i class="fas fa-cloud-download-alt text-orange-500"></i> Riwayat Terintegrasi Cloud
+                <i class="fas fa-history text-orange-500"></i> Riwayat Kegiatan Cloud
             </h3>
             <div id="historyList" class="space-y-4"></div>
         </div>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwGMnRJ-UrIyGyyrhYmyhbLJ5roz7J0Dfvx6qmWVb9msXXWlTM7al7CkWM8q9zQxbde/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxi5qKZ_1tVzpSK1OaHgy0VVjsEBzf2MtejSwtPB-DqwtSs43SHSYGN_zMDHSkRyE5d/exec";
         const user = JSON.parse(localStorage.getItem('current_user'));
         let logs = [];
 
         if(!user) { window.location.href = 'index.html'; }
         else { 
             document.getElementById('userNameDisplay').innerText = user.name;
-            loadCloudData(); 
+            loadCloud();
+        }
+
+        async function loadCloud() {
+            const container = document.getElementById('historyList');
+            container.innerHTML = '<div class="text-center py-10 text-gray-300 font-bold uppercase text-[9px] animate-pulse">Menghubungkan ke Cloud...</div>';
+            try {
+                const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "readLogbook", nim: user.id }) });
+                logs = await res.json();
+                render();
+            } catch (err) { container.innerHTML = '<div class="text-center text-red-500 font-bold text-[9px]">Gagal Memuat Data</div>'; }
         }
 
         function previewImg(input) {
@@ -110,113 +116,84 @@
             });
         }
 
-        async function loadCloudData() {
-            const container = document.getElementById('historyList');
-            container.innerHTML = '<div class="text-center py-10 text-gray-400 font-bold uppercase text-[9px] animate-pulse">Menghubungkan ke server...</div>';
-            
-            try {
-                const res = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "readLogbook", nim: user.id })
-                });
-                logs = await res.json();
-                render();
-            } catch (err) {
-                container.innerHTML = '<div class="text-center py-10 text-red-500 font-bold uppercase text-[9px]">Gagal Sinkronisasi Cloud</div>';
-            }
-        }
-
         document.getElementById('logForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
-            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mengirim...';
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-map-marker-alt fa-spin mr-2"></i> Mengunci Lokasi...';
 
-            const editId = document.getElementById('editRowId').value;
-            const rowId = editId || "RID-" + Date.now();
-            const file = document.getElementById('foto').files[0];
-            const base64 = file ? await convertBase64(file) : "";
-            const jenis = document.querySelector('input[name="jenis"]:checked').value;
-            const skor = jenis === 'Survey' ? 10 : (jenis === 'Non-Survey' ? 5 : 3);
+            if (!navigator.geolocation) { alert("GPS Tidak Didukung!"); btn.disabled = false; return; }
 
-            const payload = {
-                action: "addLogbook",
-                nim: user.id, nama: user.name,
-                tanggal: document.getElementById('tgl').value,
-                lokasi: document.getElementById('lokasi').value,
-                jenis: jenis,
-                deskripsi: document.getElementById('desk').value,
-                foto: base64,
-                existingFoto: document.getElementById('existingFoto').value,
-                rowId: rowId, skor: skor
-            };
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                const geoUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+                
+                const file = document.getElementById('foto').files[0];
+                const base64 = file ? await convertBase64(file) : "";
+                const jenis = document.querySelector('input[name="jenis"]:checked').value;
 
-            try {
-                await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-                alert("Data Berhasil Disimpan ke Cloud!");
-                location.reload();
-            } catch(err) {
-                alert("Gagal Sinkron!");
-                btn.disabled = false;
-            }
+                const payload = {
+                    action: "addLogbook",
+                    nim: user.id, nama: user.name,
+                    tanggal: document.getElementById('tgl').value,
+                    lokasi: document.getElementById('lokasi').value,
+                    jenis: jenis,
+                    deskripsi: document.getElementById('desk').value,
+                    foto: base64,
+                    existingFoto: document.getElementById('existingFoto').value,
+                    rowId: document.getElementById('editRowId').value || "RID-"+Date.now(),
+                    skor: jenis === 'Survey' ? 10 : (jenis === 'Non-Survey' ? 5 : 3),
+                    geotagging: geoUrl
+                };
+
+                try {
+                    await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+                    alert("Tersimpan ke Cloud dengan Geotagging!");
+                    location.reload();
+                } catch(err) { alert("Gagal Simpan!"); btn.disabled = false; }
+            }, () => {
+                alert("Wajib aktifkan GPS untuk mengisi logbook!");
+                btn.disabled = false; btn.innerText = "Simpan Logbook & GPS";
+            });
         };
 
         function render() {
             const container = document.getElementById('historyList');
             let total = 0;
-            if(logs.length === 0) {
-                container.innerHTML = `<div class="text-center py-10 text-gray-300 font-bold uppercase text-[10px] tracking-widest">Belum ada riwayat</div>`;
-                return;
-            }
+            if(logs.length === 0) { container.innerHTML = '<div class="text-center py-10 text-gray-300 font-bold uppercase text-[9px]">Belum ada riwayat</div>'; return; }
             
-            // Urutkan riwayat dari yang terbaru
-            const sortedLogs = [...logs].reverse();
-
-            container.innerHTML = sortedLogs.map((l, i) => {
+            container.innerHTML = [...logs].reverse().map((l, i) => {
                 total += parseInt(l.skor);
                 return `
-                <div class="bg-white p-6 rounded-[2.5rem] shadow-lg border-l-[12px] ${l.jenis === 'Survey' ? 'border-blue-900' : 'border-orange-500'} relative">
-                    <div class="flex justify-between items-start mb-4">
+                <div class="bg-white p-6 rounded-[2.5rem] shadow-lg border-l-[12px] ${l.jenis === 'Survey' ? 'border-blue-900' : 'border-orange-500'} relative mb-4">
+                    <div class="flex justify-between items-start mb-3">
                         <div class="flex gap-2">
-                            <span class="bg-gray-100 text-[7px] font-black px-3 py-1 rounded-full text-gray-500 uppercase">${l.jenis}</span>
-                            <span class="bg-orange-100 text-orange-600 text-[7px] font-black px-3 py-1 rounded-full uppercase">+${l.skor} Poin</span>
+                            <span class="bg-gray-100 text-[7px] font-black px-2 py-1 rounded-full text-gray-500 uppercase">${l.jenis}</span>
+                            <span class="bg-orange-100 text-orange-600 text-[7px] font-black px-2 py-1 rounded-full uppercase">+${l.skor} Poin</span>
                         </div>
                         <div class="flex gap-3 text-gray-300">
-                            <button onclick="editLogManual('${l.rowId}')" class="hover:text-blue-900 transition"><i class="fas fa-pencil-alt text-xs"></i></button>
                             <button onclick="hapusLog('${l.rowId}')" class="hover:text-red-500 transition"><i class="fas fa-trash-alt text-xs"></i></button>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <h4 class="text-blue-900 font-black text-xs uppercase">${l.tanggal}</h4>
-                        <p class="text-orange-500 font-black text-[9px] uppercase tracking-tighter">${l.lokasi}</p>
+                    <h4 class="text-blue-900 font-black text-xs uppercase">${l.tanggal}</h4>
+                    <p class="text-orange-500 font-black text-[9px] uppercase mb-2">${l.lokasi}</p>
+                    <p class="text-gray-600 text-[10px] bg-gray-50 p-3 rounded-xl mb-3">${l.deskripsi}</p>
+                    <div class="flex flex-col gap-2">
+                        ${l.foto && l.foto !== "-" ? `<img src="${l.foto}" class="w-full h-32 object-cover rounded-2xl">` : ''}
+                        <a href="${l.geotagging}" target="_blank" class="text-center bg-blue-50 text-blue-600 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest"><i class="fas fa-map-marker-alt mr-1"></i> Lihat Lokasi Absensi</a>
                     </div>
-                    <p class="text-gray-600 text-[10px] leading-relaxed mb-4 bg-gray-50 p-4 rounded-2xl">${l.deskripsi}</p>
-                    ${l.foto && l.foto !== "-" ? `<img src="${l.foto}" class="w-full h-44 object-cover rounded-3xl shadow-md border border-gray-100">` : ''}
                 </div>`;
             }).join('');
             document.getElementById('totalScore').innerText = total;
         }
 
-        window.editLogManual = (rid) => {
-            const l = logs.find(item => item.rowId === rid);
-            document.getElementById('editRowId').value = l.rowId;
-            document.getElementById('tgl').value = l.tanggal;
-            document.getElementById('lokasi').value = l.lokasi;
-            document.getElementById('desk').value = l.deskripsi;
-            document.getElementById('existingFoto').value = l.foto;
-            document.querySelector(`input[name="jenis"][value="${l.jenis}"]`).checked = true;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            document.getElementById('btnSubmit').innerText = "Update Data Logbook";
-        };
-
         window.hapusLog = async (rid) => {
-            if(!confirm("Hapus data permanen di cloud?")) return;
+            if(!confirm("Hapus permanen dari Cloud?")) return;
             try {
                 await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: "deleteLogbook", rowId: rid}) });
-                alert("Berhasil dihapus!");
-                location.reload();
+                alert("Terhapus!"); location.reload();
             } catch(e) { alert("Gagal!"); }
         };
-
     </script>
 </body>
 </html>
