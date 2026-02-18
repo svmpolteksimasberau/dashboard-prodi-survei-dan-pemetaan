@@ -10,9 +10,10 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .tab-btn.active { background-color: #1e3a8a; color: white; }
+        .input-focus:focus { border-color: #f97316; ring: 2px; ring-color: #f97316; }
     </style>
 </head>
-<body class="bg-blue-900 min-h-screen pb-10 font-sans">
+<body class="bg-blue-900 min-h-screen pb-10">
 
     <div class="p-8 text-center">
         <div class="w-20 h-20 bg-white rounded-3xl mx-auto flex items-center justify-center shadow-2xl mb-4 transform -rotate-6">
@@ -31,22 +32,23 @@
 
         <div id="pane-form" class="space-y-4">
             <div id="gps-status" class="hidden p-3 bg-green-100 text-green-700 text-[9px] font-black rounded-xl text-center uppercase">
-                <i class="fas fa-check-circle"></i> Lokasi GPS Terkunci
+                <i class="fas fa-check-circle mr-1"></i> Lokasi GPS Terdeteksi
             </div>
 
             <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic">Tanggal Kegiatan</label>
-                <input type="date" id="tgl_kegiatan" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 mt-1">
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic italic">Tanggal Kegiatan *</label>
+                <input type="date" id="tgl_kegiatan" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none mt-1 input-focus">
             </div>
 
             <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic">Lokasi / Area Kerja</label>
-                <input type="text" id="lokasi" placeholder="Contoh: Pit G, Workshop" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 mt-1">
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic italic">Lokasi / Area Kerja *</label>
+                <input type="text" id="lokasi" placeholder="Contoh: Pit G, Workshop" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none mt-1 input-focus">
             </div>
 
             <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic">Kategori Pekerjaan</label>
-                <select id="jenis" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 mt-1">
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic italic">Kategori Pekerjaan *</label>
+                <select id="jenis" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none mt-1 input-focus">
+                    <option value="">-- Pilih Kategori --</option>
                     <option value="Survei">Survei (10 Poin)</option>
                     <option value="Non-Survei">Non-Survei (5 Poin)</option>
                     <option value="Administrasi">Administrasi (3 Poin)</option>
@@ -55,12 +57,12 @@
             </div>
 
             <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic">Deskripsi Tugas</label>
-                <textarea id="deskripsi" placeholder="Apa yang Anda kerjakan hari ini?" rows="3" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 mt-1"></textarea>
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic italic">Deskripsi Tugas *</label>
+                <textarea id="deskripsi" placeholder="Jelaskan detail pekerjaan Anda hari ini..." rows="3" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none mt-1 input-focus"></textarea>
             </div>
 
             <div class="bg-blue-50 p-5 rounded-2xl border-2 border-dashed border-blue-200 text-center">
-                <label class="text-[9px] font-black text-blue-900 uppercase block mb-3 italic">Bukti Foto Dokumentasi</label>
+                <label class="text-[9px] font-black text-blue-900 uppercase block mb-3 italic italic">Bukti Foto Dokumentasi *</label>
                 <input type="file" id="fotoInput" accept="image/*" class="text-[10px] font-bold text-gray-500 file:bg-blue-900 file:text-white file:rounded-xl file:border-0 file:px-4 file:py-2 file:mr-4 file:uppercase">
             </div>
 
@@ -71,16 +73,16 @@
 
         <div id="pane-history" class="hidden space-y-4">
             <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-lg text-center border-b-8 border-orange-500 mb-6">
-                <p class="text-[9px] font-black text-orange-400 uppercase tracking-widest mb-1 italic">Total Skor Terkumpul</p>
-                <h2 id="overallScore" class="text-5xl font-black text-white italic tracking-tighter">0</h2>
-                <p class="text-[8px] text-blue-300 font-bold uppercase mt-2 italic">Sinkronisasi Cloud Aktif</p>
+                <p class="text-[9px] font-black text-orange-400 uppercase tracking-widest mb-1 italic italic">Total Skor Terkumpul</p>
+                <h2 id="overallScore" class="text-5xl font-black text-white italic italic tracking-tighter">0</h2>
+                <p class="text-[8px] text-blue-300 font-bold uppercase mt-2 italic italic">Sinkronisasi Database Cloud Aktif</p>
             </div>
 
-            <div id="loading" class="text-center py-10 font-black text-blue-900 text-[10px] animate-pulse uppercase tracking-[0.3em] italic">Sinkronisasi Database...</div>
+            <div id="loading" class="text-center py-10 font-black text-blue-900 text-[10px] animate-pulse uppercase tracking-[0.3em] italic italic">Memproses Data...</div>
             <div id="riwayatList" class="space-y-5"></div>
         </div>
 
-        <button onclick="logout()" class="w-full mt-12 text-gray-300 font-black text-[9px] uppercase tracking-[0.3em] italic opacity-50">Keluar Akun</button>
+        <button onclick="logout()" class="w-full mt-12 text-gray-300 font-black text-[9px] uppercase tracking-[0.3em] italic italic opacity-50">Keluar Sistem</button>
     </div>
 
     <script>
@@ -102,56 +104,56 @@
             if(tab === 'history') fetchRiwayatCloud();
         }
 
-        // --- FUNGSI SIMPAN DENGAN TRACKING GPS ---
         async function simpanLaporan() {
             const btn = document.getElementById('btnSimpan');
-            const kat = document.getElementById('jenis').value;
             const tgl = document.getElementById('tgl_kegiatan').value;
             const lok = document.getElementById('lokasi').value;
+            const kat = document.getElementById('jenis').value;
+            const des = document.getElementById('deskripsi').value;
+            const fotoFile = document.getElementById('fotoInput').files[0];
 
-            if(!tgl || !lok) return alert("Mohon lengkapi Tanggal dan Lokasi!");
+            // 1. VALIDASI INPUT KOSONG
+            if (!tgl || !lok || !kat || !des) return alert("❌ Gagal! Semua kolom teks wajib diisi.");
+            if (des.length < 10) return alert("❌ Deskripsi terlalu pendek! Minimal 10 karakter.");
+            if (!fotoFile) return alert("❌ Bukti Foto wajib dilampirkan!");
 
             btn.disabled = true;
             btn.innerText = "MENGUNCI LOKASI GPS...";
 
+            // 2. VALIDASI GPS (WAJIB TERDETEKSI)
             let mapsLink = "-";
             try {
                 const pos = await new Promise((resolve, reject) => {
                     navigator.geolocation.getCurrentPosition(resolve, reject, {
                         enableHighAccuracy: true,
-                        timeout: 10000,
+                        timeout: 8000,
                         maximumAge: 0
                     });
                 });
                 mapsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                 document.getElementById('gps-status').classList.remove('hidden');
             } catch (err) {
-                alert("GPS GAGAL: Harap aktifkan Lokasi/GPS di HP Anda!");
+                alert("❌ GPS ERROR! Pastikan GPS HP menyala dan berikan izin lokasi di browser Anda.");
                 btn.disabled = false;
                 btn.innerText = "Kirim Laporan & GPS";
                 return;
             }
 
-            // Hitung Skor
+            // 3. LOGIKA SKOR
             let skorOtomatis = 3; 
             if(kat === "Survei") skorOtomatis = 10;
             else if(kat === "Non-Survei") skorOtomatis = 5;
 
-            // Proses Foto
-            const fotoFile = document.getElementById('fotoInput').files[0];
-            let base64Foto = "";
-            if(fotoFile) {
-                const reader = new FileReader();
-                base64Foto = await new Promise(resolve => {
-                    reader.onload = e => resolve(e.target.result.split(',')[1]);
-                    reader.readAsDataURL(fotoFile);
-                });
-            }
-
-            btn.innerText = "MENGIRIM KE CLOUD...";
+            // 4. PROSES FOTO & KIRIM
+            btn.innerText = "MENGUNGGAH DATA...";
+            const reader = new FileReader();
+            const base64Foto = await new Promise(resolve => {
+                reader.onload = e => resolve(e.target.result.split(',')[1]);
+                reader.readAsDataURL(fotoFile);
+            });
 
             try {
-                await fetch(scriptURL, {
+                const response = await fetch(scriptURL, {
                     method: 'POST',
                     body: JSON.stringify({
                         action: "addLogbook",
@@ -160,23 +162,25 @@
                         tanggal: tgl,
                         lokasi: lok,
                         jenis: kat,
-                        deskripsi: document.getElementById('deskripsi').value,
+                        deskripsi: des,
                         foto: base64Foto,
                         rowId: "ID-" + Date.now(),
                         skor: skorOtomatis,
                         geotagging: mapsLink 
                     })
                 });
-                alert("LAPORAN & LOKASI BERHASIL DISIMPAN!");
-                location.reload();
+                const res = await response.json();
+                if(res.success) {
+                    alert("✅ BERHASIL! Laporan & GPS telah tersimpan di Cloud.");
+                    location.reload();
+                }
             } catch (e) {
-                alert("GAGAL KONEKSI KE SERVER!");
+                alert("❌ KONEKSI GAGAL! Periksa sinyal internet Anda.");
                 btn.disabled = false;
                 btn.innerText = "Kirim Laporan & GPS";
             }
         }
 
-        // --- FUNGSI RIWAYAT DENGAN OVERALL SCORE ---
         async function fetchRiwayatCloud() {
             const container = document.getElementById('riwayatList');
             const loading = document.getElementById('loading');
@@ -202,26 +206,25 @@
                 }
 
                 data.forEach(item => {
-                    // Paksa skor menjadi angka agar tidak NaN
                     let nilaiSkor = parseInt(item.skor) || 0;
                     totalScore += nilaiSkor;
 
                     container.innerHTML += `
                         <div class="bg-gray-50 p-6 rounded-[2.5rem] border-l-[10px] border-blue-900 shadow-sm relative mb-4">
                             <div class="flex justify-between items-start mb-2">
-                                <span class="text-[9px] font-black text-orange-600 uppercase italic tracking-tighter">${item.tanggal}</span>
+                                <span class="text-[9px] font-black text-orange-600 uppercase italic italic tracking-tighter">${item.tanggal}</span>
                                 <span class="text-[8px] bg-blue-900 text-white px-3 py-1 rounded-full font-black uppercase tracking-widest">${item.jenis}</span>
                             </div>
                             <h3 class="font-black text-blue-900 text-sm uppercase leading-tight">${item.lokasi}</h3>
-                            <p class="text-[11px] text-gray-500 mt-2 italic leading-relaxed line-clamp-2">"${item.deskripsi}"</p>
+                            <p class="text-[11px] text-gray-500 mt-2 italic italic leading-relaxed line-clamp-2">"${item.deskripsi}"</p>
                             
                             <div class="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center">
                                 <div class="bg-orange-100 px-3 py-1 rounded-lg border border-orange-200">
-                                    <span class="text-[9px] font-black text-orange-600 uppercase italic">SKOR: ${nilaiSkor}</span>
+                                    <span class="text-[9px] font-black text-orange-600 uppercase italic italic">SKOR: ${nilaiSkor}</span>
                                 </div>
                                 <div class="flex gap-2">
-                                    ${item.geotagging && item.geotagging !== "-" ? `<a href="${item.geotagging}" target="_blank" class="text-green-600 text-[10px] font-black underline italic">GPS</a>` : ""}
-                                    ${item.foto !== "-" ? `<a href="${item.foto}" target="_blank" class="text-blue-600 text-[10px] font-black underline italic">FOTO</a>` : ""}
+                                    ${item.geotagging && item.geotagging !== "-" ? `<a href="${item.geotagging}" target="_blank" class="text-green-600 text-[10px] font-black underline italic italic">LOKASI</a>` : ""}
+                                    ${item.foto !== "-" ? `<a href="${item.foto}" target="_blank" class="text-blue-600 text-[10px] font-black underline italic italic">FOTO</a>` : ""}
                                 </div>
                             </div>
                         </div>
