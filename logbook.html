@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logbook PRAKERIN - Survei & Pemetaan</title>
+    <title>Logbook PRAKERIN - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -15,49 +15,64 @@
                 <i class="fas fa-map-marked-alt text-yellow-400 text-xl"></i>
                 <div>
                     <h1 class="font-black uppercase tracking-tighter text-xs leading-none">Logbook PRAKERIN</h1>
-                    <p class="text-[8px] text-yellow-400 font-bold uppercase tracking-widest mt-1">Survei dan Pemetaan</p>
+                    <p class="text-[8px] text-yellow-400 font-bold uppercase tracking-widest mt-1">Prodi Survei dan Pemetaan</p>
+                    <p class="text-[7px] text-white/60 font-medium uppercase leading-none">Politeknik Sinar Mas Berau Coal</p>
                 </div>
             </div>
-            <a href="dashboard.html" class="bg-white/10 p-3 rounded-2xl hover:bg-white/20 transition"><i class="fas fa-home"></i></a>
+            <a href="dashboard.html" class="bg-white/10 p-3 rounded-2xl hover:bg-white/20 transition">
+                <i class="fas fa-home"></i>
+            </a>
         </div>
     </nav>
 
     <div class="container mx-auto px-4 mt-6 max-w-2xl space-y-6">
         
-        <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-xl text-white border-b-4 border-yellow-400">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p id="userNameDisplay" class="font-black text-xs uppercase text-yellow-400 mb-1">Loading...</p>
-                    <p class="text-[8px] uppercase tracking-[0.3em] opacity-60">Total Skor Akumulasi</p>
-                    <h2 id="totalScore" class="text-4xl font-black italic mt-1">0</h2>
-                </div>
-                <i class="fas fa-trophy text-5xl opacity-20 text-yellow-400"></i>
+        <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-xl text-white flex justify-between items-center border-b-4 border-yellow-400">
+            <div>
+                <p id="userNameDisplay" class="font-black text-xs uppercase text-yellow-400 mb-1">Memuat Nama...</p>
+                <p class="text-[8px] uppercase tracking-[0.3em] opacity-60">Total Skor Akumulasi</p>
+                <h2 id="totalScore" class="text-4xl font-black italic mt-1">0</h2>
             </div>
-            <div class="mt-4 pt-4 border-t border-white/10 flex items-center gap-2">
-                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <p class="text-[7px] font-bold uppercase tracking-widest text-white/50">Geotagging System Ready</p>
+            <div class="text-right">
+                <i class="fas fa-trophy text-5xl opacity-20 text-yellow-400"></i>
+                <div class="mt-2 flex items-center gap-1 justify-end">
+                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                    <p class="text-[6px] font-bold uppercase text-white/40">GPS Tracking On</p>
+                </div>
             </div>
         </div>
 
         <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border-t-8 border-orange-500">
+            <h2 class="font-black text-blue-900 uppercase mb-5 flex items-center gap-2 text-sm">
+                <i class="fas fa-file-signature text-orange-500"></i> Pelaporan PRAKERIN Harian
+            </h2>
             <form id="logForm" class="space-y-4">
                 <input type="hidden" id="editRowId">
                 <input type="hidden" id="existingFoto">
                 
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="date" id="tgl" required onclick="this.showPicker()" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs font-bold">
-                    <input type="text" id="lokasi" placeholder="Lokasi Pekerjaan" required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs font-bold">
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-bold text-gray-400 uppercase ml-2">Tanggal</label>
+                        <input type="date" id="tgl" required onclick="this.showPicker()" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs font-bold">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-bold text-gray-400 uppercase ml-2">Lokasi Pekerjaan</label>
+                        <input type="text" id="lokasi" placeholder="Site / Office" required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs font-bold">
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-2">
-                    <label class="cursor-pointer"><input type="radio" name="jenis" value="Survey" checked class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all uppercase">Survey</div></label>
-                    <label class="cursor-pointer"><input type="radio" name="jenis" value="Non-Survey" class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all uppercase">Non-Survey</div></label>
-                    <label class="cursor-pointer"><input type="radio" name="jenis" value="Administrasi" class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all uppercase">Admin</div></label>
+                <div class="space-y-1">
+                    <label class="text-[9px] font-bold text-gray-400 uppercase ml-2">Kategori Kegiatan</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer"><input type="radio" name="jenis" value="Survey" checked class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all">SURVEY (+10)</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="jenis" value="Non-Survey" class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all text-nowrap">NON-SURVEY (+5)</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="jenis" value="Administrasi" class="hidden peer"><div class="text-center p-3 bg-gray-50 rounded-2xl peer-checked:bg-blue-900 peer-checked:text-white font-black text-[8px] transition-all">ADMIN (+3)</div></label>
+                    </div>
                 </div>
 
-                <textarea id="desk" rows="3" placeholder="Deskripsi detail pekerjaan hari ini..." required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs"></textarea>
+                <textarea id="desk" rows="3" placeholder="Deskripsi pekerjaan..." required class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 text-xs"></textarea>
 
-                <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200 text-center relative">
+                <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200 text-center relative group">
                     <input type="file" id="foto" accept="image/*" class="hidden" onchange="previewImg(this)">
                     <div onclick="document.getElementById('foto').click()" class="cursor-pointer text-gray-400 py-2">
                         <i class="fas fa-camera text-xl mb-1"></i>
@@ -66,44 +81,40 @@
                     <img id="imgPrev" class="hidden mt-2 rounded-2xl max-h-40 mx-auto shadow-lg border-4 border-white">
                 </div>
 
-                <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase tracking-widest shadow-lg active:scale-95 hover:bg-blue-800 transition-all">Simpan Logbook & GPS</button>
+                <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase tracking-widest shadow-lg active:scale-95 hover:bg-blue-800 transition-all">Simpan & Kirim Lokasi</button>
             </form>
         </div>
 
         <div class="space-y-4">
             <h3 class="font-black text-blue-900 uppercase text-xs tracking-widest ml-2 flex items-center gap-2">
-                <i class="fas fa-history text-orange-500"></i> Riwayat Kegiatan Cloud
+                <i class="fas fa-history text-orange-500"></i> Riwayat Terintegrasi Cloud
             </h3>
             <div id="historyList" class="space-y-4"></div>
         </div>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxi5qKZ_1tVzpSK1OaHgy0VVjsEBzf2MtejSwtPB-DqwtSs43SHSYGN_zMDHSkRyE5d/exec";
+        // GANTI DENGAN URL WEB APP GOOGLE SCRIPT ANDA
+        const scriptURL = "PASTE_URL_WEB_APP_ANDA_DISINI";
+        
         const user = JSON.parse(localStorage.getItem('current_user'));
         let logs = [];
 
-        if(!user) { window.location.href = 'index.html'; }
-        else { 
+        if(!user) {
+            window.location.href = 'index.html';
+        } else {
             document.getElementById('userNameDisplay').innerText = user.name;
-            loadCloud();
-        }
-
-        async function loadCloud() {
-            const container = document.getElementById('historyList');
-            container.innerHTML = '<div class="text-center py-10 text-gray-300 font-bold uppercase text-[9px] animate-pulse">Menghubungkan ke Cloud...</div>';
-            try {
-                const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "readLogbook", nim: user.id }) });
-                logs = await res.json();
-                render();
-            } catch (err) { container.innerHTML = '<div class="text-center text-red-500 font-bold text-[9px]">Gagal Memuat Data</div>'; }
+            loadCloudData();
         }
 
         function previewImg(input) {
             const preview = document.getElementById('imgPrev');
             if(input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = (e) => { preview.src = e.target.result; preview.classList.remove('hidden'); };
+                reader.onload = (e) => { 
+                    preview.src = e.target.result; 
+                    preview.classList.remove('hidden'); 
+                };
                 reader.readAsDataURL(input.files[0]);
             }
         }
@@ -116,21 +127,40 @@
             });
         }
 
+        async function loadCloudData() {
+            const container = document.getElementById('historyList');
+            container.innerHTML = '<div class="text-center py-10 text-gray-400 font-bold uppercase text-[9px] animate-pulse">Sinkronisasi Cloud...</div>';
+            
+            try {
+                const res = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "readLogbook", nim: user.id })
+                });
+                logs = await res.json();
+                render();
+            } catch (err) {
+                container.innerHTML = '<div class="text-center py-10 text-red-500 font-bold uppercase text-[9px]">Gagal Menghubungkan ke Server</div>';
+            }
+        }
+
         document.getElementById('logForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
-            btn.disabled = true; btn.innerHTML = '<i class="fas fa-map-marker-alt fa-spin mr-2"></i> Mengunci Lokasi...';
+            btn.disabled = true; 
+            btn.innerHTML = '<i class="fas fa-map-marker-alt fa-spin mr-2"></i> Mengunci Lokasi...';
 
-            if (!navigator.geolocation) { alert("GPS Tidak Didukung!"); btn.disabled = false; return; }
+            if (!navigator.geolocation) {
+                alert("GPS tidak didukung!"); btn.disabled = false; return;
+            }
 
             navigator.geolocation.getCurrentPosition(async (pos) => {
-                const lat = pos.coords.latitude;
-                const lon = pos.coords.longitude;
-                const geoUrl = `https://www.google.com/maps?q=${lat},${lon}`;
-                
+                const geoUrl = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                const editId = document.getElementById('editRowId').value;
+                const rowId = editId || "RID-" + Date.now();
                 const file = document.getElementById('foto').files[0];
                 const base64 = file ? await convertBase64(file) : "";
                 const jenis = document.querySelector('input[name="jenis"]:checked').value;
+                const skor = jenis === 'Survey' ? 10 : (jenis === 'Non-Survey' ? 5 : 3);
 
                 const payload = {
                     action: "addLogbook",
@@ -141,59 +171,82 @@
                     deskripsi: document.getElementById('desk').value,
                     foto: base64,
                     existingFoto: document.getElementById('existingFoto').value,
-                    rowId: document.getElementById('editRowId').value || "RID-"+Date.now(),
-                    skor: jenis === 'Survey' ? 10 : (jenis === 'Non-Survey' ? 5 : 3),
-                    geotagging: geoUrl
+                    rowId: rowId, skor: skor, geotagging: geoUrl
                 };
 
                 try {
                     await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-                    alert("Tersimpan ke Cloud dengan Geotagging!");
+                    alert("✅ Data Berhasil Disimpan!");
                     location.reload();
-                } catch(err) { alert("Gagal Simpan!"); btn.disabled = false; }
+                } catch(err) {
+                    alert("❌ Sinkronisasi Gagal!");
+                    btn.disabled = false;
+                }
             }, () => {
-                alert("Wajib aktifkan GPS untuk mengisi logbook!");
-                btn.disabled = false; btn.innerText = "Simpan Logbook & GPS";
-            });
+                alert("GPS WAJIB AKTIF untuk pengisian logbook!");
+                btn.disabled = false;
+                btn.innerText = "Simpan & Kirim Lokasi";
+            }, { enableHighAccuracy: true });
         };
 
         function render() {
             const container = document.getElementById('historyList');
             let total = 0;
-            if(logs.length === 0) { container.innerHTML = '<div class="text-center py-10 text-gray-300 font-bold uppercase text-[9px]">Belum ada riwayat</div>'; return; }
-            
-            container.innerHTML = [...logs].reverse().map((l, i) => {
+            if(logs.length === 0) {
+                container.innerHTML = '<div class="text-center py-10 text-gray-300 font-bold uppercase text-[10px]">Belum ada riwayat</div>';
+                document.getElementById('totalScore').innerText = "0";
+                return;
+            }
+
+            // Urutkan (terbaru di atas)
+            const sortedLogs = [...logs].reverse();
+
+            container.innerHTML = sortedLogs.map((l, i) => {
                 total += parseInt(l.skor);
+                // Konversi Link Drive agar bisa di-view langsung
+                const directImg = l.foto && l.foto !== "-" ? l.foto.replace('file/d/', 'uc?export=view&id=').replace('/view?usp=drivesdk', '').replace('open?id=', 'uc?export=view&id=') : null;
+
                 return `
-                <div class="bg-white p-6 rounded-[2.5rem] shadow-lg border-l-[12px] ${l.jenis === 'Survey' ? 'border-blue-900' : 'border-orange-500'} relative mb-4">
-                    <div class="flex justify-between items-start mb-3">
+                <div class="bg-white p-6 rounded-[2.5rem] shadow-lg border-l-[12px] ${l.jenis === 'Survey' ? 'border-blue-900' : 'border-orange-500'} relative">
+                    <div class="flex justify-between items-start mb-4">
                         <div class="flex gap-2">
-                            <span class="bg-gray-100 text-[7px] font-black px-2 py-1 rounded-full text-gray-500 uppercase">${l.jenis}</span>
-                            <span class="bg-orange-100 text-orange-600 text-[7px] font-black px-2 py-1 rounded-full uppercase">+${l.skor} Poin</span>
+                            <span class="bg-gray-100 text-[7px] font-black px-2 py-1 rounded-full text-gray-500 uppercase font-sans">${l.jenis}</span>
+                            <span class="bg-orange-100 text-orange-600 text-[7px] font-black px-2 py-1 rounded-full uppercase font-sans">+${l.skor} Poin</span>
                         </div>
                         <div class="flex gap-3 text-gray-300">
-                            <button onclick="hapusLog('${l.rowId}')" class="hover:text-red-500 transition"><i class="fas fa-trash-alt text-xs"></i></button>
+                             <button onclick="hapusLog('${l.rowId}')" class="hover:text-red-500 transition"><i class="fas fa-trash-alt text-xs"></i></button>
                         </div>
                     </div>
-                    <h4 class="text-blue-900 font-black text-xs uppercase">${l.tanggal}</h4>
-                    <p class="text-orange-500 font-black text-[9px] uppercase mb-2">${l.lokasi}</p>
-                    <p class="text-gray-600 text-[10px] bg-gray-50 p-3 rounded-xl mb-3">${l.deskripsi}</p>
-                    <div class="flex flex-col gap-2">
-                        ${l.foto && l.foto !== "-" ? `<img src="${l.foto}" class="w-full h-32 object-cover rounded-2xl">` : ''}
-                        <a href="${l.geotagging}" target="_blank" class="text-center bg-blue-50 text-blue-600 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest"><i class="fas fa-map-marker-alt mr-1"></i> Lihat Lokasi Absensi</a>
+                    <div class="mb-3">
+                        <h4 class="text-blue-900 font-black text-xs uppercase">${l.tanggal}</h4>
+                        <p class="text-orange-500 font-black text-[9px] uppercase tracking-tighter">${l.lokasi}</p>
                     </div>
+                    <p class="text-gray-600 text-[10px] leading-relaxed mb-4 bg-gray-50 p-4 rounded-2xl">${l.deskripsi}</p>
+                    
+                    ${directImg ? `<img src="${directImg}" class="w-full h-44 object-cover rounded-2xl shadow-inner border border-gray-100 mb-3">` : ''}
+                    
+                    <a href="${l.geotagging}" target="_blank" class="block w-full text-center py-3 bg-blue-50 text-blue-700 rounded-xl text-[8px] font-black uppercase tracking-widest hover:bg-blue-100 transition">
+                        <i class="fas fa-map-marker-alt mr-1"></i> Lihat Lokasi Pelaporan
+                    </a>
                 </div>`;
             }).join('');
             document.getElementById('totalScore').innerText = total;
         }
 
         window.hapusLog = async (rid) => {
-            if(!confirm("Hapus permanen dari Cloud?")) return;
+            if(!confirm("Hapus data ini dari Cloud?")) return;
             try {
-                await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: "deleteLogbook", rowId: rid}) });
-                alert("Terhapus!"); location.reload();
-            } catch(e) { alert("Gagal!"); }
+                await fetch(scriptURL, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    body: JSON.stringify({action: "deleteLogbook", rowId: rid}) 
+                });
+                alert("Data Terhapus!");
+                location.reload();
+            } catch(e) { alert("Gagal Menghapus!"); }
         };
+
+        render();
     </script>
 </body>
 </html>
