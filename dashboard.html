@@ -12,126 +12,135 @@
     <nav class="bg-blue-900 text-white p-4 shadow-xl sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_6uXoR6VpX98t0Rz-2m7t6V3xX6z6f9y3fQ&s" alt="Logo" class="h-8 bg-white rounded p-1">
+                <i class="fas fa-map-marked-alt text-yellow-400 text-xl"></i>
                 <div>
                     <h1 class="text-xs font-black uppercase tracking-tighter leading-none">Politeknik Sinar Mas</h1>
                     <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">Survei dan Pemetaan</p>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="hidden md:flex flex-col text-right">
-                    <span id="navUserName" class="text-[10px] font-bold uppercase tracking-tighter">Nama User</span>
-                    <span id="navUserRole" class="text-[9px] text-yellow-400 uppercase font-black tracking-widest">Role</span>
-                </div>
-                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 p-2 rounded-lg transition shadow-md">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
+            <button onclick="logout()" class="bg-red-600 hover:bg-red-700 p-2 rounded-lg transition shadow-md">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
         </div>
     </nav>
 
     <div class="container mx-auto py-8 px-6">
         
-        <div class="mb-10 flex flex-col md:flex-row justify-between items-end gap-4">
-            <div>
-                <h2 class="text-3xl font-black text-blue-900 tracking-tighter">DASHBOARD <span class="text-orange-600 uppercase">PRODI</span></h2>
-                <p class="text-gray-500 text-xs font-bold uppercase tracking-widest mt-1">Sistem Terintegrasi Monitoring & KPI Kinerja</p>
-            </div>
-            <div id="dateDisplay" class="bg-white px-6 py-2 rounded-2xl shadow-sm border font-bold text-xs text-blue-900">
-                <i class="far fa-calendar-alt mr-2"></i> 18 Februari 2026
-            </div>
+        <div class="mb-10">
+            <h2 class="text-3xl font-black text-blue-900 tracking-tighter uppercase">Dashboard <span class="text-orange-600">Prodi</span></h2>
+            <p id="yearDisplay" class="text-gray-500 text-xs font-bold uppercase tracking-widest mt-1">Rekapitulasi Data Tahun 2026</p>
         </div>
 
         <div id="summaryDosen" class="hidden grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             <div class="bg-blue-900 p-6 rounded-[2rem] shadow-xl text-white relative overflow-hidden">
                 <i class="fas fa-chart-line absolute -right-2 -bottom-2 text-6xl opacity-10"></i>
-                <p class="text-[9px] font-bold uppercase opacity-70 tracking-widest">Total Skor Kolektif</p>
-                <p class="text-3xl font-black mt-1">1,420</p>
+                <p class="text-[9px] font-bold uppercase opacity-70 tracking-widest">Total Skor Kolektif (2026)</p>
+                <p id="realSkorKolektif" class="text-3xl font-black mt-1">0</p>
             </div>
             <div class="bg-orange-600 p-6 rounded-[2rem] shadow-xl text-white relative overflow-hidden">
                 <i class="fas fa-award absolute -right-2 -bottom-2 text-6xl opacity-20"></i>
-                <p class="text-[9px] font-bold uppercase opacity-70 tracking-widest">Publikasi & HAKI</p>
-                <p class="text-3xl font-black mt-1">24</p>
+                <p class="text-[9px] font-bold uppercase opacity-70 tracking-widest">Total Luaran & HAKI</p>
+                <p id="realTotalLuaran" class="text-3xl font-black mt-1">0</p>
             </div>
             <div class="bg-white p-6 rounded-[2rem] shadow-md border relative overflow-hidden">
-                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Mahasiswa Prakerin</p>
-                <p class="text-3xl font-black text-blue-900 mt-1">48</p>
+                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Mahasiswa Aktif</p>
+                <p id="realTotalMhs" class="text-3xl font-black text-blue-900 mt-1">0</p>
             </div>
             <div class="bg-white p-6 rounded-[2rem] shadow-md border relative overflow-hidden">
                 <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Logbook Pending</p>
-                <p class="text-3xl font-black text-red-600 mt-1">12</p>
+                <p id="realLogbookPending" class="text-3xl font-black text-red-600 mt-1">0</p>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <div id="cardKPI" class="hidden group bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-blue-900 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div class="bg-blue-100 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-900 transition-colors">
-                    <i class="fas fa-tasks text-2xl text-blue-900 group-hover:text-white"></i>
-                </div>
+            <div id="cardKPI" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-blue-900">
                 <h3 class="font-black text-lg text-blue-900 uppercase">KPI Dosen</h3>
-                <p class="text-[11px] text-gray-500 mt-2 mb-6 leading-relaxed">Input laporan harian Pengajaran, Penelitian, dan Pengabdian (+5 Poin).</p>
-                <a href="performa_dosen.html" class="inline-block bg-blue-900 text-white px-8 py-3 rounded-xl font-black text-[10px] tracking-widest shadow-lg hover:bg-orange-600 transition uppercase">Isi Laporan</a>
+                <p class="text-[11px] text-gray-500 mt-2 mb-6">Input laporan harian (+5 Poin).</p>
+                <a href="performa_dosen.html" class="bg-blue-900 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase">Isi Laporan</a>
             </div>
 
-            <div id="cardLuaran" class="hidden group bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-green-600 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div class="bg-green-100 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-green-600 transition-colors">
-                    <i class="fas fa-award text-2xl text-green-600 group-hover:text-white"></i>
-                </div>
+            <div id="cardLuaran" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-green-600">
                 <h3 class="font-black text-lg text-blue-900 uppercase">Luaran & Publikasi</h3>
-                <p class="text-[11px] text-gray-500 mt-2 mb-6 leading-relaxed">Input Jurnal, HAKI, Buku, dan Sertifikasi kompetensi (+10 Poin).</p>
-                <a href="luaran_dosen.html" class="inline-block bg-green-600 text-white px-8 py-3 rounded-xl font-black text-[10px] tracking-widest shadow-lg hover:bg-blue-900 transition uppercase">Input Luaran</a>
+                <p class="text-[11px] text-gray-500 mt-2 mb-6">Input Jurnal, HAKI, Buku (+10 Poin).</p>
+                <a href="luaran_dosen.html" class="bg-green-600 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase">Input Luaran</a>
             </div>
 
-            <div id="cardMonitor" class="hidden group bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-orange-600 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div class="bg-orange-100 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-orange-600 transition-colors">
-                    <i class="fas fa-user-check text-2xl text-orange-600 group-hover:text-white"></i>
-                </div>
+            <div id="cardMonitor" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-orange-600">
                 <h3 class="font-black text-lg text-blue-900 uppercase">Monitoring Prakerin</h3>
-                <p class="text-[11px] text-gray-500 mt-2 mb-6 leading-relaxed">Pantau history logbook mahasiswa dan berikan penilaian langsung.</p>
-                <a href="penilaian_logbook.html" class="inline-block bg-orange-600 text-white px-8 py-3 rounded-xl font-black text-[10px] tracking-widest shadow-lg hover:bg-blue-900 transition uppercase">Monitoring</a>
+                <p class="text-[11px] text-gray-500 mt-2 mb-6">Pantau logbook mahasiswa prakerin.</p>
+                <a href="penilaian_logbook.html" class="bg-orange-600 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase">Monitoring</a>
             </div>
 
-            <div id="cardLogMhs" class="hidden group bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-blue-900 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div class="bg-blue-100 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-900 transition-colors">
-                    <i class="fas fa-clipboard-list text-2xl text-blue-900 group-hover:text-white"></i>
-                </div>
+            <div id="cardLogMhs" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-blue-900">
                 <h3 class="font-black text-lg text-blue-900 uppercase">Logbook Harian</h3>
-                <p class="text-[11px] text-gray-500 mt-2 mb-6 leading-relaxed">Catat aktivitas harian prakerin/magang di industri setiap hari.</p>
-                <a href="logbook.html" class="inline-block bg-blue-900 text-white px-8 py-3 rounded-xl font-black text-[10px] tracking-widest shadow-lg hover:bg-orange-600 transition uppercase">Isi Logbook</a>
+                <p class="text-[11px] text-gray-500 mt-2 mb-6">Catat aktivitas harian magang/site.</p>
+                <a href="logbook.html" class="bg-blue-900 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase">Isi Logbook</a>
             </div>
-
-        </div>
-
-        <div class="mt-12 text-center text-[10px] text-gray-400 font-bold uppercase tracking-[0.3em]">
-            Politeknik Sinar Mas Berau Coal &copy; 2026
         </div>
     </div>
 
     <script>
-        // AUTH CHECK
         const user = JSON.parse(localStorage.getItem('current_user'));
-        if (!user) {
-            window.location.href = 'index.html';
-        } else {
-            // SET UI
-            document.getElementById('navUserName').innerText = user.name;
-            document.getElementById('navUserRole').innerText = user.role;
-            
-            if (user.role === 'dosen') {
-                document.getElementById('summaryDosen').classList.remove('hidden');
-                document.getElementById('cardKPI').classList.remove('hidden');
-                document.getElementById('cardLuaran').classList.remove('hidden');
-                document.getElementById('cardMonitor').classList.remove('hidden');
-            } else {
-                document.getElementById('cardLogMhs').classList.remove('hidden');
+        if (!user) window.location.href = 'index.html';
+
+        // FUNGSI UNTUK MENGHITUNG DATA NYATA DARI LOCALSTORAGE
+        function refreshRealData() {
+            let totalSkor = 0;
+            let totalLuaran = 0;
+            let totalMhs = 0;
+            let totalPending = 0;
+
+            // Loop melalui semua kunci di LocalStorage
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                
+                // 1. Hitung Skor dari Performa Dosen (Mencari kunci 'kpi_data_')
+                if (key.startsWith('kpi_score_')) {
+                    totalSkor += parseInt(localStorage.getItem(key)) || 0;
+                }
+
+                // 2. Hitung Jumlah Luaran (Mencari kunci 'luaran_count_')
+                if (key.startsWith('luaran_count_')) {
+                    totalLuaran += parseInt(localStorage.getItem(key)) || 0;
+                }
+
+                // 3. Hitung Mahasiswa & Logbook Pending (Mencari data user role mahasiswa)
+                if (key.startsWith('user_')) {
+                    const userData = JSON.parse(localStorage.getItem(key));
+                    if (userData.role === 'mahasiswa') {
+                        totalMhs++;
+                        // Jika mahasiswa belum pernah mengisi logbook sama sekali
+                        if (!localStorage.getItem('logbook_' + userData.id)) {
+                            totalPending++;
+                        }
+                    }
+                }
             }
+
+            // Update Tampilan Dashboard
+            document.getElementById('realSkorKolektif').innerText = totalSkor;
+            document.getElementById('realTotalLuaran').innerText = totalLuaran;
+            document.getElementById('realTotalMhs').innerText = totalMhs;
+            document.getElementById('realLogbookPending').innerText = totalPending;
+        }
+
+        // Tampilkan Menu Berdasarkan Role
+        if (user.role === 'dosen') {
+            document.getElementById('summaryDosen').classList.remove('hidden');
+            document.getElementById('cardKPI').classList.remove('hidden');
+            document.getElementById('cardLuaran').classList.remove('hidden');
+            document.getElementById('cardMonitor').classList.remove('hidden');
+        } else {
+            document.getElementById('cardLogMhs').classList.remove('hidden');
         }
 
         function logout() {
             localStorage.removeItem('current_user');
             window.location.href = 'index.html';
         }
+
+        // Jalankan penghitungan saat dashboard dibuka
+        window.onload = refreshRealData;
     </script>
 </body>
 </html>
