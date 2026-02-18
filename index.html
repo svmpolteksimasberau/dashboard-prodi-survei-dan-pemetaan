@@ -3,163 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal PKL Survei dan Pemetaan - Poltek Simas BC</title>
+    <title>Login - Logbook PRAKERIN PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-blue-900 flex items-center justify-center min-h-screen p-6 font-sans">
+<body class="bg-blue-900 flex items-center justify-center min-h-screen p-6">
 
-    <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md border-t-8 border-orange-500 transition-all">
-        <div class="flex mb-8 bg-gray-100 rounded-2xl p-1">
-            <button type="button" onclick="switchTab('login')" id="tabL" class="w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all">Login Portal</button>
-            <button type="button" onclick="switchTab('register')" id="tabR" class="w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400 transition-all">Aktivasi Akun</button>
+    <div class="bg-white w-full max-w-sm p-10 rounded-[3.5rem] shadow-2xl text-center border-b-[12px] border-orange-500">
+        
+        <div class="mb-10">
+            <div class="w-20 h-20 bg-blue-900 rounded-3xl mx-auto flex items-center justify-center shadow-lg mb-4 transform -rotate-6">
+                <i class="fas fa-user-shield text-yellow-400 text-3xl"></i>
+            </div>
+            <h1 class="font-black text-2xl text-blue-900 uppercase tracking-tighter leading-tight">Akses Logbook</h1>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mt-2">Survey & Pemetaan - PSBC</p>
         </div>
 
-        <div class="text-center mb-8">
-            <h1 class="text-xl font-black text-blue-900 leading-tight uppercase tracking-tighter">
-                Dashboard Survei dan Pemetaan <br>
-                <span class="text-[10px] font-bold text-orange-600 tracking-widest">Politeknik Sinar Mas Berau Coal</span>
-            </h1>
-            <div class="h-1 w-12 bg-blue-900 mx-auto mt-3 rounded-full"></div>
+        <div class="space-y-5">
+            <div class="text-left">
+                <label class="text-[10px] font-black text-blue-900 uppercase ml-5 mb-1 block">Nomor Induk Mahasiswa</label>
+                <div class="relative">
+                    <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xs italic">NIM</span>
+                    <input type="number" id="nimInput" placeholder="Masukkan NIM Anda" 
+                        class="w-full pl-14 pr-5 py-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-black text-sm text-gray-700 transition-all border border-gray-100 shadow-inner">
+                </div>
+            </div>
+            
+            <div class="text-left">
+                <label class="text-[10px] font-black text-blue-900 uppercase ml-5 mb-1 block">PIN Keamanan (Bebas)</label>
+                <div class="relative">
+                    <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xs italic">PIN</span>
+                    <input type="password" id="passInput" placeholder="Min. 4 Digit" 
+                        class="w-full pl-14 pr-5 py-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-black text-sm text-gray-700 transition-all border border-gray-100 shadow-inner">
+                </div>
+            </div>
+            
+            <button onclick="handleLogin()" id="btnLogin" 
+                class="w-full bg-blue-900 text-white font-black py-5 rounded-[1.8rem] shadow-xl active:scale-95 hover:bg-blue-800 transition-all uppercase tracking-widest mt-4 flex justify-center items-center gap-2">
+                Masuk Ke Sistem <i class="fas fa-sign-in-alt ml-1 text-yellow-400"></i>
+            </button>
         </div>
 
-        <div id="loginArea">
-            <form id="loginForm" class="space-y-4">
+        
+        <div class="mt-8 p-5 bg-blue-50 rounded-[2rem] border border-blue-100 text-left">
+            <div class="flex items-start gap-3">
+                <i class="fas fa-info-circle text-orange-500 mt-1"></i>
                 <div>
-                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">NIM / NUPTK</label>
-                    <div class="relative mt-1">
-                        <i class="fas fa-id-card absolute left-4 top-4 text-gray-300"></i>
-                        <input type="text" id="logId" placeholder="Masukkan ID (123 / 122)" class="w-full p-4 pl-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-bold text-sm" required>
-                    </div>
+                    <p class="text-[9px] text-blue-900 font-black uppercase leading-tight">Pengguna Baru / Lupa PIN?</p>
+                    <p class="text-[8px] text-blue-800/70 font-medium leading-relaxed mt-1">
+                        Cukup masukkan NIM dan buat PIN baru. Jika lupa, silakan hubungi Admin untuk reset PIN Anda.
+                    </p>
                 </div>
-                
-                <div>
-                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Password</label>
-                    <div class="relative mt-1">
-                        <i class="fas fa-key absolute left-4 top-4 text-gray-300"></i>
-                        <input type="password" id="logPass" placeholder="••••••••" class="w-full p-4 pl-12 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-bold text-sm" required>
-                    </div>
-                </div>
-
-                <button type="submit" class="w-full bg-blue-900 text-white py-4 rounded-2xl font-black hover:bg-blue-800 transition shadow-lg text-xs uppercase tracking-widest active:scale-95 text-center">Masuk Ke Dashboard</button>
-            </form>
+            </div>
         </div>
 
-        <div id="registerArea" class="hidden">
-            <form id="registerForm" class="space-y-4">
-                <div>
-                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Kategori Akun</label>
-                    <select id="regRole" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl font-black text-blue-900 text-xs outline-none focus:ring-2 focus:ring-orange-500">
-                        <option value="mahasiswa">SAYA MAHASISWA (NIM)</option>
-                        <option value="dosen">SAYA DOSEN (NUPTK)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Nomor Induk Resmi</label>
-                    <input type="text" id="regId" placeholder="NIM: 123 atau 122" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm" required>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Buat Password</label>
-                    <input type="password" id="regPass" placeholder="Password Bebas" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm" required>
-                </div>
-
-                <button type="submit" class="w-full bg-orange-600 text-white py-4 rounded-2xl font-black hover:bg-orange-700 transition shadow-lg text-xs uppercase tracking-widest active:scale-95 text-center">Aktivasi Sekarang</button>
-            </form>
-        </div>
-
-        <p id="alertBox" class="text-[9px] mt-6 text-center hidden font-black p-4 rounded-2xl border uppercase tracking-tighter"></p>
+        <p class="mt-8 text-[9px] text-gray-300 font-black uppercase tracking-widest">Politeknik Sinar Mas Berau Coal</p>
     </div>
 
     <script>
-        // --- 1. DATABASE MASTER RESMI ---
-        const allowedDosen = {
-            "1112099302": "Loryena Ayu Karondia, S.T., M.T.",
-            "1109068901": "Syaiful Muflichin Purnama, S.T., M.Eng.",
-            "1453779680230023": "Nurya Ramadhania, S.T., M.T.",
-            "2434777678230073": "Irma Yusiyanti, S.T., M.Eng",
-            "7435774675230242": "Murdawati, S.T., M.Sc.",
-            "8960779680230032": "Devika Rahma Damayanti Yusuf, S.T., M.T."
-        };
+        // MASUKKAN URL WEB APP GOOGLE SCRIPT ANDA DI SINI
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxzMguvh7lzmdNQuFShk1INok1OhfX-D3i99c7Cz1CXLw-vhTMzXF8d0aBWmaAcdl2D/exec";
 
-        const allowedMahasiswa = {
-            "123": "Sakinah",
-            "122": "Iqbal",
-            "121": "Baskara"
-        };
+        async function handleLogin() {
+            const nim = document.getElementById('nimInput').value;
+            const pass = document.getElementById('passInput').value;
+            const btn = document.getElementById('btnLogin');
 
-        // --- 2. FUNGSI TAB ---
-        function switchTab(mode) {
-            const isLogin = mode === 'login';
-            document.getElementById('loginArea').classList.toggle('hidden', !isLogin);
-            document.getElementById('registerArea').classList.toggle('hidden', isLogin);
-            document.getElementById('tabL').className = isLogin ? "w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all" : "w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400";
-            document.getElementById('tabR').className = !isLogin ? "w-1/2 py-3 rounded-xl font-black text-xs uppercase bg-white shadow transition-all" : "w-1/2 py-3 rounded-xl font-black text-xs uppercase text-gray-400";
-            document.getElementById('alertBox').classList.add('hidden');
-        }
-
-        // --- 3. LOGIKA AKTIVASI (REGISTER) ---
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const id = document.getElementById('regId').value;
-            const role = document.getElementById('regRole').value;
-            const alertBox = document.getElementById('alertBox');
-            
-            // Mengambil Nama Berdasarkan Database (BUKAN INPUT MANUAL)
-            let namaResmi = (role === 'dosen') ? allowedDosen[id] : allowedMahasiswa[id];
-
-            if (!namaResmi) {
-                alertBox.innerText = "❌ AKSES DITOLAK: ID TIDAK TERDAFTAR!";
-                alertBox.className = "text-[9px] mt-6 text-center font-black bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 block";
+            if(!nim || !pass) {
+                alert("NIM dan PIN wajib diisi!");
                 return;
             }
 
-            const userData = {
-                id: id,
-                role: role,
-                name: namaResmi, // Nama Sakinah atau Iqbal otomatis masuk sini
-                pass: document.getElementById('regPass').value
-            };
-
-            // Hapus data lama yang mungkin salah, lalu simpan yang baru
-            localStorage.removeItem('user_db_' + id);
-            localStorage.setItem('user_db_' + id, JSON.stringify(userData));
-            
-            alertBox.innerText = "✅ BERHASIL: AKUN " + namaResmi.toUpperCase() + " AKTIF!";
-            alertBox.className = "text-[9px] mt-6 text-center font-black bg-green-50 text-green-600 p-4 rounded-2xl border border-green-100 block";
-            
-            setTimeout(() => switchTab('login'), 2000);
-        });
-
-        // --- 4. LOGIKA LOGIN ---
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const id = document.getElementById('logId').value;
-            const pass = document.getElementById('logPass').value;
-            const alertBox = document.getElementById('alertBox');
-
-            const savedUser = localStorage.getItem('user_db_' + id);
-            const user = savedUser ? JSON.parse(savedUser) : null;
-
-            if (user && user.pass === pass) {
-                // Simpan Sesi Login Aktif dengan Nama yang Benar
-                localStorage.setItem('current_user', JSON.stringify(user));
-                
-                alertBox.innerText = "LOGIN BERHASIL! MENYAPA " + user.name.toUpperCase();
-                alertBox.className = "text-[9px] mt-6 text-center font-black bg-blue-50 text-blue-600 p-4 rounded-2xl border block";
-                
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1000);
-            } else {
-                alertBox.innerText = "❌ GAGAL: ID ATAU PASSWORD SALAH!";
-                alertBox.className = "text-[9px] mt-6 text-center font-black bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 block";
-                alertBox.classList.remove('hidden');
+            if(pass.length < 4) {
+                alert("PIN keamanan minimal 4 digit agar aman!");
+                return;
             }
+
+            // Loading State
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
+
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        action: "login", 
+                        nim: nim, 
+                        password: pass 
+                    })
+                });
+                
+                const result = await response.json();
+
+                if(result.success) {
+                    if(result.msg) alert("Notifikasi: " + result.msg); 
+                    
+                    // Simpan identitas ke LocalStorage agar logbook.html tahu siapa yang login
+                    localStorage.setItem('current_user', JSON.stringify({ 
+                        id: result.nim, 
+                        name: result.nama 
+                    }));
+
+                    // ARAHKAN KE HALAMAN LOGBOOK
+                    window.location.href = 'logbook.html'; 
+                } else {
+                    alert("Gagal: " + result.msg);
+                    resetButton(btn);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Kesalahan: Tidak dapat terhubung ke server database.");
+                resetButton(btn);
+            }
+        }
+
+        function resetButton(btn) {
+            btn.disabled = false;
+            btn.innerHTML = 'Masuk Ke Sistem <i class="fas fa-sign-in-alt ml-1 text-yellow-400"></i>';
+        }
+
+        // Support tekan Enter untuk login
+        document.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') handleLogin();
         });
     </script>
 </body>
 </html>
-
-
