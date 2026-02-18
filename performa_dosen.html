@@ -1,26 +1,177 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbxGaNDSN36le9F818_bbZ3AhZGzcyL6DfbqEwCNBy4zlQpAPqNGZt4KIKyc6f0gWf9Neg/exec';
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>KPI Performa Dosen - Poltek Simas BC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 p-4 md:p-8 font-sans">
+    <div class="container mx-auto max-w-6xl">
+        <div class="flex justify-between items-center mb-6">
+            <a href="dashboard.html" class="text-blue-900 font-bold flex items-center gap-2 hover:underline text-sm">
+                <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+            </a>
+            <h1 class="text-xl font-black text-blue-900 uppercase tracking-tighter text-right">KPI PERFORMANCE</h1>
+        </div>
 
-// Pastikan fungsi fetch mengirim data dengan struktur yang benar
-document.getElementById('kpiForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const kat = document.getElementById('kat').value;
-    const dsk = document.getElementById('desk').value;
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-gradient-to-br from-blue-900 to-blue-700 p-8 rounded-[2.5rem] shadow-xl text-white flex flex-col justify-center items-center">
+                <p class="text-[10px] font-bold uppercase opacity-80 mb-2 tracking-[0.2em]">Total Skor Anda</p>
+                <h2 id="totalSkorDisplay" class="text-7xl font-black">0</h2>
+            </div>
+            <div class="md:col-span-2 bg-white p-6 rounded-[2.5rem] shadow-md border border-gray-100">
+                <div class="h-32"><canvas id="miniChart"></canvas></div>
+            </div>
+        </div>
 
-    fetch(scriptURL, {
-        method: 'POST',
-        body: JSON.stringify({
-            type: "KPI",
-            id: currentUser.id,
-            nama: currentUser.name,
-            kategori: kat,
-            deskripsi: dsk,
-            poin: 5
-        })
-    })
-    .then(response => {
-        alert("Data KPI Berhasil Terkirim ke Cloud!");
-        // Tambahkan fungsi simpan lokal agar tabel di bawah langsung terisi
-        saveToLocal(kat, dsk);
-    })
-    .catch(error => console.error('Error!', error.message));
-});
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <form id="kpiForm" class="bg-white p-7 rounded-[2.5rem] shadow-lg border-t-8 border-orange-500 space-y-4">
+                <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs">Input Aktivitas Harian</h3>
+                <input type="hidden" id="editRowId">
+                
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Tanggal Kegiatan</label>
+                    <input type="date" id="tgl" class="w-full mt-1 p-3 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500" required>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Kategori Utama</label>
+                    <select id="kat" class="w-full mt-1 p-3 bg-gray-50 border-none rounded-2xl font-bold text-blue-900 outline-none focus:ring-2 focus:ring-orange-500">
+                        <option value="Pengajaran">Pengajaran (+5 Poin)</option>
+                        <option value="Penelitian">Penelitian (+5 Poin)</option>
+                        <option value="Pengabdian">Pengabdian (+5 Poin)</option>
+                        <option value="Administrasi">Administrasi (+5 Poin)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Deskripsi Pekerjaan</label>
+                    <textarea id="desk" rows="3" class="w-full mt-1 p-3 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" placeholder="Jelaskan apa yang Anda kerjakan hari ini..." required></textarea>
+                </div>
+
+                <div class="space-y-2">
+                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-[0.2em] shadow-lg transform active:scale-95 transition-all">SUBMIT</button>
+                    <button type="button" id="btnBatal" class="hidden w-full bg-gray-100 text-gray-500 font-black py-3 rounded-2xl uppercase text-[10px]">Batal Edit</button>
+                </div>
+            </form>
+
+            <div class="lg:col-span-2 bg-white rounded-[2.5rem] shadow-lg border border-gray-100 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-[10px] text-gray-400 uppercase font-black tracking-tighter">
+                        <tr>
+                            <th class="p-5">Tanggal</th>
+                            <th class="p-5">Aktivitas</th>
+                            <th class="p-5 text-center">Edit / Hapus</th>
+                        </tr>
+                    </thead>
+                    <tbody id="histBody" class="divide-y divide-gray-100 text-xs"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwqKz_nVp6iSF-Ts-4VgsxlYacbASHzv5q39zxZmbvcYwt_sifhw8wanfWSikTl_1H4Eg/exec';
+        const user = JSON.parse(localStorage.getItem('current_user'));
+        if (!user) window.location.href = 'index.html';
+
+        let kpiHistory = JSON.parse(localStorage.getItem('kpi_history_' + user.id)) || [];
+        let totalScore = parseInt(localStorage.getItem('kpi_score_' + user.id)) || 0;
+
+        function renderAll() {
+            document.getElementById('totalSkorDisplay').innerText = totalScore;
+            const body = document.getElementById('histBody');
+            body.innerHTML = "";
+            const counts = { Pengajaran: 0, Penelitian: 0, Pengabdian: 0, Administrasi: 0 };
+            
+            [...kpiHistory].reverse().forEach((item, index) => {
+                const realIdx = kpiHistory.length - 1 - index;
+                if(counts[item.kategori] !== undefined) counts[item.kategori]++;
+                body.insertAdjacentHTML('beforeend', `
+                    <tr class="hover:bg-gray-50 transition-all">
+                        <td class="p-5 font-bold text-gray-400 italic">${item.tanggal}</td>
+                        <td class="p-5">
+                            <span class="font-black text-blue-900 uppercase leading-none">${item.kategori}</span><br>
+                            <span class="text-gray-600 font-semibold">${item.deskripsi}</span>
+                        </td>
+                        <td class="p-5 text-center">
+                            <div class="flex justify-center items-center gap-3">
+                                <button onclick="startEdit(${realIdx})" class="w-8 h-8 flex items-center justify-center bg-blue-50 text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all"><i class="fas fa-edit text-[10px]"></i></button>
+                                <button onclick="hapusKPI(${realIdx}, '${item.rowId}')" class="w-8 h-8 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt text-[10px]"></i></button>
+                            </div>
+                        </td>
+                    </tr>`);
+            });
+            updateChart(counts);
+        }
+
+        document.getElementById('kpiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            const editRowId = document.getElementById('editRowId').value;
+            const isEdit = !!editRowId;
+            btn.innerText = "SINKRONISASI...";
+            btn.disabled = true;
+
+            const rowId = isEdit ? editRowId : "ID-" + Date.now();
+            const payload = {
+                action: isEdit ? "UPDATE" : "INSERT",
+                type: "KPI",
+                id: user.id,
+                nama: user.name,
+                kategori: document.getElementById('kat').value,
+                deskripsi: document.getElementById('desk').value,
+                rowId: rowId,
+                poin: 5
+            };
+
+            fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) })
+            .then(() => {
+                if(isEdit) {
+                    const idx = kpiHistory.findIndex(i => i.rowId === rowId);
+                    kpiHistory[idx] = { ...kpiHistory[idx], kategori: payload.kategori, deskripsi: payload.deskripsi };
+                } else {
+                    totalScore += 5;
+                    kpiHistory.push({ tanggal: document.getElementById('tgl').value, kategori: payload.kategori, deskripsi: payload.deskripsi, rowId: rowId });
+                }
+                localStorage.setItem('kpi_score_' + user.id, totalScore);
+                localStorage.setItem('kpi_history_' + user.id, JSON.stringify(kpiHistory));
+                location.reload();
+            });
+        });
+
+        window.startEdit = function(idx) {
+            const item = kpiHistory[idx];
+            document.getElementById('formTitle').innerText = "MODE EDIT AKTIVITAS";
+            document.getElementById('editRowId').value = item.rowId;
+            document.getElementById('kat').value = item.kategori;
+            document.getElementById('desk').value = item.deskripsi;
+            document.getElementById('tgl').value = item.tanggal;
+            document.getElementById('btnSubmit').innerText = "UPDATE DATA";
+            document.getElementById('btnBatal').classList.remove('hidden');
+        };
+
+        window.hapusKPI = function(idx, rowId) {
+            if(confirm("Hapus aktivitas ini secara permanen dari Cloud Drive?")) {
+                fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "KPI", rowId: rowId }) });
+                kpiHistory.splice(idx, 1);
+                totalScore -= 5;
+                localStorage.setItem('kpi_score_' + user.id, totalScore);
+                localStorage.setItem('kpi_history_' + user.id, JSON.stringify(kpiHistory));
+                location.reload();
+            }
+        };
+
+        function updateChart(c) {
+            new Chart(document.getElementById('miniChart'), {
+                type: 'bar', data: { labels: Object.keys(c), datasets: [{ data: Object.values(c), backgroundColor: '#1e3a8a', borderRadius: 10 }] },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+            });
+        }
+        document.getElementById('btnBatal').onclick = () => location.reload();
+        renderAll();
+    </script>
+</body>
+</html>
