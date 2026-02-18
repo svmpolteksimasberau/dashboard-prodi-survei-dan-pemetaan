@@ -10,8 +10,12 @@
 <body class="bg-gray-100 p-4 md:p-8 font-sans">
     <div class="container mx-auto max-w-6xl">
         <div class="flex justify-between items-center mb-8">
-            <a href="dashboard.html" class="text-blue-900 font-bold flex items-center gap-2 hover:underline text-sm"><i class="fas fa-arrow-left"></i> Dashboard</a>
-            <div class="bg-orange-600 text-white px-6 py-2 rounded-2xl font-black shadow-lg uppercase text-[10px] tracking-widest">Logbook Harian</div>
+            <a href="dashboard.html" class="text-blue-900 font-bold flex items-center gap-2 hover:underline text-sm transition-all">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <div class="bg-orange-600 text-white px-6 py-2 rounded-2xl font-black shadow-lg uppercase text-[10px] tracking-widest">
+                Logbook Harian
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -41,27 +45,25 @@
                 </form>
             </div>
 
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-[2.5rem] shadow-lg overflow-hidden border">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 text-[10px] text-gray-400 font-black uppercase">
-                            <tr><th class="p-5">Foto & Lokasi</th><th class="p-5">Kegiatan</th><th class="p-5 text-center">Aksi</th></tr>
-                        </thead>
-                        <tbody id="logBody" class="divide-y divide-gray-100 text-[11px]"></tbody>
-                    </table>
-                </div>
+            <div class="lg:col-span-2 bg-white rounded-[2.5rem] shadow-lg overflow-hidden border">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-[10px] text-gray-400 font-black uppercase">
+                        <tr><th class="p-5">Foto & Lokasi</th><th class="p-5">Kegiatan</th><th class="p-5 text-center">Aksi</th></tr>
+                    </thead>
+                    <tbody id="logBody" class="divide-y divide-gray-100 text-[11px]"></tbody>
+                </table>
             </div>
         </div>
     </div>
     <canvas id="canvas" class="hidden"></canvas>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyNOJMr5IF7qY73sUUg56RlF45lZSbRzkyDKSO1n7xO-dymhp-wsLt2oru1wZ0nBj66iQ/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyxvKOwSQFhBgeJWc0RMuDbWkJjOeY45UEqLaw9PPOrNQQyEj5-5fKhupmdMXC4hvsWYXw/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
         const storageKey = 'logbook_mhs_' + user.id;
         let logList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
-        // --- OPTIMASI FOTO (TURBO RESIZE) ---
+        // 1. PROSES GAMBAR (400px - CEPAT)
         function processImage(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -70,13 +72,10 @@
                     img.onload = function() {
                         const canvas = document.getElementById('canvas');
                         const ctx = canvas.getContext('2d');
-                        // Ukuran 400px sangat ringan untuk upload di site
                         const maxWidth = 400; 
                         canvas.width = maxWidth;
                         canvas.height = img.height * (maxWidth / img.width);
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
-                        // Kualitas 0.4 menyeimbangkan kejelasan dan kecepatan
                         const dataURL = canvas.toDataURL('image/jpeg', 0.4);
                         document.getElementById('fotoBase64').value = dataURL;
                         document.getElementById('preview').src = dataURL;
@@ -88,48 +87,65 @@
             }
         }
 
-        // --- SUBMIT DENGAN FEEDBACK PROGRESS ---
+        // 2. SUBMIT DENGAN STATUS STEP-BY-STEP
         document.getElementById('logForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
             const editId = document.getElementById('editRowId').value;
             const isEdit = !!editId;
 
-            btn.innerText = "MENGOMPRES FOTO...";
+            if (!document.getElementById('fotoBase64').value && !isEdit) {
+                alert("Harap lampirkan bukti foto!");
+                return;
+            }
+
+            // UI Progress: Step 1
             btn.disabled = true;
+            btn.innerText = "1. MENGOMPRES FOTO...";
+            btn.classList.replace('bg-blue-900', 'bg-gray-500');
 
-            const rowId = isEdit ? editId : "LOG-" + Date.now();
-            const payload = {
-                action: isEdit ? "UPDATE" : "INSERT",
-                type: "LOGBOOK", id: user.id, nama: user.name,
-                lokasi: document.getElementById('lokasi').value,
-                deskripsi: document.getElementById('desk').value,
-                kendala: document.getElementById('kendala').value,
-                foto: document.getElementById('fotoBase64').value,
-                rowId: rowId
-            };
+            setTimeout(() => {
+                // UI Progress: Step 2
+                btn.innerText = "2. MENGUNGGAH KE CLOUD...";
+                btn.classList.replace('bg-gray-500', 'bg-orange-600');
 
-            setTimeout(() => { btn.innerText = "MENGIRIM KE CLOUD..."; }, 800);
+                const rowId = isEdit ? editId : "LOG-" + Date.now();
+                const payload = {
+                    action: isEdit ? "UPDATE" : "INSERT",
+                    type: "LOGBOOK", id: user.id, nama: user.name,
+                    lokasi: document.getElementById('lokasi').value,
+                    deskripsi: document.getElementById('desk').value,
+                    kendala: document.getElementById('kendala').value,
+                    foto: document.getElementById('fotoBase64').value,
+                    rowId: rowId
+                };
 
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
-            .then(() => {
-                if(isEdit) { 
-                    const idx = logList.findIndex(i => i.rowId === rowId); 
-                    logList[idx] = payload; 
-                } else { 
-                    logList.push(payload); 
-                }
-                localStorage.setItem(storageKey, JSON.stringify(logList));
-                btn.innerText = "BERHASIL!";
-                setTimeout(() => location.reload(), 800);
-            })
-            .catch(() => {
-                alert("Gagal Sinkron. Cek Sinyal!");
-                btn.innerText = "SUBMIT LOGBOOK";
-                btn.disabled = false;
-            });
+                fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
+                .then(() => {
+                    // UI Progress: Step 3
+                    btn.innerText = "3. BERHASIL!";
+                    btn.classList.replace('bg-orange-600', 'bg-green-600');
+
+                    if(isEdit) { 
+                        const idx = logList.findIndex(i => i.rowId === rowId); 
+                        logList[idx] = payload; 
+                    } else { 
+                        logList.push(payload); 
+                    }
+                    localStorage.setItem(storageKey, JSON.stringify(logList));
+                    
+                    setTimeout(() => location.reload(), 1000);
+                })
+                .catch(() => {
+                    alert("Koneksi Error! Coba lagi.");
+                    btn.disabled = false;
+                    btn.innerText = "SUBMIT LOGBOOK";
+                    btn.classList.replace('bg-orange-600', 'bg-blue-900');
+                });
+            }, 600);
         });
 
+        // 3. RENDER TABLE & FITUR LAIN
         function render() {
             const body = document.getElementById('logBody');
             body.innerHTML = logList.length ? "" : "<tr><td colspan='3' class='p-10 text-center opacity-30 font-black'>Belum ada riwayat laporan</td></tr>";
@@ -169,7 +185,7 @@
         };
 
         window.hapusLog = function(idx, rowId) {
-            if (confirm("Hapus permanen dari database?")) {
+            if (confirm("Hapus permanen dari Cloud?")) {
                 fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "DELETE", type: "LOGBOOK", rowId: rowId }) });
                 logList.splice(idx, 1);
                 localStorage.setItem(storageKey, JSON.stringify(logList));
