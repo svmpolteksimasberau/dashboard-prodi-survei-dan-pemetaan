@@ -3,201 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logbook Mahasiswa - Poltek Simas BC</title>
+    <title>Logbook - Survei & Pemetaan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 p-4 md:p-8 font-sans">
-    <div class="container mx-auto max-w-6xl">
-        <div class="flex justify-between items-center mb-8">
-            <a href="dashboard.html" class="text-blue-900 font-bold flex items-center gap-2 hover:underline text-sm transition-all">
-                <i class="fas fa-arrow-left"></i> Dashboard
-            </a>
-            <div class="bg-orange-600 text-white px-6 py-2 rounded-2xl font-black shadow-lg uppercase text-[10px] tracking-widest">
-                Logbook Harian
-            </div>
+<body class="bg-gray-100 font-sans">
+
+    <nav class="bg-blue-900 text-white p-4 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center text-xs font-bold uppercase">
+            <a href="dashboard.html"><i class="fas fa-arrow-left mr-2"></i> Dashboard</a>
+            <span>Logbook: <span id="displayUser"></span></span>
+        </div>
+    </nav>
+
+    <div class="container mx-auto py-6 px-4 max-w-4xl">
+        <div class="bg-white p-6 rounded-3xl shadow-lg mb-8 border-t-8 border-orange-600">
+            <h2 class="text-xl font-black text-blue-900 uppercase mb-4">Input Kegiatan Harian</h2>
+            <form id="logForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="hidden" id="editIndex" value="-1">
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Tanggal</label>
+                    <input type="date" id="tgl" required class="w-full p-2 bg-gray-50 rounded-lg border">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Lokasi/Site</label>
+                    <input type="text" id="lokasi" required class="w-full p-2 bg-gray-50 rounded-lg border">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Deskripsi Pekerjaan</label>
+                    <textarea id="deskripsi" required class="w-full p-2 bg-gray-50 rounded-lg border" rows="3"></textarea>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Kendala (Opsional)</label>
+                    <input type="text" id="kendala" class="w-full p-2 bg-gray-50 rounded-lg border">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Bukti Foto</label>
+                    <input type="file" id="foto" accept="image/*" class="w-full text-xs">
+                </div>
+                <button type="submit" id="btnSubmit" class="md:col-span-2 bg-blue-900 text-white p-3 rounded-xl font-bold uppercase hover:bg-orange-600 transition">
+                    Simpan & Kirim Ke Sheets
+                </button>
+            </form>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-1">
-                <form id="logForm" class="bg-white p-7 rounded-[2.5rem] shadow-xl border-t-8 border-orange-500 space-y-4 sticky top-10">
-                    <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs">Laporan Survei</h3>
-                    <input type="hidden" id="editRowId">
-                    <input type="hidden" id="fotoBase64">
-
-                    <input type="text" id="lokasi" placeholder="Lokasi / Site" class="w-full p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" required>
-                    
-                    <div class="flex flex-col items-center p-4 border-2 border-dashed border-gray-200 rounded-3xl bg-gray-50 relative overflow-hidden h-48 justify-center">
-                        <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="processImage(this)">
-                        <div id="prompt" onclick="document.getElementById('fileInput').click()" class="cursor-pointer text-center">
-                            <i class="fas fa-camera text-orange-500 fa-2x mb-2"></i>
-                            <p class="text-[9px] font-black text-gray-400 uppercase">Ambil / Pilih Foto</p>
-                        </div>
-                        <img id="preview" class="hidden absolute inset-0 w-full h-full object-cover z-10">
-                        <button type="button" onclick="document.getElementById('fileInput').click()" class="absolute inset-0 w-full h-full z-20 opacity-0 cursor-pointer"></button>
-                    </div>
-
-                    <textarea id="desk" rows="3" placeholder="Kegiatan hari ini..." class="w-full p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" required></textarea>
-                    <input type="text" id="kendala" placeholder="Kendala (Opsional)" class="w-full p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500">
-
-                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest shadow-lg active:scale-95 transition-all">SUBMIT LOGBOOK</button>
-                    <button type="button" id="btnBatal" onclick="location.reload()" class="hidden w-full bg-gray-200 text-gray-500 font-black py-3 rounded-2xl text-[10px] uppercase">Batal Edit</button>
-                </form>
+        <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
+            <div class="p-4 bg-gray-50 border-b flex justify-between items-center">
+                <h3 class="font-bold text-blue-900 uppercase text-sm">Riwayat Logbook Lokal</h3>
             </div>
-
-            <div class="lg:col-span-2 bg-white rounded-[2.5rem] shadow-lg overflow-hidden border">
-                <table class="w-full text-left">
-                    <thead class="bg-gray-50 text-[10px] text-gray-400 font-black uppercase">
-                        <tr><th class="p-5">Foto & Lokasi</th><th class="p-5">Kegiatan</th><th class="p-5 text-center">Aksi</th></tr>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-blue-900 text-white uppercase">
+                        <tr>
+                            <th class="p-3">Tanggal</th>
+                            <th class="p-3">Kegiatan</th>
+                            <th class="p-3">Aksi</th>
+                        </tr>
                     </thead>
-                    <tbody id="logBody" class="divide-y divide-gray-100 text-[11px]"></tbody>
+                    <tbody id="logTable"></tbody>
                 </table>
             </div>
         </div>
     </div>
-    <canvas id="canvas" class="hidden"></canvas>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzS7ipxI4iiXvukb5q1eHw0ldMiTuJR62uzMPpI0XF_WIfinbDCr2v7VBhImshO2jK7Gg/exec';
+        const SCRIPT_URL = "PASTE_URL_WEB_APP_APPS_SCRIPT_DISINI";
         const user = JSON.parse(localStorage.getItem('current_user'));
-        const storageKey = 'logbook_mhs_' + user.id;
-        let logList = JSON.parse(localStorage.getItem(storageKey)) || [];
+        if(!user) window.location.href = 'index.html';
+        document.getElementById('displayUser').innerText = user.name;
 
-        // 1. PROSES GAMBAR (400px - CEPAT)
-        function processImage(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.getElementById('canvas');
-                        const ctx = canvas.getContext('2d');
-                        const maxWidth = 400; 
-                        canvas.width = maxWidth;
-                        canvas.height = img.height * (maxWidth / img.width);
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        const dataURL = canvas.toDataURL('image/jpeg', 0.4);
-                        document.getElementById('fotoBase64').value = dataURL;
-                        document.getElementById('preview').src = dataURL;
-                        document.getElementById('preview').classList.remove('hidden');
-                    }
-                    img.src = e.target.result;
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+        let logs = JSON.parse(localStorage.getItem('logs_' + user.id)) || [];
 
-        // 2. SUBMIT DENGAN STATUS STEP-BY-STEP
-        document.getElementById('logForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            const editId = document.getElementById('editRowId').value;
-            const isEdit = !!editId;
-
-            if (!document.getElementById('fotoBase64').value && !isEdit) {
-                alert("Harap lampirkan bukti foto!");
-                return;
-            }
-
-            // UI Progress: Step 1
-            btn.disabled = true;
-            btn.innerText = "1. MENGOMPRES FOTO...";
-            btn.classList.replace('bg-blue-900', 'bg-gray-500');
-
-            setTimeout(() => {
-                // UI Progress: Step 2
-                btn.innerText = "2. MENGUNGGAH KE CLOUD...";
-                btn.classList.replace('bg-gray-500', 'bg-orange-600');
-
-                const rowId = isEdit ? editId : "LOG-" + Date.now();
-                const payload = {
-                    action: isEdit ? "UPDATE" : "INSERT",
-                    type: "LOGBOOK", id: user.id, nama: user.name,
-                    lokasi: document.getElementById('lokasi').value,
-                    deskripsi: document.getElementById('desk').value,
-                    kendala: document.getElementById('kendala').value,
-                    foto: document.getElementById('fotoBase64').value,
-                    rowId: rowId
-                };
-
-                fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
-                .then(() => {
-                    // UI Progress: Step 3
-                    btn.innerText = "3. BERHASIL!";
-                    btn.classList.replace('bg-orange-600', 'bg-green-600');
-
-                    if(isEdit) { 
-                        const idx = logList.findIndex(i => i.rowId === rowId); 
-                        logList[idx] = payload; 
-                    } else { 
-                        logList.push(payload); 
-                    }
-                    localStorage.setItem(storageKey, JSON.stringify(logList));
-                    
-                    setTimeout(() => location.reload(), 1000);
-                })
-                .catch(() => {
-                    alert("Koneksi Error! Coba lagi.");
-                    btn.disabled = false;
-                    btn.innerText = "SUBMIT LOGBOOK";
-                    btn.classList.replace('bg-orange-600', 'bg-blue-900');
-                });
-            }, 600);
-        });
-
-        // 3. RENDER TABLE & FITUR LAIN
-        function render() {
-            const body = document.getElementById('logBody');
-            body.innerHTML = logList.length ? "" : "<tr><td colspan='3' class='p-10 text-center opacity-30 font-black'>Belum ada riwayat laporan</td></tr>";
-            [...logList].reverse().forEach((item, index) => {
-                const realIdx = logList.length - 1 - index;
-                body.insertAdjacentHTML('beforeend', `
-                    <tr class="hover:bg-orange-50 border-b border-gray-50">
-                        <td class="p-5">
-                            <img src="${item.foto}" class="w-16 h-12 object-cover rounded-lg border mb-1 bg-gray-100">
-                            <span class="font-black text-orange-600 uppercase text-[8px] block tracking-tighter">${item.lokasi}</span>
+        function renderTable() {
+            const table = document.getElementById('logTable');
+            table.innerHTML = "";
+            logs.forEach((item, index) => {
+                table.innerHTML += `
+                    <tr class="border-b">
+                        <td class="p-3">${item.tanggal}</td>
+                        <td class="p-3 font-bold">${item.lokasi} - ${item.deskripsi.substring(0,20)}...</td>
+                        <td class="p-3 flex gap-2">
+                            <button onclick="editLog(${index})" class="text-blue-600"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteLog(${index})" class="text-red-600"><i class="fas fa-trash"></i></button>
                         </td>
-                        <td class="p-5 text-gray-700 leading-snug">
-                            <p class="font-bold text-gray-800">${item.deskripsi}</p>
-                            <span class="text-[8px] font-black uppercase text-gray-400 italic">Kendala: ${item.kendala || '-'}</span>
-                        </td>
-                        <td class="p-5 text-center flex justify-center gap-2">
-                            <button onclick="startEdit(${realIdx})" class="w-7 h-7 flex items-center justify-center bg-blue-50 text-blue-500 rounded-lg"><i class="fas fa-edit text-[10px]"></i></button>
-                            <button onclick="hapusLog(${realIdx}, '${item.rowId}')" class="w-7 h-7 flex items-center justify-center bg-red-50 text-red-500 rounded-lg"><i class="fas fa-trash-alt text-[10px]"></i></button>
-                        </td>
-                    </tr>`);
+                    </tr>
+                `;
             });
         }
 
-        window.startEdit = function(idx) {
-            const item = logList[idx];
-            document.getElementById('formTitle').innerText = "MODE EDIT LAPORAN";
-            document.getElementById('editRowId').value = item.rowId;
-            document.getElementById('lokasi').value = item.lokasi;
-            document.getElementById('desk').value = item.deskripsi;
-            document.getElementById('kendala').value = item.kendala;
-            document.getElementById('fotoBase64').value = item.foto;
-            document.getElementById('preview').src = item.foto;
-            document.getElementById('preview').classList.remove('hidden');
-            document.getElementById('btnSubmit').innerText = "UPDATE DATA";
-            document.getElementById('btnBatal').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.getElementById('logForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = true;
+            btn.innerText = "MENGIRIM...";
+
+            const fotoFile = document.getElementById('foto').files[0];
+            let base64Foto = "";
+            if(fotoFile) {
+                const reader = new FileReader();
+                base64Foto = await new Promise(r => {
+                    reader.onload = ev => r(ev.target.result.split(',')[1]);
+                    reader.readAsDataURL(fotoFile);
+                });
+            }
+
+            const newEntry = {
+                tanggal: document.getElementById('tgl').value,
+                lokasi: document.getElementById('lokasi').value,
+                deskripsi: document.getElementById('deskripsi').value,
+                kendala: document.getElementById('kendala').value || "-",
+            };
+
+            // Kirim ke Google Sheets
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: "addLogbook",
+                        nim: user.id,
+                        nama: user.name,
+                        foto: base64Foto,
+                        ...newEntry
+                    })
+                });
+
+                // Simpan di Lokal
+                const editIdx = document.getElementById('editIndex').value;
+                if(editIdx == -1) logs.push(newEntry);
+                else logs[editIdx] = newEntry;
+
+                localStorage.setItem('logs_' + user.id, JSON.stringify(logs));
+                alert("Berhasil disimpan permanen!");
+                document.getElementById('logForm').reset();
+                document.getElementById('editIndex').value = "-1";
+                renderTable();
+            } catch(e) { alert("Gagal kirim!"); }
+            
+            btn.disabled = false;
+            btn.innerText = "SIMPAN & KIRIM KE SHEETS";
         };
 
-        window.hapusLog = function(idx, rowId) {
-            if (confirm("Hapus permanen dari Cloud?")) {
-                fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "DELETE", type: "LOGBOOK", rowId: rowId }) });
-                logList.splice(idx, 1);
-                localStorage.setItem(storageKey, JSON.stringify(logList));
-                location.reload();
+        window.deleteLog = (index) => {
+            if(confirm("Hapus dari riwayat lokal? (Data di Sheets tetap ada)")) {
+                logs.splice(index, 1);
+                localStorage.setItem('logs_' + user.id, JSON.stringify(logs));
+                renderTable();
             }
         };
-        render();
+
+        window.editLog = (index) => {
+            const item = logs[index];
+            document.getElementById('tgl').value = item.tanggal;
+            document.getElementById('lokasi').value = item.lokasi;
+            document.getElementById('deskripsi').value = item.deskripsi;
+            document.getElementById('kendala').value = item.kendala;
+            document.getElementById('editIndex').value = index;
+            window.scrollTo(0,0);
+        };
+
+        renderTable();
     </script>
 </body>
 </html>
-
-
-
-
-
