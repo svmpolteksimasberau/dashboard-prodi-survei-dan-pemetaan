@@ -27,14 +27,20 @@
     <div class="container mx-auto py-8 px-6">
         
         <div class="mb-10">
-            <h2 class="text-3xl font-black text-blue-900 tracking-tighter uppercase">Dashboard <span class="text-orange-600">Prodi</span></h2>
-            <p id="yearDisplay" class="text-gray-500 text-xs font-bold uppercase tracking-widest mt-1">Rekapitulasi Data Tahun 2026</p>
+            <div class="flex items-center gap-2 mb-1">
+                <span class="h-1 w-8 bg-orange-600 rounded-full"></span>
+                <p id="roleLabel" class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Role User</p>
+            </div>
+            <h2 class="text-4xl font-black text-blue-900 tracking-tighter uppercase leading-tight">
+                Halo, <span id="userName" class="text-orange-600">Dosen</span>!
+            </h2>
+            <p class="text-gray-500 text-xs font-bold uppercase tracking-widest mt-2">Selamat datang di rekapitulasi data tahun 2026</p>
         </div>
 
         <div id="summaryDosen" class="hidden grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             <div class="bg-blue-900 p-6 rounded-[2rem] shadow-xl text-white relative overflow-hidden">
                 <i class="fas fa-chart-line absolute -right-2 -bottom-2 text-6xl opacity-10"></i>
-                <p class="text-[9px] font-bold uppercase opacity-70 tracking-widest">Total Skor Kolektif (2026)</p>
+                <p class="text-[9px] font-bold uppercase opacity-70 tracking-widest">Total Skor Kolektif</p>
                 <p id="realSkorKolektif" class="text-3xl font-black mt-1">0</p>
             </div>
             <div class="bg-orange-600 p-6 rounded-[2rem] shadow-xl text-white relative overflow-hidden">
@@ -53,63 +59,72 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div id="cardKPI" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-blue-900">
+            <div id="cardKPI" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-blue-900 hover:shadow-2xl transition transform hover:-translate-y-2">
                 <h3 class="font-black text-lg text-blue-900 uppercase">KPI Dosen</h3>
-                <p class="text-[11px] text-gray-500 mt-2 mb-6">Input laporan harian (+5 Poin).</p>
-                <a href="performa_dosen.html" class="bg-blue-900 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase">Isi Laporan</a>
+                <p class="text-[11px] text-gray-500 mt-2 mb-6 leading-relaxed">Input laporan harian Pengajaran, Penelitian, dan Pengabdian (+5 Poin).</p>
+                <a href="performa_dosen.html" class="inline-block bg-blue-900 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase shadow-lg">Isi Laporan</a>
             </div>
 
-            <div id="cardLuaran" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-green-600">
+            <div id="cardLuaran" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-green-600 hover:shadow-2xl transition transform hover:-translate-y-2">
                 <h3 class="font-black text-lg text-blue-900 uppercase">Luaran & Publikasi</h3>
-                <p class="text-[11px] text-gray-500 mt-2 mb-6">Input Jurnal, HAKI, Buku (+10 Poin).</p>
-                <a href="luaran_dosen.html" class="bg-green-600 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase">Input Luaran</a>
+                <p class="text-[11px] text-gray-500 mt-2 mb-6 leading-relaxed">Input Jurnal, HAKI, Buku, dan Sertifikasi kompetensi (+10 Poin).</p>
+                <a href="luaran_dosen.html" class="inline-block bg-green-600 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase shadow-lg">Input Luaran</a>
             </div>
 
-            <div id="cardMonitor" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-orange-600">
+            <div id="cardMonitor" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-orange-600 hover:shadow-2xl transition transform hover:-translate-y-2">
                 <h3 class="font-black text-lg text-blue-900 uppercase">Monitoring Prakerin</h3>
-                <p class="text-[11px] text-gray-500 mt-2 mb-6">Pantau logbook mahasiswa prakerin.</p>
-                <a href="penilaian_logbook.html" class="bg-orange-600 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase">Monitoring</a>
+                <p class="text-[11px] text-gray-500 mt-2 mb-6 leading-relaxed">Pantau history logbook mahasiswa dan berikan penilaian langsung.</p>
+                <a href="penilaian_logbook.html" class="inline-block bg-orange-600 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase shadow-lg">Monitoring</a>
             </div>
 
-            <div id="cardLogMhs" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-blue-900">
+            <div id="cardLogMhs" class="hidden bg-white p-8 rounded-[2.5rem] shadow-lg border-b-8 border-blue-900 hover:shadow-2xl transition transform hover:-translate-y-2">
                 <h3 class="font-black text-lg text-blue-900 uppercase">Logbook Harian</h3>
-                <p class="text-[11px] text-gray-500 mt-2 mb-6">Catat aktivitas harian magang/site.</p>
-                <a href="logbook.html" class="bg-blue-900 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase">Isi Logbook</a>
+                <p class="text-[11px] text-gray-500 mt-2 mb-6 leading-relaxed">Catat aktivitas harian prakerin/magang di industri setiap hari.</p>
+                <a href="logbook.html" class="inline-block bg-blue-900 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase shadow-lg">Isi Logbook</a>
             </div>
         </div>
     </div>
 
     <script>
+        // Mengambil data user yang sedang login dari memori browser
         const user = JSON.parse(localStorage.getItem('current_user'));
-        if (!user) window.location.href = 'index.html';
+        
+        if (!user) {
+            window.location.href = 'index.html';
+        } else {
+            // Menampilkan nama lengkap dosen/mahasiswa di Dashboard
+            document.getElementById('userName').innerText = user.name;
+            document.getElementById('roleLabel').innerText = user.role;
+            
+            if (user.role === 'dosen') {
+                document.getElementById('summaryDosen').classList.remove('hidden');
+                document.getElementById('cardKPI').classList.remove('hidden');
+                document.getElementById('cardLuaran').classList.remove('hidden');
+                document.getElementById('cardMonitor').classList.remove('hidden');
+            } else {
+                document.getElementById('cardLogMhs').classList.remove('hidden');
+            }
+            refreshRealData();
+        }
 
-        // FUNGSI UNTUK MENGHITUNG DATA NYATA DARI LOCALSTORAGE
         function refreshRealData() {
             let totalSkor = 0;
             let totalLuaran = 0;
             let totalMhs = 0;
             let totalPending = 0;
 
-            // Loop melalui semua kunci di LocalStorage
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                
-                // 1. Hitung Skor dari Performa Dosen (Mencari kunci 'kpi_data_')
                 if (key.startsWith('kpi_score_')) {
                     totalSkor += parseInt(localStorage.getItem(key)) || 0;
                 }
-
-                // 2. Hitung Jumlah Luaran (Mencari kunci 'luaran_count_')
                 if (key.startsWith('luaran_count_')) {
                     totalLuaran += parseInt(localStorage.getItem(key)) || 0;
                 }
-
-                // 3. Hitung Mahasiswa & Logbook Pending (Mencari data user role mahasiswa)
                 if (key.startsWith('user_')) {
                     const userData = JSON.parse(localStorage.getItem(key));
                     if (userData.role === 'mahasiswa') {
                         totalMhs++;
-                        // Jika mahasiswa belum pernah mengisi logbook sama sekali
                         if (!localStorage.getItem('logbook_' + userData.id)) {
                             totalPending++;
                         }
@@ -117,30 +132,16 @@
                 }
             }
 
-            // Update Tampilan Dashboard
             document.getElementById('realSkorKolektif').innerText = totalSkor;
             document.getElementById('realTotalLuaran').innerText = totalLuaran;
             document.getElementById('realTotalMhs').innerText = totalMhs;
             document.getElementById('realLogbookPending').innerText = totalPending;
         }
 
-        // Tampilkan Menu Berdasarkan Role
-        if (user.role === 'dosen') {
-            document.getElementById('summaryDosen').classList.remove('hidden');
-            document.getElementById('cardKPI').classList.remove('hidden');
-            document.getElementById('cardLuaran').classList.remove('hidden');
-            document.getElementById('cardMonitor').classList.remove('hidden');
-        } else {
-            document.getElementById('cardLogMhs').classList.remove('hidden');
-        }
-
         function logout() {
             localStorage.removeItem('current_user');
             window.location.href = 'index.html';
         }
-
-        // Jalankan penghitungan saat dashboard dibuka
-        window.onload = refreshRealData;
     </script>
 </body>
 </html>
