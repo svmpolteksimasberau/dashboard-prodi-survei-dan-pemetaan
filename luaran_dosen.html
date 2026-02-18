@@ -9,48 +9,69 @@
 </head>
 <body class="bg-gray-100 p-4 md:p-8 font-sans">
 
-    <div class="container mx-auto max-w-5xl">
+    <div class="container mx-auto max-w-6xl">
         <div class="flex justify-between items-center mb-8">
             <a href="dashboard.html" class="text-blue-900 font-bold flex items-center gap-2 hover:underline text-sm transition-all">
-                <i class="fas fa-arrow-left"></i> Dashboard
+                <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
             </a>
-            <div class="bg-green-600 text-white px-8 py-3 rounded-2xl font-black shadow-xl">
-                SKOR: <span id="skorLuaran">0</span>
+            <div class="bg-green-600 text-white px-8 py-3 rounded-2xl font-black shadow-xl flex items-center gap-3">
+                <i class="fas fa-award text-yellow-300"></i>
+                <span>SKOR LUARAN: <span id="skorLuaran">0</span></span>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-1">
-                <form id="luaranForm" class="bg-white p-6 rounded-[2.5rem] shadow-lg border-t-8 border-green-600 space-y-5 sticky top-24">
-                    <h3 class="font-black text-blue-900 uppercase text-sm">Input Luaran</h3>
+                <form id="luaranForm" class="bg-white p-6 rounded-[2.5rem] shadow-lg border-t-8 border-green-600 space-y-5 sticky top-24 transition-all">
+                    <div>
+                        <h3 id="formTitle" class="font-black text-blue-900 uppercase text-sm tracking-tight">Input Luaran & Publikasi</h3>
+                        <p id="formSubtitle" class="text-[10px] text-gray-400 font-bold uppercase mt-1">Prodi Survei dan Pemetaan</p>
+                    </div>
                     
-                    <select id="jenisLuaran" class="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-green-700 outline-none focus:ring-2 focus:ring-green-500">
-                        <option value="Publikasi Jurnal">Publikasi Jurnal (+10)</option>
-                        <option value="HAKI">HAKI / Paten (+10)</option>
-                        <option value="Buku Ber-ISBN">Buku Ber-ISBN (+10)</option>
-                    </select>
+                    <input type="hidden" id="editRowId">
 
-                    <input type="text" id="judul" class="w-full p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-green-500" placeholder="Judul Karya..." required>
-                    <input type="url" id="link" class="w-full p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-green-500" placeholder="Link Bukti (https://...)" required>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Jenis Luaran</label>
+                        <select id="jenisLuaran" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl font-bold text-green-700 outline-none focus:ring-2 focus:ring-green-500 transition-all">
+                            <option value="Publikasi Jurnal">Publikasi Jurnal (+10)</option>
+                            <option value="HAKI">HAKI / Paten (+10)</option>
+                            <option value="Buku Ber-ISBN">Buku Ber-ISBN (+10)</option>
+                        </select>
+                    </div>
 
-                    <button type="submit" id="btnKirim" class="w-full bg-green-600 hover:bg-green-700 text-white font-black py-5 rounded-2xl transition-all uppercase text-xs tracking-widest">
-                        SUBMIT
-                    </button>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Judul Karya</label>
+                        <input type="text" id="judul" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-green-500 transition-all" placeholder="Judul..." required>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Link Bukti (URL)</label>
+                        <input type="url" id="link" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-green-500 transition-all" placeholder="https://..." required>
+                    </div>
+
+                    <div class="space-y-2">
+                        <button type="submit" id="btnSubmit" class="w-full bg-green-600 hover:bg-green-700 text-white font-black py-5 rounded-2xl shadow-lg transition-all transform active:scale-95 uppercase text-xs tracking-widest">
+                            SUBMIT
+                        </button>
+                        <button type="button" id="btnBatal" class="hidden w-full bg-gray-200 text-gray-500 font-black py-3 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-gray-300">
+                            Batal Edit
+                        </button>
+                    </div>
                 </form>
             </div>
 
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-[2.5rem] shadow-lg border border-gray-100 overflow-hidden">
-                    <div class="p-6 bg-gray-50 border-b">
-                        <h3 class="font-black text-xs uppercase text-gray-500 tracking-widest">Riwayat Publikasi</h3>
+                    <div class="p-6 bg-gray-50 border-b flex justify-between items-center">
+                        <h3 class="font-black text-xs uppercase text-gray-500 tracking-widest">Daftar Publikasi Terarsip</h3>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
-                            <thead class="bg-gray-50 text-[10px] text-gray-400 uppercase font-black">
+                            <thead class="bg-gray-50 text-[10px] text-gray-400 uppercase font-black tracking-tighter">
                                 <tr>
                                     <th class="p-5">Kategori</th>
-                                    <th class="p-5">Judul</th>
-                                    <th class="p-5 text-center text-red-400">EDIT / HAPUS</th>
+                                    <th class="p-5">Judul & Tautan</th>
+                                    <th class="p-5 text-center">Edit / Hapus</th>
                                 </tr>
                             </thead>
                             <tbody id="luaranBody" class="divide-y divide-gray-100 text-xs">
@@ -63,31 +84,45 @@
     </div>
 
     <script>
-        // Gunakan URL Deployment TERBARU Anda
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxGaNDSN36le9F818_bbZ3AhZGzcyL6DfbqEwCNBy4zlQpAPqNGZt4KIKyc6f0gWf9Neg/exec';
-        const currentUser = JSON.parse(localStorage.getItem('current_user'));
+        // URL Web App Terbaru Anda
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwez4MS_W9q2vFBtAqhZfqaVaxT_YKdNO6MNrmv94b9LWDQuSvokf4wK4EZVo1K8WMJDQ/exec';
         
-        if (!currentUser) { window.location.href = 'index.html'; }
+        const user = JSON.parse(localStorage.getItem('current_user'));
+        if (!user) { window.location.href = 'index.html'; }
 
-        let luaranList = JSON.parse(localStorage.getItem('luaran_list_' + currentUser.id)) || [];
+        let luaranList = JSON.parse(localStorage.getItem('luaran_list_' + user.id)) || [];
 
         function renderLuaran() {
             document.getElementById('skorLuaran').innerText = luaranList.length * 10;
             const body = document.getElementById('luaranBody');
             body.innerHTML = "";
             
+            if (luaranList.length === 0) {
+                body.innerHTML = `<tr><td colspan="3" class="p-10 text-center text-gray-300 font-bold italic uppercase tracking-widest">Belum ada data luaran</td></tr>`;
+                return;
+            }
+
             [...luaranList].reverse().forEach((item, index) => {
-                const originalIndex = luaranList.length - 1 - index; 
+                const realIndex = luaranList.length - 1 - index;
                 body.insertAdjacentHTML('beforeend', `
-                    <tr class="hover:bg-green-50 transition-all">
-                        <td class="p-5 font-black text-green-700 uppercase">${item.jenis}</td>
-                        <td class="p-5 font-bold text-gray-800">${item.judul}</td>
+                    <tr class="hover:bg-green-50/50 transition-all">
+                        <td class="p-5">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg font-black text-[9px] uppercase">
+                                ${item.jenis}
+                            </span>
+                        </td>
+                        <td class="p-5">
+                            <p class="font-black text-gray-800 text-[11px] uppercase leading-tight mb-1">${item.judul}</p>
+                            <a href="${item.link}" target="_blank" class="text-[10px] text-blue-500 font-bold italic underline">
+                                <i class="fas fa-external-link-alt text-[8px]"></i> Lihat Link
+                            </a>
+                        </td>
                         <td class="p-5 text-center">
                             <div class="flex justify-center items-center gap-3">
-                                <button onclick="alert('Fitur Edit sedang dikembangkan oleh Prodi')" class="text-blue-400 hover:text-blue-600 transition-all">
+                                <button onclick="startEdit(${realIndex})" class="text-blue-400 hover:text-blue-600 p-2">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button onclick="hapusLuaran(${originalIndex}, '${item.rowId}')" class="text-red-400 hover:text-red-600 p-2 bg-red-50 rounded-lg transition-all">
+                                <button onclick="hapusLuaran(${realIndex}, '${item.rowId}')" class="text-red-400 hover:text-red-600 p-2 bg-red-50 rounded-lg">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
@@ -96,18 +131,22 @@
             });
         }
 
+        // HANDLER SUBMIT (INSERT & UPDATE)
         document.getElementById('luaranForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const btn = document.getElementById('btnKirim');
-            btn.innerText = "SUBMITTING...";
+            const btn = document.getElementById('btnSubmit');
+            const editRowId = document.getElementById('editRowId').value;
+            const isEdit = !!editRowId;
+
+            btn.innerText = "SINKRONISASI CLOUD...";
             btn.disabled = true;
 
-            const rowId = "ID-" + Date.now(); // Membuat ID unik untuk sinkronisasi hapus
+            const rowId = isEdit ? editRowId : "ID-" + Date.now();
             const payload = {
-                action: "INSERT",
+                action: isEdit ? "UPDATE" : "INSERT",
                 type: "LUARAN",
-                id: currentUser.id,
-                nama: currentUser.name,
+                id: user.id,
+                nama: user.name,
                 jenis: document.getElementById('jenisLuaran').value,
                 judul: document.getElementById('judul').value,
                 link: document.getElementById('link').value,
@@ -115,31 +154,61 @@
                 rowId: rowId
             };
 
-            fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) })
-            .then(() => {
-                luaranList.push({ ...payload });
-                localStorage.setItem('luaran_list_' + currentUser.id, JSON.stringify(luaranList));
-                localStorage.setItem('luaran_count_' + currentUser.id, luaranList.length);
-                alert("Data Berhasil di-Submit!");
-                location.reload(); 
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: JSON.stringify(payload) 
             })
-            .catch(() => { alert("Error!"); btn.innerText = "SUBMIT"; btn.disabled = false; });
+            .then(() => {
+                if (isEdit) {
+                    const idx = luaranList.findIndex(item => item.rowId === rowId);
+                    if (idx !== -1) luaranList[idx] = payload;
+                } else {
+                    luaranList.push(payload);
+                }
+                
+                localStorage.setItem('luaran_list_' + user.id, JSON.stringify(luaranList));
+                localStorage.setItem('luaran_count_' + user.id, luaranList.length);
+                alert(isEdit ? "Data Berhasil Diperbarui!" : "Data Berhasil Disimpan ke Cloud!");
+                location.reload();
+            })
+            .catch(() => {
+                alert("Gagal terhubung ke Server Cloud.");
+                btn.innerText = "SUBMIT";
+                btn.disabled = false;
+            });
         });
 
-        function hapusLuaran(index, rowId) {
-            if(confirm("Hapus data ini secara permanen dari Cloud Drive Prodi?")) {
-                // Perintah hapus ke Google Sheets
+        // FUNGSI EDIT
+        window.startEdit = function(idx) {
+            const item = luaranList[idx];
+            document.getElementById('formTitle').innerText = "Mode Edit Data";
+            document.getElementById('formSubtitle').innerText = "Memperbaiki data yang sudah ada";
+            document.getElementById('editRowId').value = item.rowId;
+            document.getElementById('jenisLuaran').value = item.jenis;
+            document.getElementById('judul').value = item.judul;
+            document.getElementById('link').value = item.link;
+            document.getElementById('btnSubmit').innerText = "UPDATE DATA";
+            document.getElementById('btnBatal').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        document.getElementById('btnBatal').onclick = () => location.reload();
+
+        // FUNGSI HAPUS SINKRON
+        window.hapusLuaran = function(idx, rowId) {
+            if (confirm("Hapus data ini secara permanen dari Cloud Drive Prodi?")) {
+                // Kirim perintah DELETE ke Apps Script
                 fetch(scriptURL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "DELETE", type: "LUARAN", rowId: rowId })
+                    body: JSON.stringify({ action: "DELETE", rowId: rowId })
                 });
 
-                luaranList.splice(index, 1);
-                localStorage.setItem('luaran_list_' + currentUser.id, JSON.stringify(luaranList));
-                localStorage.setItem('luaran_count_' + currentUser.id, luaranList.length);
+                luaranList.splice(idx, 1);
+                localStorage.setItem('luaran_list_' + user.id, JSON.stringify(luaranList));
+                localStorage.setItem('luaran_count_' + user.id, luaranList.length);
                 location.reload();
             }
-        }
+        };
 
         renderLuaran();
     </script>
