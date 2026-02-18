@@ -18,8 +18,8 @@
         <div class="w-20 h-20 bg-white rounded-3xl mx-auto flex items-center justify-center shadow-2xl mb-4 transform -rotate-6">
             <i class="fas fa-map-marked-alt text-blue-900 text-3xl"></i>
         </div>
-        <h1 id="userName" class="text-white font-black text-2xl uppercase tracking-tighter italic">Halo, User!</h1>
-        <p id="userId" class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-1 italic">Memuat ID...</p>
+        <h1 id="userName" class="text-white font-black text-2xl uppercase tracking-tighter italic text-center">Halo, User!</h1>
+        <p id="userId" class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-1 italic">NIM: --</p>
     </div>
 
     <div class="bg-white mx-6 p-8 rounded-[3rem] shadow-2xl border-b-[10px] border-orange-500 min-h-[500px]">
@@ -30,6 +30,10 @@
         </div>
 
         <div id="pane-form" class="space-y-4">
+            <div id="gps-status" class="hidden p-3 bg-green-100 text-green-700 text-[9px] font-black rounded-xl text-center uppercase">
+                <i class="fas fa-check-circle"></i> Lokasi GPS Terkunci
+            </div>
+
             <div>
                 <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic">Tanggal Kegiatan</label>
                 <input type="date" id="tgl_kegiatan" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 mt-1">
@@ -41,7 +45,7 @@
             </div>
 
             <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic">Kategori Pekerjaan (Auto-Score)</label>
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic">Kategori Pekerjaan</label>
                 <select id="jenis" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 mt-1">
                     <option value="Survei">Survei (10 Poin)</option>
                     <option value="Non-Survei">Non-Survei (5 Poin)</option>
@@ -52,7 +56,7 @@
 
             <div>
                 <label class="text-[9px] font-black text-blue-900 uppercase ml-4 italic">Deskripsi Tugas</label>
-                <textarea id="deskripsi" placeholder="Tuliskan detail pekerjaan Anda hari ini..." rows="3" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 mt-1"></textarea>
+                <textarea id="deskripsi" placeholder="Tulis rincian pekerjaan Anda..." rows="3" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none focus:ring-2 focus:ring-orange-500 mt-1"></textarea>
             </div>
 
             <div class="bg-blue-50 p-5 rounded-2xl border-2 border-dashed border-blue-200 text-center">
@@ -60,18 +64,23 @@
                 <input type="file" id="fotoInput" accept="image/*" class="text-[10px] font-bold text-gray-500 file:bg-blue-900 file:text-white file:rounded-xl file:border-0 file:px-4 file:py-2 file:mr-4 file:uppercase">
             </div>
 
-            <button onclick="simpanLaporan()" id="btnSimpan" class="w-full bg-orange-500 text-white font-black py-6 rounded-3xl shadow-lg uppercase tracking-widest mt-6 active:scale-95 transition-all text-sm">Kirim Ke Cloud</button>
+            <button onclick="simpanLaporan()" id="btnSimpan" class="w-full bg-orange-500 text-white font-black py-6 rounded-3xl shadow-lg uppercase tracking-widest mt-6 active:scale-95 transition-all text-sm">
+                Kirim Laporan & GPS
+            </button>
         </div>
 
         <div id="pane-history" class="hidden space-y-4">
+            <div class="bg-blue-900 p-6 rounded-[2.5rem] shadow-lg text-center border-b-8 border-orange-500 mb-8">
+                <p class="text-[9px] font-black text-orange-400 uppercase tracking-widest mb-1 italic">Total Skor Terkumpul</p>
+                <h2 id="overallScore" class="text-4xl font-black text-white italic tracking-tighter">0</h2>
+                <p class="text-[8px] text-blue-300 font-bold uppercase mt-2">Sinkron Otomatis dengan Database Cloud</p>
+            </div>
+
             <div id="loading" class="text-center py-10 font-black text-blue-900 text-[10px] animate-pulse uppercase tracking-[0.3em] italic">Sinkronisasi Database...</div>
-            <div id="riwayatList" class="space-y-5">
-                </div>
+            <div id="riwayatList" class="space-y-5"></div>
         </div>
 
-        <button onclick="logout()" class="w-full mt-12 text-gray-300 font-black text-[9px] uppercase tracking-[0.3em] italic opacity-50 hover:opacity-100 transition-all">
-            <i class="fas fa-sign-out-alt mr-1"></i> Keluar Dari Akun
-        </button>
+        <button onclick="logout()" class="w-full mt-12 text-gray-300 font-black text-[9px] uppercase tracking-[0.3em] italic opacity-50">Keluar Dari Akun</button>
     </div>
 
     <script>
@@ -93,18 +102,39 @@
             if(tab === 'history') fetchRiwayatCloud();
         }
 
+        // FUNGSI UTAMA DENGAN GPS
         async function simpanLaporan() {
             const btn = document.getElementById('btnSimpan');
             const kat = document.getElementById('jenis').value;
-            
-            // LOGIKA SKOR OTOMATIS
+            const tgl = document.getElementById('tgl_kegiatan').value;
+            const lok = document.getElementById('lokasi').value;
+
+            if(!tgl || !lok) return alert("Mohon lengkapi Tanggal dan Lokasi!");
+
+            btn.disabled = true;
+            btn.innerText = "MENGUNCI LOKASI GPS...";
+
+            // 1. Ambil Geotagging
+            let mapsLink = "-";
+            try {
+                const pos = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {timeout: 10000});
+                });
+                mapsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                document.getElementById('gps-status').classList.remove('hidden');
+            } catch (err) {
+                alert("Gagal ambil lokasi GPS. Pastikan GPS HP menyala!");
+                btn.disabled = false;
+                btn.innerText = "Kirim Laporan & GPS";
+                return;
+            }
+
+            // 2. Logika Skor
             let skorOtomatis = 3; 
             if(kat === "Survei") skorOtomatis = 10;
             else if(kat === "Non-Survei") skorOtomatis = 5;
 
-            btn.disabled = true;
-            btn.innerText = "SINKRONISASI...";
-
+            // 3. Proses Foto
             const fotoFile = document.getElementById('fotoInput').files[0];
             let base64Foto = "";
             if(fotoFile) {
@@ -115,34 +145,37 @@
                 });
             }
 
+            btn.innerText = "MENGIRIM KE CLOUD...";
+
             try {
-                const response = await fetch(scriptURL, {
+                await fetch(scriptURL, {
                     method: 'POST',
                     body: JSON.stringify({
                         action: "addLogbook",
                         nim: user.id,
                         nama: user.name,
-                        tanggal: document.getElementById('tgl_kegiatan').value,
-                        lokasi: document.getElementById('lokasi').value,
+                        tanggal: tgl,
+                        lokasi: lok,
                         jenis: kat,
                         deskripsi: document.getElementById('deskripsi').value,
                         foto: base64Foto,
                         rowId: "ID-" + Date.now(),
-                        skor: skorOtomatis // Kirim skor otomatis ke kolom K
+                        skor: skorOtomatis,
+                        geotagging: mapsLink // Kirim link maps ke kolom L
                     })
                 });
-                alert("LAPORAN TERKIRIM!");
+                alert("BERHASIL! DATA & GPS TERSIMPAN");
                 location.reload();
             } catch (e) {
-                alert("GAGAL! CEK KONEKSI");
+                alert("GAGAL KONEKSI!");
                 btn.disabled = false;
-                btn.innerText = "Kirim Laporan";
             }
         }
 
         async function fetchRiwayatCloud() {
             const container = document.getElementById('riwayatList');
             const loading = document.getElementById('loading');
+            const scoreLabel = document.getElementById('overallScore');
             loading.classList.remove('hidden');
             container.innerHTML = "";
 
@@ -154,32 +187,32 @@
                 const data = await response.json();
                 loading.classList.add('hidden');
 
-                if(data.length === 0) {
-                    container.innerHTML = `<div class="text-center py-10"><p class="text-[10px] font-black text-gray-300 uppercase italic">Database Kosong</p></div>`;
-                    return;
-                }
+                let totalScore = 0;
 
                 data.forEach(item => {
+                    totalScore += parseInt(item.skor || 0);
                     container.innerHTML += `
-                        <div class="bg-gray-50 p-6 rounded-[2.5rem] border-l-[10px] border-blue-900 shadow-sm relative overflow-hidden">
+                        <div class="bg-gray-50 p-6 rounded-[2.5rem] border-l-[10px] border-blue-900 shadow-sm relative">
                             <div class="flex justify-between items-start mb-2">
-                                <span class="text-[9px] font-black text-orange-600 uppercase italic tracking-tighter">${item.tanggal}</span>
+                                <span class="text-[9px] font-black text-orange-600 uppercase italic">${item.tanggal}</span>
                                 <span class="text-[8px] bg-blue-900 text-white px-3 py-1 rounded-full font-black uppercase tracking-widest">${item.jenis}</span>
                             </div>
                             <h3 class="font-black text-blue-900 text-sm uppercase leading-tight">${item.lokasi}</h3>
-                            <p class="text-[11px] text-gray-500 mt-2 italic leading-relaxed line-clamp-2">"${item.deskripsi}"</p>
-                            
                             <div class="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center">
                                 <div class="bg-orange-100 px-3 py-1 rounded-lg">
                                     <span class="text-[9px] font-black text-orange-600 uppercase italic">POIN: ${item.skor || '0'}</span>
                                 </div>
-                                ${item.foto !== "-" ? `<a href="${item.foto}" target="_blank" class="text-blue-600 text-[10px] font-black underline italic">BUKTI FOTO</a>` : ""}
+                                <div class="flex gap-2">
+                                    ${item.geotagging && item.geotagging !== "-" ? `<a href="${item.geotagging}" target="_blank" class="text-green-600 text-[10px] font-black underline italic">CEK GPS</a>` : ""}
+                                    ${item.foto !== "-" ? `<a href="${item.foto}" target="_blank" class="text-blue-600 text-[10px] font-black underline italic">FOTO</a>` : ""}
+                                </div>
                             </div>
                         </div>
                     `;
                 });
+                scoreLabel.innerText = totalScore;
             } catch (e) {
-                loading.innerText = "ERROR SINKRONISASI!";
+                loading.innerText = "ERROR SINKRON!";
             }
         }
 
