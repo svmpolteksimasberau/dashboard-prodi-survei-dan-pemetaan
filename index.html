@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 
-                <div class="relative">
+                <div>
                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Password</label>
                     <div class="relative mt-1">
                         <i class="fas fa-key absolute left-4 top-4 text-gray-300"></i>
@@ -41,7 +41,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full bg-blue-900 text-white py-4 rounded-2xl font-black hover:bg-blue-800 transition shadow-lg text-xs uppercase tracking-widest active:scale-95">Masuk Ke Dashboard</button>
+                <button type="submit" class="w-full bg-blue-900 text-white py-4 rounded-2xl font-black hover:bg-blue-800 transition shadow-lg text-xs uppercase tracking-widest active:scale-95 text-center">Masuk Ke Dashboard</button>
             </form>
         </div>
 
@@ -65,7 +65,7 @@
                     <input type="password" id="regPass" placeholder="Password Bebas" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm" required>
                 </div>
 
-                <button type="submit" class="w-full bg-orange-600 text-white py-4 rounded-2xl font-black hover:bg-orange-700 transition shadow-lg text-xs uppercase tracking-widest active:scale-95">Aktivasi Sekarang</button>
+                <button type="submit" class="w-full bg-orange-600 text-white py-4 rounded-2xl font-black hover:bg-orange-700 transition shadow-lg text-xs uppercase tracking-widest active:scale-95 text-center">Aktivasi Sekarang</button>
             </form>
         </div>
 
@@ -73,7 +73,7 @@
     </div>
 
     <script>
-        // --- DATABASE MASTER RESMI ---
+        // --- 1. DATABASE MASTER RESMI ---
         const allowedDosen = {
             "1112099302": "Loryena Ayu Karondia, S.T., M.T.",
             "1109068901": "Syaiful Muflichin Purnama, S.T., M.Eng.",
@@ -88,6 +88,7 @@
             "122": "Iqbal"
         };
 
+        // --- 2. FUNGSI TAB ---
         function switchTab(mode) {
             const isLogin = mode === 'login';
             document.getElementById('loginArea').classList.toggle('hidden', !isLogin);
@@ -97,18 +98,18 @@
             document.getElementById('alertBox').classList.add('hidden');
         }
 
-        // --- PROSES AKTIVASI ---
+        // --- 3. LOGIKA AKTIVASI (REGISTER) ---
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const id = document.getElementById('regId').value;
             const role = document.getElementById('regRole').value;
             const alertBox = document.getElementById('alertBox');
             
-            // Ambil nama berdasarkan Database di atas
+            // Mengambil Nama Berdasarkan Database (BUKAN INPUT MANUAL)
             let namaResmi = (role === 'dosen') ? allowedDosen[id] : allowedMahasiswa[id];
 
             if (!namaResmi) {
-                alertBox.innerText = "❌ AKSES DITOLAK: ID TIDAK TERDAFTAR DI DATABASE PRODI!";
+                alertBox.innerText = "❌ AKSES DITOLAK: ID TIDAK TERDAFTAR!";
                 alertBox.className = "text-[9px] mt-6 text-center font-black bg-red-50 text-red-600 p-4 rounded-2xl border border-red-100 block";
                 return;
             }
@@ -116,11 +117,12 @@
             const userData = {
                 id: id,
                 role: role,
-                name: namaResmi, // Nama Sakinah/Iqbal/Dosen terkunci di sini
+                name: namaResmi, // Nama Sakinah atau Iqbal otomatis masuk sini
                 pass: document.getElementById('regPass').value
             };
 
-            // Simpan data aktivasi ke browser
+            // Hapus data lama yang mungkin salah, lalu simpan yang baru
+            localStorage.removeItem('user_db_' + id);
             localStorage.setItem('user_db_' + id, JSON.stringify(userData));
             
             alertBox.innerText = "✅ BERHASIL: AKUN " + namaResmi.toUpperCase() + " AKTIF!";
@@ -129,7 +131,7 @@
             setTimeout(() => switchTab('login'), 2000);
         });
 
-        // --- PROSES LOGIN ---
+        // --- 4. LOGIKA LOGIN ---
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const id = document.getElementById('logId').value;
@@ -140,11 +142,11 @@
             const user = savedUser ? JSON.parse(savedUser) : null;
 
             if (user && user.pass === pass) {
-                // Simpan Sesi Login
+                // Simpan Sesi Login Aktif dengan Nama yang Benar
                 localStorage.setItem('current_user', JSON.stringify(user));
                 
-                alertBox.innerText = "SINKRONISASI DATA... MOHON TUNGGU";
-                alertBox.className = "text-[9px] mt-6 text-center font-black bg-blue-50 text-blue-600 p-4 rounded-2xl border block animate-pulse";
+                alertBox.innerText = "LOGIN BERHASIL! MENYAPA " + user.name.toUpperCase();
+                alertBox.className = "text-[9px] mt-6 text-center font-black bg-blue-50 text-blue-600 p-4 rounded-2xl border block";
                 
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
