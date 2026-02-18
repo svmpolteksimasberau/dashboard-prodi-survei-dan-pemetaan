@@ -9,74 +9,55 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
-        }
-        .animate-blob { animation: blob 7s infinite; }
-        @keyframes blob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
-        .animation-delay-2000 { animation-delay: 2s; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
     </style>
 </head>
 <body class="bg-blue-900 flex items-center justify-center min-h-screen p-6 relative overflow-hidden">
     
-    <div class="absolute top-0 -left-4 w-72 h-72 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-    <div class="absolute top-0 -right-4 w-72 h-72 bg-yellow-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-    <div class="absolute -bottom-8 left-20 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    <div class="absolute -top-20 -left-20 w-80 h-80 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+    <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-yellow-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
 
-    <div class="glass-card w-full max-w-sm p-10 rounded-[3.5rem] shadow-2xl text-center border-b-[12px] border-orange-500 relative z-10 border border-white/20">
+    <div class="glass-effect w-full max-w-sm p-10 rounded-[3.5rem] shadow-2xl text-center border-b-[12px] border-orange-600 relative z-10">
         
         <div class="mb-10">
-            <div class="w-24 h-24 bg-blue-900 rounded-[2rem] mx-auto flex items-center justify-center shadow-2xl mb-6 transform -rotate-6 border-4 border-white">
-                <i class="fas fa-university text-yellow-400 text-4xl"></i>
+            <div class="w-20 h-20 bg-blue-900 rounded-3xl mx-auto flex items-center justify-center shadow-lg mb-4 transform -rotate-6 border-4 border-white">
+                <i class="fas fa-university text-yellow-400 text-3xl"></i>
             </div>
-            <h1 class="font-black text-3xl text-blue-900 uppercase tracking-tighter leading-none">Portal Akses</h1>
+            <h1 class="font-black text-2xl text-blue-900 uppercase tracking-tighter leading-none">Portal Akses</h1>
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mt-3 italic">Politeknik Sinar Mas Berau Coal</p>
         </div>
 
         <div class="space-y-5">
             <div class="text-left">
-                <label class="text-[10px] font-black text-blue-900 uppercase ml-5 mb-1 block opacity-60 italic">ID Terdaftar (NIM/NIDN)</label>
+                <label class="text-[10px] font-black text-blue-900 uppercase ml-5 mb-1 block italic text-opacity-50">NIM / NIDN</label>
                 <div class="relative">
-                    <span class="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
-                        <i class="fas fa-id-card"></i>
-                    </span>
-                    <input type="number" id="idInput" placeholder="Contoh: 121" 
-                        class="w-full pl-14 pr-6 py-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-black text-sm text-gray-700 transition-all border border-gray-100 shadow-inner">
+                    <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"><i class="fas fa-id-badge"></i></span>
+                    <input type="number" id="idInput" placeholder="Masukkan ID Anda" 
+                        class="w-full pl-12 pr-5 py-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-black text-sm text-gray-700 transition-all border border-gray-100 shadow-inner">
                 </div>
             </div>
             
             <div class="text-left">
-                <label class="text-[10px] font-black text-blue-900 uppercase ml-5 mb-1 block opacity-60 italic">PIN Keamanan</label>
+                <label class="text-[10px] font-black text-blue-900 uppercase ml-5 mb-1 block italic text-opacity-50">PIN Keamanan</label>
                 <div class="relative">
-                    <span class="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
-                        <i class="fas fa-key"></i>
-                    </span>
-                    <input type="password" id="passInput" placeholder="PIN Bebas" 
-                        class="w-full pl-14 pr-6 py-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-black text-sm text-gray-700 transition-all border border-gray-100 shadow-inner">
+                    <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"><i class="fas fa-lock"></i></span>
+                    <input type="password" id="passInput" placeholder="Masukkan PIN" 
+                        class="w-full pl-12 pr-5 py-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-black text-sm text-gray-700 transition-all border border-gray-100 shadow-inner">
                 </div>
             </div>
             
             <button onclick="handleLogin()" id="btnLogin" 
-                class="w-full bg-blue-900 text-white font-black py-5 rounded-[1.8rem] shadow-xl active:scale-95 hover:bg-blue-800 transition-all uppercase tracking-[0.2em] mt-4 flex justify-center items-center gap-2">
-                Masuk Sistem <i class="fas fa-arrow-right text-[10px]"></i>
+                class="w-full bg-blue-900 text-white font-black py-5 rounded-[2rem] shadow-xl active:scale-95 hover:bg-blue-800 transition-all uppercase tracking-widest mt-4 flex justify-center items-center gap-2">
+                Masuk Ke Sistem <i class="fas fa-arrow-right text-[10px]"></i>
             </button>
         </div>
 
-        
-        <div class="mt-8 p-5 bg-blue-50/50 rounded-3xl border border-blue-100 text-left">
+        <div class="mt-8 p-5 bg-blue-50 rounded-3xl border border-blue-100 text-left">
             <div class="flex items-start gap-3">
-                <i class="fas fa-fingerprint text-orange-500 mt-1"></i>
-                <div>
-                    <p class="text-[9px] text-blue-900 font-black uppercase">Registrasi Otomatis</p>
-                    <p class="text-[8px] text-gray-500 font-medium normal-case mt-1 italic leading-relaxed">
-                        Jika ID Anda terdaftar namun belum memiliki PIN, silakan masukkan PIN baru untuk pendaftaran otomatis.
-                    </p>
+                <i class="fas fa-info-circle text-orange-500 mt-1"></i>
+                <div class="text-[9px] text-blue-900 font-bold leading-relaxed uppercase">
+                    Pendaftaran PIN Otomatis
+                    <p class="text-gray-400 font-medium normal-case mt-1 italic leading-tight">Cukup masukkan NIM/NIDN Anda dan tentukan PIN baru keinginan Anda untuk pendaftaran pertama.</p>
                 </div>
             </div>
         </div>
@@ -86,7 +67,7 @@
 
     <script>
         // MASUKKAN URL WEB APP GOOGLE SCRIPT ANDA DI SINI
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyj2vIsx7ePYkP0TBqybYVtxU1faoVdI3xaHUDGvkEsBHoz5mdtRfKzsncuZ1oaJV39jw/exec";
+        const scriptURL = "PASTE_URL_WEB_APP_ANDA_DISINI";
 
         async function handleLogin() {
             const idUser = document.getElementById('idInput').value;
@@ -94,11 +75,11 @@
             const btn = document.getElementById('btnLogin');
 
             if(!idUser || !pass) {
-                alert("ID dan PIN wajib diisi!");
+                alert("ID (NIM/NIDN) dan PIN wajib diisi!");
                 return;
             }
 
-            // Loading State
+            // Mencegah Double Click
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memvalidasi...';
 
@@ -124,32 +105,30 @@
                         role: result.role 
                     }));
 
-                    // LOGIKA REDIRECT BERDASARKAN PERAN (ROLE)
+                    // LOGIKA REDIRECT BERDASARKAN ROLE
                     if(result.role === "DOSEN") {
                         window.location.href = 'dashboard_dosen.html';
                     } else {
                         window.location.href = 'logbook.html';
                     }
                 } else {
-                    alert("⚠️ Akses Ditolak: " + result.msg);
+                    alert("⚠️ Gagal: " + result.msg);
                     resetButton(btn);
                 }
             } catch (err) {
                 console.error(err);
-                alert("❌ Gagal terhubung ke Cloud. Pastikan Deployment URL benar!");
+                alert("❌ Gagal terhubung ke Cloud. Periksa Koneksi!");
                 resetButton(btn);
             }
         }
 
         function resetButton(btn) {
             btn.disabled = false;
-            btn.innerHTML = 'Masuk Sistem <i class="fas fa-arrow-right text-[10px]"></i>';
+            btn.innerHTML = 'Masuk Ke Sistem <i class="fas fa-arrow-right text-[10px]"></i>';
         }
 
-        // Jalankan login saat menekan tombol Enter
-        document.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleLogin();
-        });
+        // Support Enter Key
+        document.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
     </script>
 </body>
 </html>
