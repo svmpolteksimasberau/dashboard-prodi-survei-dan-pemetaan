@@ -14,46 +14,50 @@
             <a href="dashboard.html" class="text-blue-900 font-bold flex items-center gap-2 hover:underline text-sm transition-all">
                 <i class="fas fa-arrow-left"></i> Dashboard
             </a>
-            <div class="bg-orange-600 text-white px-6 py-2 rounded-2xl font-black shadow-lg uppercase text-xs tracking-widest">
-                Logbook Prakerin
+            <div class="bg-orange-600 text-white px-6 py-2 rounded-2xl font-black shadow-lg uppercase text-[10px] tracking-widest">
+                Logbook Harian Mahasiswa
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-1">
                 <form id="logForm" class="bg-white p-6 rounded-[2.5rem] shadow-xl border-t-8 border-orange-500 space-y-4 sticky top-10">
-                    <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs">Laporan Kegiatan</h3>
+                    <div>
+                        <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs">Laporan Survei Lapangan</h3>
+                        <p class="text-[9px] text-gray-400 font-bold uppercase mt-1">Politeknik Sinar Mas Berau Coal</p>
+                    </div>
                     
                     <input type="hidden" id="editRowId">
                     <input type="hidden" id="fotoBase64">
 
                     <div>
-                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Lokasi / Site Survei</label>
-                        <input type="text" id="lokasi" placeholder="Contoh: Area Reklamasi Blok C" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" required>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Lokasi / Site</label>
+                        <input type="text" id="lokasi" placeholder="Misal: Pit Ganal Area A" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" required>
                     </div>
 
                     <div>
-                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Dokumentasi Lapangan</label>
-                        <div class="mt-1 flex flex-col items-center p-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 text-center">
-                            <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="previewImage(this)">
-                            <button type="button" onclick="document.getElementById('fileInput').click()" class="text-orange-600 font-bold text-xs uppercase hover:underline">
-                                <i class="fas fa-camera mr-2"></i> Pilih / Ambil Foto
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Bukti Foto Dokumentasi</label>
+                        <div class="mt-1 flex flex-col items-center p-6 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 text-center">
+                            <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="processImage(this)">
+                            <button type="button" onclick="document.getElementById('fileInput').click()" class="text-orange-600 font-black text-xs uppercase hover:scale-105 transition-all">
+                                <i class="fas fa-camera fa-2x mb-2 block"></i> Ambil / Pilih Foto
                             </button>
-                            <img id="previewImg" class="hidden mt-3 rounded-xl w-full h-40 object-cover border shadow-sm">
+                            <img id="previewImg" class="hidden mt-4 rounded-xl w-full h-44 object-cover border-4 border-white shadow-md">
+                            <p id="imgStatus" class="hidden text-[9px] text-green-600 font-bold mt-2 uppercase">Foto Siap!</p>
                         </div>
                     </div>
 
                     <div>
-                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Kegiatan Harian</label>
-                        <textarea id="desk" rows="3" placeholder="Apa yang Anda kerjakan hari ini?" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" required></textarea>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Deskripsi Kegiatan</label>
+                        <textarea id="desk" rows="3" placeholder="Apa yang Anda kerjakan?" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" required></textarea>
                     </div>
 
                     <div>
-                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Kendala Lapangan</label>
-                        <input type="text" id="kendala" placeholder="Contoh: Alat GPS Error / Hujan" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Kendala</label>
+                        <input type="text" id="kendala" placeholder="Misal: Cuaca Hujan / Alat Error" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500">
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2 pt-2">
                         <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest shadow-lg active:scale-95 transition-all">
                             SUBMIT LOGBOOK
                         </button>
@@ -66,19 +70,19 @@
 
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-[2.5rem] shadow-lg overflow-hidden border border-gray-100">
-                    <div class="p-6 bg-gray-50 border-b">
-                        <h3 class="font-black text-xs uppercase text-gray-500 tracking-widest">Riwayat Kegiatan Anda</h3>
+                    <div class="p-6 bg-gray-50 border-b flex justify-between items-center">
+                        <h3 class="font-black text-xs uppercase text-gray-500 tracking-widest">Riwayat Laporan Lapangan</h3>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
                             <thead class="bg-gray-50 text-[10px] text-gray-400 uppercase font-black">
                                 <tr>
                                     <th class="p-5">Foto & Lokasi</th>
-                                    <th class="p-5">Kegiatan</th>
+                                    <th class="p-5">Aktivitas</th>
                                     <th class="p-5 text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="logBody" class="divide-y divide-gray-100 text-xs">
+                            <tbody id="logBody" class="divide-y divide-gray-100 text-xs font-semibold">
                                 </tbody>
                         </table>
                     </div>
@@ -87,28 +91,38 @@
         </div>
     </div>
 
-    <script>
-        // URL WEB APP TERBARU ANDA
+    <canvas id="canvas" class="hidden"></canvas> <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyr3YPRLSWXElcPAhKE2KL9zDopffm07qwzR--ELO5fiysD3vmAxLidoCL_LVWud92h9Q/exec';
         
         const user = JSON.parse(localStorage.getItem('current_user'));
-        if (!user || user.role !== 'mahasiswa') {
-            alert("Sesi berakhir atau Anda bukan mahasiswa.");
-            window.location.href = 'index.html';
-        }
+        if (!user || user.role !== 'mahasiswa') { window.location.href = 'index.html'; }
 
         const storageKey = 'logbook_mhs_' + user.id;
         let logList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
-        // Fungsi Preview & Convert Foto ke Base64
-        function previewImage(input) {
+        // FUNGSI KOMPRES FOTO (Penting agar tidak error saat kirim ke Cloud)
+        function processImage(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const img = document.getElementById('previewImg');
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.getElementById('canvas');
+                        const ctx = canvas.getContext('2d');
+                        // Resize ke lebar 600px (tinggi proporsional)
+                        const scale = 600 / img.width;
+                        canvas.width = 600;
+                        canvas.height = img.height * scale;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        // Convert ke Base64 dengan kualitas 0.7 (lebih ringan)
+                        const dataURL = canvas.toDataURL('image/jpeg', 0.7);
+                        document.getElementById('fotoBase64').value = dataURL;
+                        document.getElementById('previewImg').src = dataURL;
+                        document.getElementById('previewImg').classList.remove('hidden');
+                        document.getElementById('imgStatus').classList.remove('hidden');
+                    }
                     img.src = e.target.result;
-                    img.classList.remove('hidden');
-                    document.getElementById('fotoBase64').value = e.target.result;
                 }
                 reader.readAsDataURL(input.files[0]);
             }
@@ -116,18 +130,18 @@
 
         function render() {
             const body = document.getElementById('logBody');
-            body.innerHTML = logList.length ? "" : "<tr><td colspan='3' class='p-10 text-center opacity-30 italic font-bold'>Belum ada laporan lapangan</td></tr>";
+            body.innerHTML = logList.length ? "" : "<tr><td colspan='3' class='p-10 text-center opacity-30 font-bold uppercase'>Belum ada riwayat laporan</td></tr>";
             
             [...logList].reverse().forEach((item, index) => {
                 const realIdx = logList.length - 1 - index;
                 body.insertAdjacentHTML('beforeend', `
-                    <tr class="hover:bg-orange-50 transition-all border-b border-gray-50">
+                    <tr class="hover:bg-orange-50/50 transition-all border-b border-gray-50">
                         <td class="p-5">
-                            <img src="${item.foto || 'https://via.placeholder.com/150'}" class="w-20 h-20 object-cover rounded-2xl mb-2 border shadow-sm">
-                            <span class="font-black text-orange-600 uppercase text-[9px] block tracking-tighter">${item.lokasi}</span>
+                            <img src="${item.foto}" class="w-24 h-16 object-cover rounded-xl mb-2 border shadow-sm">
+                            <span class="font-black text-orange-600 uppercase text-[9px] block">${item.lokasi}</span>
                         </td>
                         <td class="p-5">
-                            <p class="font-bold text-gray-800 leading-snug mb-1 text-[11px]">${item.deskripsi}</p>
+                            <p class="text-gray-800 leading-snug mb-1">${item.deskripsi}</p>
                             <div class="text-[9px] font-black uppercase text-gray-400 italic">Kendala: ${item.kendala || '-'}</div>
                         </td>
                         <td class="p-5 text-center">
@@ -149,6 +163,12 @@
             const btn = document.getElementById('btnSubmit');
             const editId = document.getElementById('editRowId').value;
             const isEdit = !!editId;
+
+            // Cek apakah foto sudah ada
+            if (!document.getElementById('fotoBase64').value) {
+                alert("Harap lampirkan bukti foto kegiatan!");
+                return;
+            }
 
             btn.innerText = "SINKRONISASI CLOUD...";
             btn.disabled = true;
@@ -175,11 +195,11 @@
                     logList.push(payload);
                 }
                 localStorage.setItem(storageKey, JSON.stringify(logList));
-                alert(isEdit ? "Laporan Diperbarui!" : "Laporan Berhasil Terkirim!");
+                alert(isEdit ? "Laporan Berhasil Diupdate!" : "Laporan Berhasil Terkirim!");
                 location.reload();
             })
             .catch(() => {
-                alert("Koneksi gagal. Coba lagi.");
+                alert("Gagal sinkron. Coba lagi.");
                 btn.innerText = "SUBMIT LOGBOOK";
                 btn.disabled = false;
             });
@@ -187,7 +207,7 @@
 
         window.startEdit = function(idx) {
             const item = logList[idx];
-            document.getElementById('formTitle').innerText = "EDIT LAPORAN";
+            document.getElementById('formTitle').innerText = "MODE EDIT LAPORAN";
             document.getElementById('editRowId').value = item.rowId;
             document.getElementById('lokasi').value = item.lokasi;
             document.getElementById('desk').value = item.deskripsi;
@@ -201,7 +221,7 @@
         };
 
         window.hapusLog = function(idx, rowId) {
-            if (confirm("Hapus laporan ini secara permanen dari Cloud Drive?")) {
+            if (confirm("Hapus laporan ini secara permanen dari Cloud Drive Prodi?")) {
                 fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "LOGBOOK", rowId: rowId }) });
                 logList.splice(idx, 1);
                 localStorage.setItem(storageKey, JSON.stringify(logList));
