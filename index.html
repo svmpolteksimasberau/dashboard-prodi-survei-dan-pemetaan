@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Logbook PRAKERIN PSBC</title>
+    <title>Login Logbook - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -13,60 +13,43 @@
 </head>
 <body class="bg-blue-900 flex items-center justify-center min-h-screen p-6">
 
-    <div class="bg-white w-full max-w-sm p-10 rounded-[3.5rem] shadow-2xl text-center border-b-[12px] border-orange-500">
-        
-        <div class="mb-10">
-            <div class="w-20 h-20 bg-blue-900 rounded-3xl mx-auto flex items-center justify-center shadow-lg mb-4 transform -rotate-6">
-                <i class="fas fa-user-shield text-yellow-400 text-3xl"></i>
-            </div>
-            <h1 class="font-black text-2xl text-blue-900 uppercase tracking-tighter leading-tight">Akses Logbook</h1>
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mt-2">Survey & Pemetaan - PSBC</p>
+    <div class="bg-white w-full max-w-sm p-10 rounded-[3rem] shadow-2xl text-center border-b-[10px] border-orange-500">
+        <div class="mb-8">
+            <i class="fas fa-user-circle text-blue-900 text-6xl mb-4"></i>
+            <h1 class="font-black text-2xl text-blue-900 uppercase tracking-tighter leading-none">Akses Mahasiswa</h1>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Prodi Survei & Pemetaan</p>
         </div>
 
-        <div class="space-y-5">
+        <div class="space-y-4">
             <div class="text-left">
-                <label class="text-[10px] font-black text-blue-900 uppercase ml-5 mb-1 block">Nomor Induk Mahasiswa</label>
-                <div class="relative">
-                    <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xs italic">NIM</span>
-                    <input type="number" id="nimInput" placeholder="Masukkan NIM Anda" 
-                        class="w-full pl-14 pr-5 py-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-black text-sm text-gray-700 transition-all border border-gray-100 shadow-inner">
-                </div>
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-4">Nomor Induk Mahasiswa (NIM)</label>
+                <input type="number" id="nimInput" placeholder="Masukkan NIM (Contoh: 121)" 
+                    class="w-full p-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-bold text-center mt-1 border border-gray-100">
             </div>
             
             <div class="text-left">
-                <label class="text-[10px] font-black text-blue-900 uppercase ml-5 mb-1 block">PIN Keamanan (Bebas)</label>
-                <div class="relative">
-                    <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xs italic">PIN</span>
-                    <input type="password" id="passInput" placeholder="Min. 4 Digit" 
-                        class="w-full pl-14 pr-5 py-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-black text-sm text-gray-700 transition-all border border-gray-100 shadow-inner">
-                </div>
+                <label class="text-[9px] font-black text-blue-900 uppercase ml-4">PIN / Password</label>
+                <input type="password" id="passInput" placeholder="Masukkan PIN Bebas" 
+                    class="w-full p-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-bold text-center mt-1 border border-gray-100">
             </div>
             
             <button onclick="handleLogin()" id="btnLogin" 
-                class="w-full bg-blue-900 text-white font-black py-5 rounded-[1.8rem] shadow-xl active:scale-95 hover:bg-blue-800 transition-all uppercase tracking-widest mt-4 flex justify-center items-center gap-2">
-                Masuk Ke Sistem <i class="fas fa-sign-in-alt ml-1 text-yellow-400"></i>
+                class="w-full bg-blue-900 text-white font-black py-5 rounded-2xl shadow-lg active:scale-95 hover:bg-blue-800 transition-all uppercase tracking-widest mt-4">
+                Masuk ke Sistem
             </button>
         </div>
 
-        
-        <div class="mt-8 p-5 bg-blue-50 rounded-[2rem] border border-blue-100 text-left">
-            <div class="flex items-start gap-3">
-                <i class="fas fa-info-circle text-orange-500 mt-1"></i>
-                <div>
-                    <p class="text-[9px] text-blue-900 font-black uppercase leading-tight">Pengguna Baru / Lupa PIN?</p>
-                    <p class="text-[8px] text-blue-800/70 font-medium leading-relaxed mt-1">
-                        Cukup masukkan NIM dan buat PIN baru. Jika lupa, silakan hubungi Admin untuk reset PIN Anda.
-                    </p>
-                </div>
-            </div>
+        <div class="mt-8 p-4 bg-orange-50 rounded-2xl border border-orange-100">
+            <p class="text-[8px] text-orange-700 font-bold leading-relaxed">
+                <i class="fas fa-lightbulb mr-1"></i> INFO PENDAFTARAN:<br>
+                Jika NIM terdaftar tapi belum punya PIN, silakan masukkan PIN baru keinginan Anda. Sistem akan menyimpannya secara otomatis.
+            </p>
         </div>
-
-        <p class="mt-8 text-[9px] text-gray-300 font-black uppercase tracking-widest">Politeknik Sinar Mas Berau Coal</p>
     </div>
 
     <script>
-        // MASUKKAN URL WEB APP GOOGLE SCRIPT ANDA DI SINI
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxzMguvh7lzmdNQuFShk1INok1OhfX-D3i99c7Cz1CXLw-vhTMzXF8d0aBWmaAcdl2D/exec";
+        // PASTI KAN URL INI ADALAH URL DARI "NEW DEPLOYMENT" TERBARU
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxkczI1AQXLfpxw3mF3iSNjGiXaCao3eKw_pu3bJQwVZ4LlQBL3B0dZEW9tX2L8enYk/exec";
 
         async function handleLogin() {
             const nim = document.getElementById('nimInput').value;
@@ -74,62 +57,49 @@
             const btn = document.getElementById('btnLogin');
 
             if(!nim || !pass) {
-                alert("NIM dan PIN wajib diisi!");
+                alert("NIM dan PIN tidak boleh kosong!");
                 return;
             }
 
-            if(pass.length < 4) {
-                alert("PIN keamanan minimal 4 digit agar aman!");
-                return;
-            }
-
-            // Loading State
+            // Tampilan Loading
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Menghubungkan...';
 
             try {
                 const response = await fetch(scriptURL, {
                     method: 'POST',
                     body: JSON.stringify({ 
                         action: "login", 
-                        nim: nim, 
-                        password: pass 
+                        nim: nim.toString(), 
+                        password: pass.toString() 
                     })
                 });
                 
                 const result = await response.json();
 
                 if(result.success) {
-                    if(result.msg) alert("Notifikasi: " + result.msg); 
+                    if(result.msg) alert(result.msg); 
                     
-                    // Simpan identitas ke LocalStorage agar logbook.html tahu siapa yang login
+                    // Simpan ke memori browser
                     localStorage.setItem('current_user', JSON.stringify({ 
                         id: result.nim, 
                         name: result.nama 
                     }));
 
-                    // ARAHKAN KE HALAMAN LOGBOOK
+                    // Pindah ke halaman logbook
                     window.location.href = 'logbook.html'; 
                 } else {
                     alert("Gagal: " + result.msg);
-                    resetButton(btn);
+                    btn.disabled = false;
+                    btn.innerText = "Masuk ke Sistem";
                 }
             } catch (err) {
                 console.error(err);
-                alert("Kesalahan: Tidak dapat terhubung ke server database.");
-                resetButton(btn);
+                alert("Error: Tidak bisa menjangkau database Cloud.");
+                btn.disabled = false;
+                btn.innerText = "Masuk ke Sistem";
             }
         }
-
-        function resetButton(btn) {
-            btn.disabled = false;
-            btn.innerHTML = 'Masuk Ke Sistem <i class="fas fa-sign-in-alt ml-1 text-yellow-400"></i>';
-        }
-
-        // Support tekan Enter untuk login
-        document.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') handleLogin();
-        });
     </script>
 </body>
 </html>
