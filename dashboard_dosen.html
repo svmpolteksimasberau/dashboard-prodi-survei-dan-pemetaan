@@ -6,49 +6,89 @@
     <title>Dashboard Dosen - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap'); body { font-family: 'Inter', sans-serif; }</style>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .menu-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .menu-card:hover { transform: translateY(-5px); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+    </style>
 </head>
-<body class="bg-slate-50 min-h-screen pb-10">
-    <nav class="bg-blue-900 text-white p-10 rounded-b-[4rem] shadow-2xl">
-        <div class="container mx-auto">
-            <p class="text-[10px] font-bold text-orange-400 uppercase tracking-[0.3em] mb-1">Dosen Pembimbing</p>
-            <h1 id="dosenGreet" class="font-black text-3xl tracking-tighter">Halo, Dosen!</h1>
+<body class="bg-slate-50 min-h-screen pb-12">
+
+    <nav class="bg-blue-900 text-white p-10 pb-24 rounded-b-[4rem] shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-10 opacity-10 text-9xl -mr-16 -mt-16 transform rotate-12">
+            <i class="fas fa-university"></i>
+        </div>
+        
+        <div class="container mx-auto relative z-10">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[10px] font-black text-orange-400 uppercase tracking-[0.4em] mb-2 italic">Sistem Informasi Dosen</p>
+                    <h1 id="dosenGreet" class="font-black text-3xl tracking-tighter uppercase italic leading-none">Halo, Dosen!</h1>
+                </div>
+                <div class="bg-white/10 p-3 rounded-2xl border border-white/10">
+                    <i class="fas fa-user-tie text-xl text-orange-400"></i>
+                </div>
+            </div>
+            <p class="mt-4 text-[10px] text-blue-200 font-medium italic opacity-60">Pilih menu di bawah untuk mulai memantau bimbingan atau mengelola performa Anda.</p>
         </div>
     </nav>
 
-    <div class="container mx-auto px-6 -mt-10 max-w-md space-y-5">
-        <a href="penilaian_logbook.html" class="flex items-center gap-5 bg-white p-7 rounded-[2.5rem] shadow-xl border-b-8 border-orange-500 active:scale-95 transition-all">
-            <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600"><i class="fas fa-check-double text-xl"></i></div>
+    <div class="container mx-auto px-6 -mt-12 max-w-md space-y-4 relative z-20">
+        
+        <a href="penilaian_logbook.html" class="menu-card flex items-center gap-6 bg-white p-8 rounded-[3rem] shadow-xl border-b-8 border-orange-500 active:scale-95 group">
+            <div class="w-16 h-16 bg-orange-100 rounded-[1.5rem] flex items-center justify-center text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition-all">
+                <i class="fas fa-tasks text-2xl"></i>
+            </div>
             <div>
-                <h3 class="font-black text-blue-900 text-sm uppercase leading-none">Penilaian Logbook</h3>
-                <p class="text-[9px] text-gray-400 font-bold uppercase mt-1">Evaluasi Mahasiswa</p>
+                <h3 class="font-black text-blue-900 text-sm uppercase leading-none tracking-tight">Penilaian Logbook</h3>
+                <p class="text-[9px] text-gray-400 font-bold uppercase mt-2 italic tracking-widest">Pantau Portofolio Mahasiswa</p>
             </div>
         </a>
 
-        <a href="performa_dosen.html" class="flex items-center gap-5 bg-white p-7 rounded-[2.5rem] shadow-xl border-b-8 border-blue-900 active:scale-95 transition-all">
-            <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-900"><i class="fas fa-chart-line text-xl"></i></div>
+        <a href="performa_dosen.html" class="menu-card flex items-center gap-6 bg-white p-8 rounded-[3rem] shadow-xl border-b-8 border-blue-900 active:scale-95 group">
+            <div class="w-16 h-16 bg-blue-100 rounded-[1.5rem] flex items-center justify-center text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-all">
+                <i class="fas fa-chart-line text-2xl"></i>
+            </div>
             <div>
-                <h3 class="font-black text-blue-900 text-sm uppercase leading-none">Performa Dosen</h3>
-                <p class="text-[9px] text-gray-400 font-bold uppercase mt-1">Statistik & Monitoring</p>
+                <h3 class="font-black text-blue-900 text-sm uppercase leading-none tracking-tight">Performa Dosen</h3>
+                <p class="text-[9px] text-gray-400 font-bold uppercase mt-2 italic tracking-widest">Statistik & Capaian KPI</p>
             </div>
         </a>
 
-        <a href="luaran_dosen.html" class="flex items-center gap-5 bg-white p-7 rounded-[2.5rem] shadow-xl border-b-8 border-green-600 active:scale-95 transition-all">
-            <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-green-700"><i class="fas fa-file-export text-xl"></i></div>
+        <a href="luaran_dosen.html" class="menu-card flex items-center gap-6 bg-white p-8 rounded-[3rem] shadow-xl border-b-8 border-green-600 active:scale-95 group">
+            <div class="w-16 h-16 bg-green-100 rounded-[1.5rem] flex items-center justify-center text-green-700 group-hover:bg-green-700 group-hover:text-white transition-all">
+                <i class="fas fa-file-signature text-2xl"></i>
+            </div>
             <div>
-                <h3 class="font-black text-blue-900 text-sm uppercase leading-none">Luaran & Publikasi</h3>
-                <p class="text-[9px] text-gray-400 font-bold uppercase mt-1">Arsip & Hasil Akhir</p>
+                <h3 class="font-black text-blue-900 text-sm uppercase leading-none tracking-tight">Luaran & Publikasi</h3>
+                <p class="text-[9px] text-gray-400 font-bold uppercase mt-2 italic tracking-widest">Arsip Publikasi & HAKI</p>
             </div>
         </a>
 
-        <button onclick="logout()" class="w-full mt-8 text-gray-300 font-black text-[10px] uppercase tracking-widest">Keluar</button>
+        <button onclick="logout()" class="w-full mt-12 text-gray-300 font-black text-[10px] uppercase tracking-[0.5em] hover:text-red-500 transition-all italic">
+            <i class="fas fa-power-off mr-2"></i> Keluar Sistem
+        </button>
     </div>
 
     <script>
+        // Ambil data user dari session login
         const user = JSON.parse(localStorage.getItem('current_user'));
-        if(!user || user.role !== "DOSEN") window.location.href = 'index.html';
+
+        // Proteksi: Jika bukan dosen, tendang ke login
+        if(!user || user.role.toUpperCase() !== "DOSEN") {
+            window.location.href = 'index.html';
+        }
+
+        // Tampilkan Nama Dosen
         document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
-        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+
+        function logout() {
+            if(confirm("Apakah Anda yakin ingin keluar?")) {
+                localStorage.clear();
+                window.location.href = 'index.html';
+            }
+        }
     </script>
 </body>
 </html>
