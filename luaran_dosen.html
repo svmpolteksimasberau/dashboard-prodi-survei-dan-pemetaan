@@ -3,286 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luaran & Publikasi - Poltek Simas BC</title>
+    <title>Luaran Dosen - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <style> @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap'); body { font-family: 'Inter', sans-serif; } </style>
 </head>
-<body class="bg-gray-100 p-4 md:p-8">
-
-    <div class="container mx-auto max-w-6xl">
-        <div class="flex justify-between items-center mb-8">
-            <a href="dashboard_dosen.html" class="text-blue-900 font-black flex items-center gap-2 hover:scale-105 transition-all text-xs uppercase italic tracking-widest">
-                <i class="fas fa-arrow-left"></i> Dashboard
-            </a>
-            <div class="text-right">
-                <h1 class="text-xl font-black text-blue-900 uppercase tracking-tighter italic">Luaran & Publikasi</h1>
-                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Politeknik Sinar Mas Berau Coal</p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-gradient-to-br from-green-700 to-green-900 p-8 rounded-[3rem] shadow-xl text-white text-center flex flex-col justify-center border-b-8 border-yellow-500">
-                <p class="text-[9px] font-black uppercase opacity-60 tracking-[0.4em] mb-2 italic">Total Skor Luaran</p>
-                <h2 id="totalSkorLuaran" class="text-7xl font-black italic tracking-tighter">0</h2>
-                <div id="syncStatus" class="mt-4 text-[8px] font-bold opacity-40 uppercase tracking-widest italic">Syncing Cloud...</div>
-            </div>
-
-            <div class="md:col-span-2 bg-white p-8 rounded-[3rem] shadow-xl border border-gray-100 space-y-5">
-                <h3 class="font-black text-blue-900 text-[10px] uppercase tracking-widest flex items-center gap-2 italic">
-                    <i class="fas fa-chart-line text-green-600"></i> Distribusi Jenis Luaran
-                </h3>
-                
-                <div class="space-y-1">
-                    <div class="flex justify-between text-[9px] font-black uppercase italic text-gray-400">
-                        <span>Publikasi Jurnal</span>
-                        <span id="txtJurnal">0</span>
-                    </div>
-                    <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
-                        <div id="barJurnal" class="bg-green-600 h-full transition-all duration-1000" style="width: 0%"></div>
-                    </div>
-                </div>
-
-                <div class="space-y-1">
-                    <div class="flex justify-between text-[9px] font-black uppercase italic text-gray-400">
-                        <span>HAKI / Paten</span>
-                        <span id="txtHaki">0</span>
-                    </div>
-                    <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
-                        <div id="barHaki" class="bg-blue-900 h-full transition-all duration-1000" style="width: 0%"></div>
-                    </div>
-                </div>
-
-                <div class="space-y-1">
-                    <div class="flex justify-between text-[9px] font-black uppercase italic text-gray-400">
-                        <span>Buku Ber-ISBN</span>
-                        <span id="txtBuku">0</span>
-                    </div>
-                    <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
-                        <div id="barBuku" class="bg-orange-500 h-full transition-all duration-1000" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+<body class="bg-slate-50 p-4 md:p-8">
+    <div class="container mx-auto max-w-5xl">
+        <a href="dashboard_dosen.html" class="text-blue-900 font-black text-xs uppercase italic mb-5 inline-block"><i class="fas fa-arrow-left"></i> Kembali</a>
+        
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-1">
-                <form id="luaranForm" class="bg-white p-8 rounded-[3.5rem] shadow-2xl border-t-8 border-green-600 space-y-5 sticky top-10">
-                    <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs italic italic mb-2">Input Luaran Baru</h3>
-                    <input type="hidden" id="editRowId">
+            <form id="luaranForm" class="bg-white p-8 rounded-[3rem] shadow-xl border-t-8 border-green-600 space-y-4 h-fit">
+                <h3 class="font-black text-blue-900 uppercase text-xs italic">Input Luaran</h3>
+                <input type="text" id="judul" placeholder="Judul Luaran" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none text-sm font-bold" required>
+                <select id="jenis" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none text-sm font-bold">
+                    <option value="Publikasi Jurnal">Publikasi Jurnal</option>
+                    <option value="HAKI">HAKI / Paten</option>
+                    <option value="Buku Ber-ISBN">Buku Ber-ISBN</option>
+                </select>
+                <input type="url" id="link" placeholder="Link Bukti (URL)" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none text-sm font-bold" required>
+                <button type="submit" id="btnSub" class="w-full bg-green-600 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest shadow-lg">Kirim Ke Cloud</button>
+            </form>
 
-                    <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4 italic">Jenis Luaran</label>
-                        <select id="jenisLuaran" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl font-black text-green-700 text-sm outline-none focus:ring-2 focus:ring-green-500 italic">
-                            <option value="Publikasi Jurnal">Publikasi Jurnal (+10)</option>
-                            <option value="HAKI">HAKI / Paten (+10)</option>
-                            <option value="Buku Ber-ISBN">Buku Ber-ISBN (+10)</option>
-                        </select>
+            <div class="lg:col-span-2 bg-white rounded-[3rem] shadow-xl overflow-hidden border border-gray-100">
+                <div class="p-6 bg-gray-50 border-b font-black text-blue-900 text-xs uppercase italic">Arsip Luaran Cloud</div>
+                <div class="p-4 space-y-3" id="listLuaran">
                     </div>
-
-                    <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4 italic">Judul Karya</label>
-                        <input type="text" id="judul" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-green-500" placeholder="Judul..." required>
-                    </div>
-
-                    <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4 italic">Link Bukti (URL)</label>
-                        <input type="url" id="link" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-green-500" placeholder="https://..." required>
-                    </div>
-
-                    <div class="pt-4 space-y-2">
-                        <button type="submit" id="btnSubmit" class="w-full bg-green-600 text-white font-black py-5 rounded-[2rem] shadow-xl active:scale-95 transition-all text-xs tracking-widest uppercase">
-                            Kirim ke Cloud
-                        </button>
-                        <button type="button" id="btnBatal" class="hidden w-full bg-gray-200 text-gray-400 font-black py-3 rounded-2xl uppercase text-[10px]">
-                            Batal Edit
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-[3.5rem] shadow-2xl border border-gray-100 overflow-hidden">
-                    <div class="p-8 bg-gray-50 border-b flex justify-between items-center px-12">
-                        <h3 class="font-black text-blue-900 uppercase text-xs italic tracking-widest">Arsip Luaran Cloud</h3>
-                        <i class="fas fa-cloud-upload-alt text-green-200 text-xl"></i>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="bg-white text-[9px] text-gray-400 uppercase font-black">
-                                <tr>
-                                    <th class="p-8 pl-12">Kategori</th>
-                                    <th class="p-8">Judul & Tautan</th>
-                                    <th class="p-8 text-center pr-12">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="luaranBody" class="divide-y divide-gray-100 text-[11px]">
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // URL WEB APP APPSCRIPT
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbx82l_FfvequpO_9n0ljeu7EkQekObrYBNT03SzwLZvpOjV9hFGqFjgWYqMaNgyS4UzXg/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbye3Fg2t8LdKUhRPw66QVI8dyt-DjrjnQAVa585TTvN1Fde2BkFYCjkyTddPOZg-xZyGA/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
-        
-        if (!user) { window.location.href = 'index.html'; }
 
-        // 1. FUNGSI LOAD DATA DARI CLOUD (SINKRONISASI)
-        async function fetchLuaranCloud() {
-            const body = document.getElementById('luaranBody');
-            const sync = document.getElementById('syncStatus');
-            body.innerHTML = '<tr><td colspan="3" class="p-20 text-center font-black text-green-200 animate-pulse uppercase text-[10px] italic tracking-widest">Menarik Data Luaran...</td></tr>';
-            
-            try {
-                const response = await fetch(scriptURL, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ action: "readLuaran", id: user.id, type: "LUARAN" }) 
-                });
-                const data = await response.json();
-                renderUI(data);
-                sync.innerText = "Cloud Connection: Active";
-            } catch (e) {
-                sync.innerText = "Connection Failed!";
-                body.innerHTML = '<tr><td colspan="3" class="p-10 text-center text-red-400 font-bold uppercase">Gagal Sinkron Cloud!</td></tr>';
-            }
-        }
-
-        // 2. RENDER UI & STATISTIK
-        function renderUI(data) {
-            const body = document.getElementById('luaranBody');
-            const totalScoreLabel = document.getElementById('totalSkorLuaran');
-            body.innerHTML = "";
-            
-            let totalScore = 0;
-            let counts = { jurnal: 0, haki: 0, buku: 0 };
-
-            if (data.length === 0) {
-                body.innerHTML = `<tr><td colspan="3" class="p-20 text-center text-gray-300 font-bold italic uppercase text-[10px] tracking-widest">Belum ada data luaran terinput</td></tr>`;
-                totalScoreLabel.innerText = "0";
-                return;
-            }
-
-            data.forEach((item) => {
-                totalScore += 10;
-                
-                // Hitung Statistik
-                if(item.jenis === "Publikasi Jurnal") counts.jurnal++;
-                else if(item.jenis === "HAKI") counts.haki++;
-                else counts.buku++;
-
-                body.insertAdjacentHTML('beforeend', `
-                    <tr class="hover:bg-green-50/50 transition-all border-l-4 border-transparent hover:border-green-600">
-                        <td class="p-8 pl-12">
-                            <span class="px-4 py-2 bg-green-100 text-green-700 rounded-2xl font-black text-[9px] uppercase italic tracking-tighter">
-                                ${item.jenis}
-                            </span>
-                        </td>
-                        <td class="p-8">
-                            <p class="font-black text-blue-900 text-sm leading-tight mb-2 uppercase italic">${item.judul}</p>
-                            <a href="${item.link}" target="_blank" class="text-[10px] text-blue-500 hover:text-blue-700 flex items-center gap-1 font-bold italic underline">
-                                <i class="fas fa-external-link-alt"></i> Lihat Dokumen Luaran
-                            </a>
-                        </td>
-                        <td class="p-8 text-center pr-12">
-                            <div class="flex justify-center gap-3">
-                                <button onclick="prepEdit('${item.rowId}', '${item.jenis}', '${item.judul.replace(/'/g, "\\'")}', '${item.link}')" class="w-11 h-11 flex items-center justify-center bg-blue-50 text-blue-500 rounded-2xl hover:bg-blue-900 hover:text-white transition-all shadow-sm">
-                                    <i class="fas fa-pen text-xs"></i>
-                                </button>
-                                <button onclick="hapusLuaran('${item.rowId}')" class="w-11 h-11 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all shadow-sm">
-                                    <i class="fas fa-trash-alt text-xs"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>`);
+        async function loadLuaran() {
+            const res = await fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "readLuaran", type: "LUARAN", id: user.id })
             });
-
-            totalScoreLabel.innerText = totalScore;
-            updateStats(counts, data.length);
+            const data = await res.json();
+            const container = document.getElementById('listLuaran');
+            container.innerHTML = "";
+            data.forEach(item => {
+                container.innerHTML += `
+                    <div class="p-5 bg-slate-50 rounded-[2rem] flex justify-between items-center border border-gray-100">
+                        <div>
+                            <p class="text-[10px] font-black text-green-600 uppercase">${item.jenis}</p>
+                            <p class="text-xs font-bold text-blue-900 uppercase">${item.judul}</p>
+                            <a href="${item.link}" target="_blank" class="text-[9px] text-blue-400 underline italic">Lihat Link Bukti</a>
+                        </div>
+                        <button onclick="hapus('${item.rowId}')" class="text-red-400 p-3"><i class="fas fa-trash"></i></button>
+                    </div>`;
+            });
         }
 
-        // 3. FUNGSI UPDATE STATISTIK BAR
-        function updateStats(c, total) {
-            const pJurnal = total > 0 ? (c.jurnal / total) * 100 : 0;
-            const pHaki = total > 0 ? (c.haki / total) * 100 : 0;
-            const pBuku = total > 0 ? (c.buku / total) * 100 : 0;
-
-            document.getElementById('barJurnal').style.width = pJurnal + "%";
-            document.getElementById('txtJurnal').innerText = c.jurnal + " Dokumen";
-
-            document.getElementById('barHaki').style.width = pHaki + "%";
-            document.getElementById('txtHaki').innerText = c.haki + " Dokumen";
-
-            document.getElementById('barBuku').style.width = pBuku + "%";
-            document.getElementById('txtBuku').innerText = c.buku + " Dokumen";
-        }
-
-        // 4. SUBMIT / UPDATE KE CLOUD
-        document.getElementById('luaranForm').addEventListener('submit', async function(e) {
+        document.getElementById('luaranForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            const editId = document.getElementById('editRowId').value;
-            const isEdit = !!editId;
-
-            btn.innerText = "SINKRONISASI...";
-            btn.disabled = true;
-
+            document.getElementById('btnSub').innerText = "MENGIRIM...";
             const payload = {
-                action: isEdit ? "UPDATE" : "INSERT",
-                type: "LUARAN",
-                id: user.id,
-                nama: user.name,
-                jenis: document.getElementById('jenisLuaran').value,
+                action: "INSERT", type: "LUARAN", id: user.id, nama: user.name,
                 judul: document.getElementById('judul').value,
+                jenis: document.getElementById('jenis').value,
                 link: document.getElementById('link').value,
-                poin: 10,
-                rowId: isEdit ? editId : "ID-LUA-" + Date.now()
+                rowId: "LUA-" + Date.now()
             };
-
-            try {
-                await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
-                location.reload(); 
-            } catch (e) {
-                alert("Gagal Sinkronisasi Cloud!");
-                btn.innerText = "Kirim ke Cloud";
-                btn.disabled = false;
-            }
+            await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
+            location.reload();
         });
 
-        // 5. PREP EDIT
-        window.prepEdit = function(rowId, jenis, judul, link) {
-            document.getElementById('formTitle').innerText = "MODE EDIT LUARAN";
-            document.getElementById('editRowId').value = rowId;
-            document.getElementById('jenisLuaran').value = jenis;
-            document.getElementById('judul').value = judul;
-            document.getElementById('link').value = link;
-            document.getElementById('btnSubmit').innerText = "UPDATE CLOUD";
-            document.getElementById('btnBatal').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        // 6. HAPUS DARI CLOUD
-        window.hapusLuaran = async function(rowId) {
-            if (confirm("Hapus luaran ini secara permanen dari Cloud Prodi?")) {
-                await fetch(scriptURL, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ action: "DELETE", type: "LUARAN", rowId: rowId }) 
-                });
-                fetchLuaranCloud();
+        async function hapus(id) {
+            if(confirm("Hapus dari cloud?")) {
+                await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "LUARAN", rowId: id }) });
+                loadLuaran();
             }
-        };
-
-        document.getElementById('btnBatal').onclick = () => location.reload();
-        
-        // Load data saat pertama buka
-        window.onload = fetchLuaranCloud;
+        }
+        window.onload = loadLuaran;
     </script>
 </body>
 </html>
