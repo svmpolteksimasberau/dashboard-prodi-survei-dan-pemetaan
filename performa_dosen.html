@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KPI Performance - Poltek Simas BC</title>
+    <title>KPI Performa Dosen - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,7 +15,7 @@
 <body class="bg-gray-100 p-4 md:p-8">
     <div class="container mx-auto max-w-6xl">
         
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex justify-between items-center mb-8">
             <a href="dashboard_dosen.html" class="text-blue-900 font-black flex items-center gap-2 hover:scale-105 transition-all text-xs uppercase italic tracking-widest">
                 <i class="fas fa-arrow-left"></i> Dashboard
             </a>
@@ -25,31 +25,32 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-gradient-to-br from-blue-900 to-blue-700 p-8 rounded-[3rem] shadow-xl text-white text-center flex flex-col justify-center border-b-8 border-orange-500">
-                <p class="text-[9px] font-black uppercase opacity-60 tracking-[0.3em] mb-2">Total Skor Anda</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-gradient-to-br from-blue-900 to-blue-700 p-10 rounded-[3.5rem] shadow-2xl text-white text-center flex flex-col justify-center border-b-[10px] border-orange-500">
+                <p class="text-[10px] font-black uppercase opacity-60 tracking-[0.4em] mb-2">Total Skor Anda</p>
                 <h2 id="totalSkorDisplay" class="text-7xl font-black italic tracking-tighter">0</h2>
-                <div id="statusSync" class="mt-4 text-[8px] font-bold opacity-40 uppercase tracking-widest italic">Syncing Cloud...</div>
+                <div id="statusSync" class="mt-4 text-[8px] font-bold opacity-30 uppercase tracking-widest italic">Syncing with Cloud Drive...</div>
             </div>
-            <div class="md:col-span-2 bg-white p-6 rounded-[3rem] shadow-md border border-gray-100 flex items-center">
+            <div class="md:col-span-2 bg-white p-8 rounded-[3.5rem] shadow-xl border border-gray-100 flex items-center">
                 <div class="h-44 w-full"><canvas id="miniChart"></canvas></div>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <form id="kpiForm" class="bg-white p-8 rounded-[3.5rem] shadow-lg border-t-8 border-orange-500 space-y-5 h-fit">
-                <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs italic mb-4">Input Aktivitas Harian</h3>
+            <form id="kpiForm" class="bg-white p-8 rounded-[3.5rem] shadow-2xl border-t-[10px] border-orange-500 space-y-5 h-fit">
+                <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs italic mb-4"><i class="fas fa-edit mr-2 text-orange-500"></i> Input Aktivitas</h3>
                 <input type="hidden" id="editRowId">
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4">Tanggal Pekerjaan</label>
-                        <input type="date" id="tgl" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-bold text-sm" required>
+                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4 italic">Tanggal</label>
+                        <input type="date" id="tgl" class="w-full mt-1 p-5 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-bold text-sm" required>
                     </div>
 
                     <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4">Kategori KPI</label>
-                        <select id="kat" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl font-black text-blue-900 outline-none focus:ring-2 focus:ring-blue-900 text-sm italic">
+                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4 italic">Kategori KPI</label>
+                        <select id="kat" class="w-full mt-1 p-5 bg-gray-50 border-none rounded-2xl font-black text-blue-900 outline-none focus:ring-2 focus:ring-blue-900 text-sm italic">
                             <option value="Pengajaran">Pengajaran (+5 Poin)</option>
                             <option value="Penelitian">Penelitian (+5 Poin)</option>
                             <option value="Pengabdian">Pengabdian (+5 Poin)</option>
@@ -58,29 +59,29 @@
                     </div>
 
                     <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4">Deskripsi Aktivitas</label>
-                        <textarea id="desk" rows="3" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-900" placeholder="Apa yang Anda kerjakan?" required></textarea>
+                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4 italic">Deskripsi Tugas</label>
+                        <textarea id="desk" rows="3" class="w-full mt-1 p-5 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-900" placeholder="Detail aktivitas..." required></textarea>
                     </div>
                 </div>
 
-                <div class="pt-4 space-y-2">
-                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-5 rounded-[2rem] shadow-xl active:scale-95 transition-all text-xs tracking-widest uppercase">Kirim ke Cloud</button>
-                    <button type="button" id="btnBatal" class="hidden w-full bg-gray-200 text-gray-400 font-black py-3 rounded-2xl uppercase text-[10px]">Batal Edit</button>
+                <div class="pt-4">
+                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-6 rounded-[2rem] shadow-xl active:scale-95 transition-all text-xs tracking-widest uppercase">Sinkronisasi ke Cloud</button>
+                    <button type="button" id="btnBatal" class="hidden w-full bg-gray-200 text-gray-400 font-black py-4 rounded-2xl uppercase text-[10px] mt-2">Batal Edit</button>
                 </div>
             </form>
 
-            <div class="lg:col-span-2 bg-white rounded-[3.5rem] shadow-lg border border-gray-100 overflow-hidden">
-                <div class="p-6 bg-gray-50 border-b border-gray-100 flex justify-between items-center px-10">
+            <div class="lg:col-span-2 bg-white rounded-[3.5rem] shadow-2xl border border-gray-100 overflow-hidden">
+                <div class="p-8 bg-gray-50 border-b border-gray-100 flex justify-between items-center px-12">
                     <h3 class="font-black text-blue-900 uppercase text-xs italic tracking-widest">Riwayat Aktivitas Cloud</h3>
-                    <i class="fas fa-cloud text-blue-200"></i>
+                    <i class="fas fa-cloud-upload-alt text-blue-200 text-xl"></i>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
-                        <thead class="bg-white text-[9px] text-gray-400 uppercase font-black">
+                        <thead class="bg-white text-[10px] text-gray-400 uppercase font-black">
                             <tr>
-                                <th class="p-6 pl-10">Tanggal</th>
-                                <th class="p-6">Aktivitas</th>
-                                <th class="p-6 text-center pr-10">Aksi</th>
+                                <th class="p-8 pl-12">Tanggal</th>
+                                <th class="p-8">Aktivitas</th>
+                                <th class="p-8 text-center pr-12">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="histBody" class="divide-y divide-gray-100 text-[11px]">
@@ -92,31 +93,31 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwsU3yhfreM2RL5wL98qwEfBVb6EwNdTYUvgZoFClseLT9VWZn1Jv-1peEhgLp6vrAhmA/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbx82l_FfvequpO_9n0ljeu7EkQekObrYBNT03SzwLZvpOjV9hFGqFjgWYqMaNgyS4UzXg/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
         if (!user) window.location.href = 'index.html';
 
         let chartInstance = null;
 
-        // 1. FUNGSI LOAD DATA DARI CLOUD
+        // FUNGSI 1: LOAD DATA DARI CLOUD
         async function fetchCloudData() {
             const body = document.getElementById('histBody');
-            body.innerHTML = '<tr><td colspan="3" class="p-10 text-center font-black text-blue-200 animate-pulse uppercase text-[10px] tracking-widest italic">Menghubungkan ke server database...</td></tr>';
+            body.innerHTML = '<tr><td colspan="3" class="p-20 text-center font-black text-blue-200 animate-pulse uppercase text-[10px] tracking-[0.4em] italic">Menghubungkan ke Database...</td></tr>';
             
             try {
                 const response = await fetch(scriptURL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "readKPI", id: user.id })
+                    body: JSON.stringify({ action: "readKPI", id: user.id, type: "KPI" })
                 });
                 const data = await response.json();
                 renderUI(data);
-                document.getElementById('statusSync').innerText = "Database Terhubung";
+                document.getElementById('statusSync').innerText = "Cloud Connection: Active";
             } catch (e) {
-                body.innerHTML = '<tr><td colspan="3" class="p-10 text-center text-red-400 font-black uppercase text-[10px]">Koneksi Cloud Gagal!</td></tr>';
+                body.innerHTML = '<tr><td colspan="3" class="p-20 text-center text-red-400 font-black uppercase text-[10px]">Gagal Menghubungkan ke Cloud!</td></tr>';
             }
         }
 
-        // 2. RENDER UI & CHART
+        // FUNGSI 2: RENDER UI & CHART
         function renderUI(data) {
             const body = document.getElementById('histBody');
             const scoreLabel = document.getElementById('totalSkorDisplay');
@@ -130,16 +131,16 @@
                 if(stats[item.kategori] !== undefined) stats[item.kategori]++;
                 
                 body.insertAdjacentHTML('beforeend', `
-                    <tr class="hover:bg-blue-50/50 transition-all border-l-4 border-transparent hover:border-blue-900">
-                        <td class="p-6 pl-10 font-bold text-gray-400 italic">${item.tanggal}</td>
-                        <td class="p-6">
-                            <span class="font-black text-blue-900 uppercase tracking-tighter">${item.kategori}</span><br>
+                    <tr class="hover:bg-blue-50/50 transition-all">
+                        <td class="p-8 pl-12 font-bold text-gray-400 italic">${item.tanggal}</td>
+                        <td class="p-8">
+                            <span class="font-black text-blue-900 uppercase tracking-tighter text-sm">${item.kategori}</span><br>
                             <span class="text-gray-500 font-medium italic">"${item.deskripsi}"</span>
                         </td>
-                        <td class="p-6 text-center pr-10">
-                            <div class="flex justify-center gap-2">
-                                <button onclick="prepEdit('${item.rowId}', '${item.tanggal}', '${item.kategori}', '${item.deskripsi.replace(/'/g, "\\'")}')" class="w-9 h-9 flex items-center justify-center bg-blue-50 text-blue-500 rounded-xl hover:bg-blue-900 hover:text-white transition-all shadow-sm"><i class="fas fa-pen text-[10px]"></i></button>
-                                <button onclick="hapusCloud('${item.rowId}')" class="w-9 h-9 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"><i class="fas fa-trash-alt text-[10px]"></i></button>
+                        <td class="p-8 text-center pr-12">
+                            <div class="flex justify-center gap-3">
+                                <button onclick="prepEdit('${item.rowId}', '${item.tanggal}', '${item.kategori}', '${item.deskripsi.replace(/'/g, "\\'")}')" class="w-11 h-11 flex items-center justify-center bg-blue-50 text-blue-500 rounded-2xl hover:bg-blue-900 hover:text-white transition-all shadow-sm"><i class="fas fa-pen text-xs"></i></button>
+                                <button onclick="hapusCloud('${item.rowId}')" class="w-11 h-11 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all shadow-sm"><i class="fas fa-trash-alt text-xs"></i></button>
                             </div>
                         </td>
                     </tr>`);
@@ -149,14 +150,14 @@
             updateChart(stats);
         }
 
-        // 3. FUNGSI SIMPAN/UPDATE KE CLOUD
+        // FUNGSI 3: KIRIM/UPDATE
         document.getElementById('kpiForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
             const editId = document.getElementById('editRowId').value;
             const isEdit = !!editId;
 
-            btn.innerText = "MENGIRIM...";
+            btn.innerText = "SINKRONISASI...";
             btn.disabled = true;
 
             const payload = {
@@ -175,21 +176,21 @@
                 await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
                 location.reload(); 
             } catch (e) {
-                alert("Gagal Sinkron!");
-                btn.innerText = "Kirim ke Cloud";
+                alert("Gagal Sinkronisasi!");
+                btn.innerText = "Sinkronisasi ke Cloud";
                 btn.disabled = false;
             }
         });
 
-        // 4. FUNGSI HAPUS CLOUD
+        // FUNGSI 4: HAPUS
         async function hapusCloud(rowId) {
-            if(confirm("Hapus permanen dari database Cloud?")) {
+            if(confirm("Hapus data dari Database Cloud secara permanen?")) {
                 await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "KPI", rowId: rowId }) });
                 fetchCloudData();
             }
         }
 
-        // 5. PREP EDIT
+        // FUNGSI 5: PREP EDIT
         window.prepEdit = function(rowId, tgl, kat, desk) {
             document.getElementById('formTitle').innerText = "Edit Aktivitas";
             document.getElementById('editRowId').value = rowId;
@@ -201,6 +202,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
+        // CHART JS
         function updateChart(s) {
             if (chartInstance) chartInstance.destroy();
             const ctx = document.getElementById('miniChart').getContext('2d');
@@ -211,8 +213,8 @@
                     datasets: [{
                         data: Object.values(s),
                         backgroundColor: '#1e3a8a',
-                        borderRadius: 10,
-                        barThickness: 35
+                        borderRadius: 12,
+                        barThickness: 40
                     }]
                 },
                 options: {
