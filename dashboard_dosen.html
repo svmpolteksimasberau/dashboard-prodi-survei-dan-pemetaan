@@ -9,86 +9,144 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .menu-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .menu-card:hover { transform: translateY(-5px); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        .stat-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        .menu-card { transition: all 0.3s ease; }
+        .menu-card:hover { transform: translateY(-5px); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen pb-12">
 
-    <nav class="bg-blue-900 text-white p-10 pb-24 rounded-b-[4rem] shadow-2xl relative overflow-hidden">
+    <nav class="bg-blue-900 text-white p-10 pb-28 rounded-b-[4rem] shadow-2xl relative overflow-hidden">
         <div class="absolute top-0 right-0 p-10 opacity-10 text-9xl -mr-16 -mt-16 transform rotate-12">
-            <i class="fas fa-university"></i>
+            <i class="fas fa-chart-line"></i>
         </div>
         
         <div class="container mx-auto relative z-10">
-            <div class="flex justify-between items-start">
+            <div class="flex justify-between items-start mb-8">
                 <div>
-                    <p class="text-[10px] font-black text-orange-400 uppercase tracking-[0.4em] mb-2 italic">Sistem Informasi Dosen</p>
-                    <h1 id="dosenGreet" class="font-black text-3xl tracking-tighter uppercase italic leading-none">Halo, Dosen!</h1>
+                    <p class="text-[10px] font-black text-orange-400 uppercase tracking-[0.4em] mb-2 italic">Dashboard Utama Dosen</p>
+                    <h1 id="dosenGreet" class="font-black text-3xl tracking-tighter uppercase italic">Halo, Dosen!</h1>
                 </div>
-                <div class="bg-white/10 p-3 rounded-2xl border border-white/10">
-                    <i class="fas fa-user-tie text-xl text-orange-400"></i>
+                <button onclick="logout()" class="bg-red-500/20 hover:bg-red-500 p-3 rounded-2xl transition-all border border-red-500/30">
+                    <i class="fas fa-power-off"></i>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="stat-card p-5 rounded-[2.5rem] border border-white/20">
+                    <p class="text-[8px] font-black text-blue-200 uppercase tracking-widest mb-1 italic">Total Seluruh Logbook</p>
+                    <div class="flex items-end gap-2">
+                        <span id="globalTotal" class="text-3xl font-black italic">--</span>
+                        <span class="text-[9px] font-bold mb-2 opacity-50 uppercase italic">Data</span>
+                    </div>
+                </div>
+                <div class="stat-card p-5 rounded-[2.5rem] border border-white/20">
+                    <p class="text-[8px] font-black text-blue-200 uppercase tracking-widest mb-1 italic">Dosen Penginput</p>
+                    <div class="flex items-end gap-2">
+                        <span id="globalDosen" class="text-3xl font-black italic">--</span>
+                        <span class="text-[9px] font-bold mb-2 opacity-50 uppercase italic">User</span>
+                    </div>
                 </div>
             </div>
-            <p class="mt-4 text-[10px] text-blue-200 font-medium italic opacity-60">Pilih menu di bawah untuk mulai memantau bimbingan atau mengelola performa Anda.</p>
         </div>
     </nav>
 
-    <div class="container mx-auto px-6 -mt-12 max-w-md space-y-4 relative z-20">
+    <div class="container mx-auto px-6 -mt-12 max-w-md space-y-6 relative z-20">
         
-        <a href="penilaian_logbook.html" class="menu-card flex items-center gap-6 bg-white p-8 rounded-[3rem] shadow-xl border-b-8 border-orange-500 active:scale-95 group">
-            <div class="w-16 h-16 bg-orange-100 rounded-[1.5rem] flex items-center justify-center text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition-all">
-                <i class="fas fa-tasks text-2xl"></i>
-            </div>
-            <div>
-                <h3 class="font-black text-blue-900 text-sm uppercase leading-none tracking-tight">Penilaian Logbook</h3>
-                <p class="text-[9px] text-gray-400 font-bold uppercase mt-2 italic tracking-widest">Pantau Portofolio Mahasiswa</p>
-            </div>
-        </a>
+        <div class="grid grid-cols-1 gap-4">
+            <a href="penilaian_logbook.html" class="menu-card flex items-center gap-5 bg-white p-6 rounded-[2.5rem] shadow-xl border-b-4 border-orange-500 active:scale-95 group">
+                <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition-all">
+                    <i class="fas fa-tasks text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-black text-blue-900 text-[11px] uppercase tracking-tight">Penilaian Logbook</h3>
+                    <p class="text-[8px] text-gray-400 font-bold uppercase italic tracking-widest">Monitoring Portofolio</p>
+                </div>
+            </a>
 
-        <a href="performa_dosen.html" class="menu-card flex items-center gap-6 bg-white p-8 rounded-[3rem] shadow-xl border-b-8 border-blue-900 active:scale-95 group">
-            <div class="w-16 h-16 bg-blue-100 rounded-[1.5rem] flex items-center justify-center text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-all">
-                <i class="fas fa-chart-line text-2xl"></i>
-            </div>
-            <div>
-                <h3 class="font-black text-blue-900 text-sm uppercase leading-none tracking-tight">Performa Dosen</h3>
-                <p class="text-[9px] text-gray-400 font-bold uppercase mt-2 italic tracking-widest">Statistik & Capaian KPI</p>
-            </div>
-        </a>
+            <a href="performa_dosen.html" class="menu-card flex items-center gap-5 bg-white p-6 rounded-[2.5rem] shadow-xl border-b-4 border-blue-900 active:scale-95 group">
+                <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-all">
+                    <i class="fas fa-chart-line text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-black text-blue-900 text-[11px] uppercase tracking-tight">Performa & KPI</h3>
+                    <p class="text-[8px] text-gray-400 font-bold uppercase italic tracking-widest">Statistik Dosen</p>
+                </div>
+            </a>
+        </div>
 
-        <a href="luaran_dosen.html" class="menu-card flex items-center gap-6 bg-white p-8 rounded-[3rem] shadow-xl border-b-8 border-green-600 active:scale-95 group">
-            <div class="w-16 h-16 bg-green-100 rounded-[1.5rem] flex items-center justify-center text-green-700 group-hover:bg-green-700 group-hover:text-white transition-all">
-                <i class="fas fa-file-signature text-2xl"></i>
+        <div class="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-gray-100">
+            <div class="bg-gray-50 p-6 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-black text-blue-900 text-[10px] uppercase tracking-widest italic">Aktivitas Database Dosen</h3>
+                <i class="fas fa-database text-blue-900/10"></i>
             </div>
-            <div>
-                <h3 class="font-black text-blue-900 text-sm uppercase leading-none tracking-tight">Luaran & Publikasi</h3>
-                <p class="text-[9px] text-gray-400 font-bold uppercase mt-2 italic tracking-widest">Arsip Publikasi & HAKI</p>
+            <div id="dosenStatsList" class="p-4 max-h-60 overflow-y-auto scrollbar-hide space-y-2">
+                <div class="text-center py-6">
+                    <i class="fas fa-circle-notch fa-spin text-blue-900/20 text-xl mb-2"></i>
+                    <p class="text-[9px] text-gray-400 font-bold uppercase italic">Memuat aktivitas terbaru...</p>
+                </div>
             </div>
-        </a>
+        </div>
 
-        <button onclick="logout()" class="w-full mt-12 text-gray-300 font-black text-[10px] uppercase tracking-[0.5em] hover:text-red-500 transition-all italic">
-            <i class="fas fa-power-off mr-2"></i> Keluar Sistem
-        </button>
     </div>
 
     <script>
-        // Ambil data user dari session login
+        const scriptURL = "https://script.google.com/macros/s/AKfycbx82l_FfvequpO_9n0ljeu7EkQekObrYBNT03SzwLZvpOjV9hFGqFjgWYqMaNgyS4UzXg/exec"; 
         const user = JSON.parse(localStorage.getItem('current_user'));
 
-        // Proteksi: Jika bukan dosen, tendang ke login
-        if(!user || user.role.toUpperCase() !== "DOSEN") {
-            window.location.href = 'index.html';
-        }
-
-        // Tampilkan Nama Dosen
+        if(!user || user.role.toUpperCase() !== "DOSEN") window.location.href = 'index.html';
         document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
 
-        function logout() {
-            if(confirm("Apakah Anda yakin ingin keluar?")) {
-                localStorage.clear();
-                window.location.href = 'index.html';
+        async function fetchGlobalStats() {
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "readLogbook", nim: "ALL" })
+                });
+                const data = await response.json();
+                
+                // Kelompokkan aktivitas per dosen tanpa ranking (diurutkan alfabetis)
+                const aktivitasDosen = data.reduce((acc, curr) => {
+                    let namaDosen = curr.dosen_pembimbing || "Dosen Penguji"; 
+                    acc[namaDosen] = (acc[namaDosen] || 0) + 1;
+                    return acc;
+                }, {});
+
+                // Urutkan berdasarkan Nama (Alfabetis), bukan jumlah input
+                const dosenArray = Object.entries(aktivitasDosen).sort((a,b) => a[0].localeCompare(b[0]));
+
+                document.getElementById('globalTotal').innerText = data.length;
+                document.getElementById('globalDosen').innerText = dosenArray.length;
+
+                const listContainer = document.getElementById('dosenStatsList');
+                listContainer.innerHTML = "";
+                
+                dosenArray.forEach(([nama, jumlah]) => {
+                    const isMe = nama.toUpperCase() === user.name.toUpperCase();
+                    listContainer.innerHTML += `
+                        <div class="flex items-center justify-between p-4 rounded-3xl ${isMe ? 'bg-blue-50 border border-blue-100' : 'bg-gray-50/50'}">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full ${isMe ? 'bg-blue-500' : 'bg-gray-200'}"></div>
+                                <div>
+                                    <p class="text-[10px] font-black text-blue-900 leading-none uppercase italic">${nama}</p>
+                                    <p class="text-[8px] text-gray-400 font-bold uppercase mt-1 italic italic">Verifikasi Logbook</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] font-black text-blue-900 italic">${jumlah} <small class="text-[8px] text-gray-400">Log</small></span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+            } catch (e) {
+                document.getElementById('dosenStatsList').innerHTML = "<p class='text-center text-[10px] py-4 text-red-400'>Gagal sinkronisasi aktivitas.</p>";
             }
         }
+
+        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+        window.onload = fetchGlobalStats;
     </script>
 </body>
 </html>
