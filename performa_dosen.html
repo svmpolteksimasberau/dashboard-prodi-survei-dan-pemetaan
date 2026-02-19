@@ -3,121 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KPI Performa Dosen - Poltek Simas BC</title>
+    <title>KPI Performance - Poltek Simas BC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-100 p-4 md:p-8 font-sans">
+<body class="bg-gray-100 p-4 md:p-8">
     <div class="container mx-auto max-w-6xl">
+        
         <div class="flex justify-between items-center mb-6">
-            <a href="dashboard.html" class="text-blue-900 font-bold flex items-center gap-2 hover:underline text-sm">
+            <a href="dashboard_dosen.html" class="text-blue-900 font-black flex items-center gap-2 hover:scale-105 transition-all text-xs uppercase italic tracking-widest">
                 <i class="fas fa-arrow-left"></i> Dashboard
             </a>
-            <h1 class="text-xl font-black text-blue-900 uppercase tracking-tighter">KPI PERFORMANCE</h1>
+            <div class="text-right">
+                <h1 class="text-xl font-black text-blue-900 uppercase tracking-tighter italic">KPI Performance</h1>
+                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Politeknik Sinar Mas Berau Coal</p>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-gradient-to-br from-blue-900 to-blue-700 p-8 rounded-[2.5rem] shadow-xl text-white flex flex-col justify-center items-center text-center">
-                <p class="text-[10px] font-bold uppercase opacity-80 mb-2 tracking-widest">Total Skor Anda</p>
-                <h2 id="totalSkorDisplay" class="text-7xl font-black">0</h2>
+            <div class="bg-gradient-to-br from-blue-900 to-blue-700 p-8 rounded-[3rem] shadow-xl text-white text-center flex flex-col justify-center border-b-8 border-orange-500">
+                <p class="text-[9px] font-black uppercase opacity-60 tracking-[0.3em] mb-2">Total Skor Anda</p>
+                <h2 id="totalSkorDisplay" class="text-7xl font-black italic tracking-tighter">0</h2>
+                <div id="statusSync" class="mt-4 text-[8px] font-bold opacity-40 uppercase tracking-widest italic">Syncing Cloud...</div>
             </div>
-            <div class="md:col-span-2 bg-white p-6 rounded-[2.5rem] shadow-md border border-gray-100">
-                <div class="h-32"><canvas id="miniChart"></canvas></div>
+            <div class="md:col-span-2 bg-white p-6 rounded-[3rem] shadow-md border border-gray-100 flex items-center">
+                <div class="h-44 w-full"><canvas id="miniChart"></canvas></div>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <form id="kpiForm" class="bg-white p-7 rounded-[2.5rem] shadow-lg border-t-8 border-orange-500 space-y-4">
-                <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs">Input Aktivitas Harian</h3>
+            <form id="kpiForm" class="bg-white p-8 rounded-[3.5rem] shadow-lg border-t-8 border-orange-500 space-y-5 h-fit">
+                <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs italic mb-4">Input Aktivitas Harian</h3>
                 <input type="hidden" id="editRowId">
                 
-                <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Tanggal</label>
-                    <input type="date" id="tgl" class="w-full mt-1 p-3 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-orange-500" required>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4">Tanggal Pekerjaan</label>
+                        <input type="date" id="tgl" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-bold text-sm" required>
+                    </div>
+
+                    <div>
+                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4">Kategori KPI</label>
+                        <select id="kat" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl font-black text-blue-900 outline-none focus:ring-2 focus:ring-blue-900 text-sm italic">
+                            <option value="Pengajaran">Pengajaran (+5 Poin)</option>
+                            <option value="Penelitian">Penelitian (+5 Poin)</option>
+                            <option value="Pengabdian">Pengabdian (+5 Poin)</option>
+                            <option value="Administrasi">Administrasi (+5 Poin)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4">Deskripsi Aktivitas</label>
+                        <textarea id="desk" rows="3" class="w-full mt-1 p-4 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-900" placeholder="Apa yang Anda kerjakan?" required></textarea>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Kategori</label>
-                    <select id="kat" class="w-full mt-1 p-3 bg-gray-50 border-none rounded-2xl font-bold text-blue-900 outline-none focus:ring-2 focus:ring-orange-500">
-                        <option value="Pengajaran">Pengajaran (+5 Poin)</option>
-                        <option value="Penelitian">Penelitian (+5 Poin)</option>
-                        <option value="Pengabdian">Pengabdian (+5 Poin)</option>
-                        <option value="Administrasi">Administrasi (+5 Poin)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Deskripsi</label>
-                    <textarea id="desk" rows="3" class="w-full mt-1 p-3 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500" placeholder="Apa yang Anda kerjakan?" required></textarea>
-                </div>
-
-                <div class="space-y-2">
-                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest shadow-lg transform active:scale-95 transition-all">SUBMIT</button>
-                    <button type="button" id="btnBatal" class="hidden w-full bg-gray-100 text-gray-500 font-black py-3 rounded-2xl uppercase text-[10px]">Batal Edit</button>
+                <div class="pt-4 space-y-2">
+                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-5 rounded-[2rem] shadow-xl active:scale-95 transition-all text-xs tracking-widest uppercase">Kirim ke Cloud</button>
+                    <button type="button" id="btnBatal" class="hidden w-full bg-gray-200 text-gray-400 font-black py-3 rounded-2xl uppercase text-[10px]">Batal Edit</button>
                 </div>
             </form>
 
-            <div class="lg:col-span-2 bg-white rounded-[2.5rem] shadow-lg border border-gray-100 overflow-hidden">
-                <table class="w-full text-left">
-                    <thead class="bg-gray-50 text-[10px] text-gray-400 uppercase font-black">
-                        <tr>
-                            <th class="p-5">Tanggal</th>
-                            <th class="p-5">Aktivitas</th>
-                            <th class="p-5 text-center">Edit / Hapus</th>
-                        </tr>
-                    </thead>
-                    <tbody id="histBody" class="divide-y divide-gray-100 text-xs"></tbody>
-                </table>
+            <div class="lg:col-span-2 bg-white rounded-[3.5rem] shadow-lg border border-gray-100 overflow-hidden">
+                <div class="p-6 bg-gray-50 border-b border-gray-100 flex justify-between items-center px-10">
+                    <h3 class="font-black text-blue-900 uppercase text-xs italic tracking-widest">Riwayat Aktivitas Cloud</h3>
+                    <i class="fas fa-cloud text-blue-200"></i>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-white text-[9px] text-gray-400 uppercase font-black">
+                            <tr>
+                                <th class="p-6 pl-10">Tanggal</th>
+                                <th class="p-6">Aktivitas</th>
+                                <th class="p-6 text-center pr-10">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="histBody" class="divide-y divide-gray-100 text-[11px]">
+                            </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // URL Web App Versi 5 Anda
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwqKz_nVp6iSF-Ts-4VgsxlYacbASHzv5q39zxZmbvcYwt_sifhw8wanfWSikTl_1H4Eg/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwsU3yhfreM2RL5wL98qwEfBVb6EwNdTYUvgZoFClseLT9VWZn1Jv-1peEhgLp6vrAhmA/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
         if (!user) window.location.href = 'index.html';
 
-        let kpiHistory = JSON.parse(localStorage.getItem('kpi_history_' + user.id)) || [];
-        let totalScore = parseInt(localStorage.getItem('kpi_score_' + user.id)) || 0;
+        let chartInstance = null;
 
-        function renderAll() {
-            document.getElementById('totalSkorDisplay').innerText = totalScore;
+        // 1. FUNGSI LOAD DATA DARI CLOUD
+        async function fetchCloudData() {
             const body = document.getElementById('histBody');
-            body.innerHTML = "";
-            const counts = { Pengajaran: 0, Penelitian: 0, Pengabdian: 0, Administrasi: 0 };
+            body.innerHTML = '<tr><td colspan="3" class="p-10 text-center font-black text-blue-200 animate-pulse uppercase text-[10px] tracking-widest italic">Menghubungkan ke server database...</td></tr>';
             
-            [...kpiHistory].reverse().forEach((item, index) => {
-                const realIdx = kpiHistory.length - 1 - index;
-                if(counts[item.kategori] !== undefined) counts[item.kategori]++;
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "readKPI", id: user.id })
+                });
+                const data = await response.json();
+                renderUI(data);
+                document.getElementById('statusSync').innerText = "Database Terhubung";
+            } catch (e) {
+                body.innerHTML = '<tr><td colspan="3" class="p-10 text-center text-red-400 font-black uppercase text-[10px]">Koneksi Cloud Gagal!</td></tr>';
+            }
+        }
+
+        // 2. RENDER UI & CHART
+        function renderUI(data) {
+            const body = document.getElementById('histBody');
+            const scoreLabel = document.getElementById('totalSkorDisplay');
+            body.innerHTML = "";
+            
+            let scoreTotal = 0;
+            const stats = { Pengajaran: 0, Penelitian: 0, Pengabdian: 0, Administrasi: 0 };
+
+            data.forEach((item) => {
+                scoreTotal += 5;
+                if(stats[item.kategori] !== undefined) stats[item.kategori]++;
+                
                 body.insertAdjacentHTML('beforeend', `
-                    <tr class="hover:bg-gray-50 transition-all">
-                        <td class="p-5 font-bold text-gray-400">${item.tanggal}</td>
-                        <td class="p-5">
-                            <span class="font-black text-blue-900 uppercase">${item.kategori}</span><br>
-                            <span class="text-gray-600">${item.deskripsi}</span>
+                    <tr class="hover:bg-blue-50/50 transition-all border-l-4 border-transparent hover:border-blue-900">
+                        <td class="p-6 pl-10 font-bold text-gray-400 italic">${item.tanggal}</td>
+                        <td class="p-6">
+                            <span class="font-black text-blue-900 uppercase tracking-tighter">${item.kategori}</span><br>
+                            <span class="text-gray-500 font-medium italic">"${item.deskripsi}"</span>
                         </td>
-                        <td class="p-5 text-center">
-                            <div class="flex justify-center items-center gap-3">
-                                <button onclick="startEdit(${realIdx})" class="w-8 h-8 flex items-center justify-center bg-blue-50 text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all"><i class="fas fa-edit text-[10px]"></i></button>
-                                <button onclick="hapusKPI(${realIdx}, '${item.rowId}')" class="w-8 h-8 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt text-[10px]"></i></button>
+                        <td class="p-6 text-center pr-10">
+                            <div class="flex justify-center gap-2">
+                                <button onclick="prepEdit('${item.rowId}', '${item.tanggal}', '${item.kategori}', '${item.deskripsi.replace(/'/g, "\\'")}')" class="w-9 h-9 flex items-center justify-center bg-blue-50 text-blue-500 rounded-xl hover:bg-blue-900 hover:text-white transition-all shadow-sm"><i class="fas fa-pen text-[10px]"></i></button>
+                                <button onclick="hapusCloud('${item.rowId}')" class="w-9 h-9 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"><i class="fas fa-trash-alt text-[10px]"></i></button>
                             </div>
                         </td>
                     </tr>`);
             });
-            updateChart(counts);
+
+            scoreLabel.innerText = scoreTotal;
+            updateChart(stats);
         }
 
-        document.getElementById('kpiForm').addEventListener('submit', function(e) {
+        // 3. FUNGSI SIMPAN/UPDATE KE CLOUD
+        document.getElementById('kpiForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
-            const editRowId = document.getElementById('editRowId').value;
-            const isEdit = !!editRowId;
-            btn.innerText = "SINKRONISASI...";
+            const editId = document.getElementById('editRowId').value;
+            const isEdit = !!editId;
+
+            btn.innerText = "MENGIRIM...";
             btn.disabled = true;
 
-            const rowId = isEdit ? editRowId : "ID-KPI-" + Date.now();
             const payload = {
                 action: isEdit ? "UPDATE" : "INSERT",
                 type: "KPI",
@@ -125,61 +166,68 @@
                 nama: user.name,
                 kategori: document.getElementById('kat').value,
                 deskripsi: document.getElementById('desk').value,
-                rowId: rowId,
+                tanggal: document.getElementById('tgl').value,
+                rowId: isEdit ? editId : "ID-KPI-" + Date.now(),
                 poin: 5
             };
 
-            fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) })
-            .then(() => {
-                if(isEdit) {
-                    const idx = kpiHistory.findIndex(i => i.rowId === rowId);
-                    kpiHistory[idx] = { ...kpiHistory[idx], kategori: payload.kategori, deskripsi: payload.deskripsi };
-                } else {
-                    totalScore += 5;
-                    kpiHistory.push({ tanggal: document.getElementById('tgl').value, kategori: payload.kategori, deskripsi: payload.deskripsi, rowId: rowId });
-                }
-                localStorage.setItem('kpi_score_' + user.id, totalScore);
-                localStorage.setItem('kpi_history_' + user.id, JSON.stringify(kpiHistory));
-                location.reload();
-            })
-            .catch(() => {
-                alert("Gagal koneksi Cloud!");
-                btn.innerText = "SUBMIT";
+            try {
+                await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
+                location.reload(); 
+            } catch (e) {
+                alert("Gagal Sinkron!");
+                btn.innerText = "Kirim ke Cloud";
                 btn.disabled = false;
-            });
+            }
         });
 
-        window.startEdit = function(idx) {
-            const item = kpiHistory[idx];
-            document.getElementById('formTitle').innerText = "EDIT AKTIVITAS";
-            document.getElementById('editRowId').value = item.rowId;
-            document.getElementById('kat').value = item.kategori;
-            document.getElementById('desk').value = item.deskripsi;
-            document.getElementById('tgl').value = item.tanggal;
-            document.getElementById('btnSubmit').innerText = "UPDATE DATA";
+        // 4. FUNGSI HAPUS CLOUD
+        async function hapusCloud(rowId) {
+            if(confirm("Hapus permanen dari database Cloud?")) {
+                await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "KPI", rowId: rowId }) });
+                fetchCloudData();
+            }
+        }
+
+        // 5. PREP EDIT
+        window.prepEdit = function(rowId, tgl, kat, desk) {
+            document.getElementById('formTitle').innerText = "Edit Aktivitas";
+            document.getElementById('editRowId').value = rowId;
+            document.getElementById('kat').value = kat;
+            document.getElementById('desk').value = desk;
+            document.getElementById('tgl').value = tgl;
+            document.getElementById('btnSubmit').innerText = "Update Cloud";
             document.getElementById('btnBatal').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.hapusKPI = function(idx, rowId) {
-            if(confirm("Hapus aktivitas ini dari Cloud Drive?")) {
-                fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "KPI", rowId: rowId }) });
-                kpiHistory.splice(idx, 1);
-                totalScore -= 5;
-                localStorage.setItem('kpi_score_' + user.id, totalScore);
-                localStorage.setItem('kpi_history_' + user.id, JSON.stringify(kpiHistory));
-                location.reload();
-            }
-        };
-
-        function updateChart(c) {
-            new Chart(document.getElementById('miniChart'), {
-                type: 'bar', data: { labels: Object.keys(c), datasets: [{ data: Object.values(c), backgroundColor: '#1e3a8a', borderRadius: 8 }] },
-                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+        function updateChart(s) {
+            if (chartInstance) chartInstance.destroy();
+            const ctx = document.getElementById('miniChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(s),
+                    datasets: [{
+                        data: Object.values(s),
+                        backgroundColor: '#1e3a8a',
+                        borderRadius: 10,
+                        barThickness: 35
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        y: { beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1 } },
+                        x: { grid: { display: false } }
+                    }
+                }
             });
         }
+
         document.getElementById('btnBatal').onclick = () => location.reload();
-        renderAll();
+        window.onload = fetchCloudData;
     </script>
 </body>
 </html>
