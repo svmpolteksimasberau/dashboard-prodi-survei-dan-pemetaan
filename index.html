@@ -3,66 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Logbook & Monitoring - PSBC</title>
+    <title>ISMAP - Integrated System of Survey and Mapping</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-effect { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); }
+        .brand-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
     </style>
 </head>
-<body class="bg-blue-900 flex items-center justify-center min-h-screen p-6 relative overflow-hidden">
+<body class="brand-gradient flex items-center justify-center min-h-screen p-6 relative overflow-hidden">
     
     <div class="absolute -top-20 -left-20 w-80 h-80 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-yellow-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+    <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
 
-    <div class="glass-effect w-full max-w-sm p-10 rounded-[3.5rem] shadow-2xl text-center border-b-[12px] border-orange-600 relative z-10">
+    <div class="glass-effect w-full max-w-sm p-8 rounded-[3rem] shadow-2xl text-center border-b-[12px] border-orange-600 relative z-10 transition-all">
         
-        <div class="mb-10">
-            <div class="w-20 h-20 bg-blue-900 rounded-3xl mx-auto flex items-center justify-center shadow-lg mb-4 transform -rotate-6 border-4 border-white">
-                <i class="fas fa-university text-yellow-400 text-3xl"></i>
+        <div class="mb-8">
+            <div class="w-20 h-20 bg-white rounded-[2rem] mx-auto flex items-center justify-center shadow-xl mb-4 transform -rotate-3 border-b-4 border-orange-500 relative">
+                <i class="fas fa-compass text-blue-900 text-4xl"></i>
+                <div class="absolute top-1 right-1 w-4 h-4 bg-orange-500 rounded-full border-2 border-white"></div>
             </div>
-            <h1 class="font-black text-2xl text-blue-900 uppercase tracking-tighter leading-none">Portal Akses</h1>
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mt-3 italic">Politeknik Sinar Mas Berau Coal</p>
+            
+            <h1 class="font-black text-3xl text-blue-900 tracking-tighter leading-none italic uppercase">ISMAP</h1>
+            <div class="mt-2 space-y-1">
+                <p class="text-[9px] font-black text-blue-800/60 uppercase tracking-[0.1em] leading-tight">Integrated System of Survey and Mapping</p>
+                <div class="h-[1px] w-12 bg-orange-400 mx-auto my-1"></div>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Politeknik Sinar Mas Berau Coal</p>
+            </div>
         </div>
 
-        <div class="space-y-5">
+        <div class="space-y-4">
             <div class="text-left">
-                <label class="text-[10px] font-black text-blue-900 uppercase ml-5 mb-1 block italic text-opacity-50">NIM / NIDN</label>
+                <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic tracking-wider">NIM / NIDN Identity</label>
                 <div class="relative">
-                    <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"><i class="fas fa-id-badge"></i></span>
+                    <span class="absolute left-5 top-1/2 -translate-y-1/2 text-blue-900 opacity-30 text-xs"><i class="fas fa-id-card"></i></span>
                     <input type="number" id="idInput" placeholder="Masukkan ID Anda" 
-                        class="w-full pl-12 pr-5 py-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-black text-sm text-gray-700 transition-all border border-gray-100 shadow-inner">
+                        class="w-full pl-12 pr-5 py-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-bold text-sm text-gray-700 transition-all border border-gray-100">
                 </div>
             </div>
             
             <div class="text-left">
-                <label class="text-[10px] font-black text-blue-900 uppercase ml-5 mb-1 block italic text-opacity-50">PIN Keamanan</label>
+                <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic tracking-wider">Security PIN</label>
                 <div class="relative">
-                    <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"><i class="fas fa-lock"></i></span>
+                    <span class="absolute left-5 top-1/2 -translate-y-1/2 text-blue-900 opacity-30 text-xs"><i class="fas fa-key"></i></span>
                     <input type="password" id="passInput" placeholder="Masukkan PIN" 
-                        class="w-full pl-12 pr-5 py-5 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-black text-sm text-gray-700 transition-all border border-gray-100 shadow-inner">
+                        class="w-full pl-12 pr-5 py-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-bold text-sm text-gray-700 transition-all border border-gray-100">
                 </div>
             </div>
             
             <button onclick="handleLogin()" id="btnLogin" 
-                class="w-full bg-blue-900 text-white font-black py-5 rounded-[2rem] shadow-xl active:scale-95 hover:bg-blue-800 transition-all uppercase tracking-widest mt-4 flex justify-center items-center gap-2">
-                Masuk Ke Sistem <i class="fas fa-arrow-right text-[10px]"></i>
+                class="w-full bg-blue-900 text-white font-black py-4 rounded-2xl shadow-lg active:scale-95 hover:bg-blue-800 transition-all uppercase tracking-widest mt-2 flex justify-center items-center gap-3">
+                Login System <i class="fas fa-chevron-right text-[10px]"></i>
             </button>
         </div>
 
-        <div class="mt-8 p-5 bg-blue-50 rounded-3xl border border-blue-100 text-left">
+        <div class="mt-6 p-4 bg-orange-50 rounded-2xl border border-orange-100 text-left">
             <div class="flex items-start gap-3">
-                <i class="fas fa-info-circle text-orange-500 mt-1"></i>
-                <div class="text-[9px] text-blue-900 font-bold leading-relaxed uppercase">
-                    Pendaftaran PIN Otomatis
-                    <p class="text-gray-400 font-medium normal-case mt-1 italic leading-tight">Cukup masukkan NIM/NIDN Anda dan tentukan PIN baru keinginan Anda untuk pendaftaran pertama.</p>
+                <i class="fas fa-info-circle text-orange-500 mt-0.5 text-sm"></i>
+                <div class="text-[9px] text-orange-900 font-bold leading-relaxed uppercase">
+                    Auto-Registration Enabled
+                    <p class="text-orange-700/60 font-medium normal-case mt-0.5 italic leading-tight">Untuk akses pertama kali, masukkan ID Anda dan tentukan PIN baru untuk mendaftar secara otomatis.</p>
                 </div>
             </div>
         </div>
 
-        <p class="mt-8 text-[9px] text-gray-300 font-black uppercase tracking-widest">Survei dan Pemetaan © 2026</p>
+        <p class="mt-6 text-[8px] text-gray-300 font-black uppercase tracking-[0.4em] italic">Survei dan Pemetaan © 2026</p>
     </div>
 
     <script>
@@ -75,13 +82,12 @@
             const btn = document.getElementById('btnLogin');
 
             if(!idUser || !pass) {
-                alert("ID (NIM/NIDN) dan PIN wajib diisi!");
+                alert("ID dan PIN wajib diisi!");
                 return;
             }
 
-            // Mencegah Double Click
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memvalidasi...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
 
             try {
                 const response = await fetch(scriptURL, {
@@ -96,16 +102,12 @@
                 const result = await response.json();
 
                 if(result.success) {
-                    if(result.msg) alert(result.msg); 
-                    
-                    // Simpan data user ke memori browser (LocalStorage)
                     localStorage.setItem('current_user', JSON.stringify({ 
                         id: result.id, 
                         name: result.nama,
                         role: result.role 
                     }));
 
-                    // LOGIKA REDIRECT BERDASARKAN ROLE
                     if(result.role === "DOSEN") {
                         window.location.href = 'dashboard_dosen.html';
                     } else {
@@ -117,22 +119,17 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert("❌ Gagal terhubung ke Cloud. Periksa Koneksi!");
+                alert("❌ Gagal terhubung ke Cloud ISMAP.");
                 resetButton(btn);
             }
         }
 
         function resetButton(btn) {
             btn.disabled = false;
-            btn.innerHTML = 'Masuk Ke Sistem <i class="fas fa-arrow-right text-[10px]"></i>';
+            btn.innerHTML = 'Login System <i class="fas fa-chevron-right text-[10px]"></i>';
         }
 
-        // Support Enter Key
         document.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
     </script>
 </body>
 </html>
-
-
-
-
