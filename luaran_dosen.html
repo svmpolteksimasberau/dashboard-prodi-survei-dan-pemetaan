@@ -3,31 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luaran Dosen - PSBC</title>
+    <title>Luaran & Publikasi - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style> @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap'); body { font-family: 'Inter', sans-serif; } </style>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+    </style>
 </head>
-<body class="bg-slate-50 p-4 md:p-8">
-    <div class="container mx-auto max-w-5xl">
-        <a href="dashboard_dosen.html" class="text-blue-900 font-black text-xs uppercase italic mb-5 inline-block"><i class="fas fa-arrow-left"></i> Kembali</a>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <form id="luaranForm" class="bg-white p-8 rounded-[3rem] shadow-xl border-t-8 border-green-600 space-y-4 h-fit">
-                <h3 class="font-black text-blue-900 uppercase text-xs italic">Input Luaran</h3>
-                <input type="text" id="judul" placeholder="Judul Luaran" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none text-sm font-bold" required>
-                <select id="jenis" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none text-sm font-bold">
-                    <option value="Publikasi Jurnal">Publikasi Jurnal</option>
-                    <option value="HAKI">HAKI / Paten</option>
-                    <option value="Buku Ber-ISBN">Buku Ber-ISBN</option>
-                </select>
-                <input type="url" id="link" placeholder="Link Bukti (URL)" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none text-sm font-bold" required>
-                <button type="submit" id="btnSub" class="w-full bg-green-600 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest shadow-lg">Kirim Ke Cloud</button>
-            </form>
+<body class="min-h-screen pb-20">
 
-            <div class="lg:col-span-2 bg-white rounded-[3rem] shadow-xl overflow-hidden border border-gray-100">
-                <div class="p-6 bg-gray-50 border-b font-black text-blue-900 text-xs uppercase italic">Arsip Luaran Cloud</div>
-                <div class="p-4 space-y-3" id="listLuaran">
+    <nav class="bg-blue-900 text-white p-10 rounded-b-[4rem] shadow-2xl mb-10 border-b-8 border-green-600">
+        <div class="container mx-auto max-w-5xl flex justify-between items-center">
+            <div class="flex items-center gap-5">
+                <a href="dashboard_dosen.html" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-green-500 rounded-2xl transition-all shadow-lg">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-black uppercase italic tracking-tighter leading-none">Luaran & Publikasi</h1>
+                    <p class="text-green-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-2 italic">Arsip Karya Ilmiah & HAKI</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-6 max-w-5xl">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-blue-900">
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Total Publikasi</p>
+                <h2 id="statPublikasi" class="text-4xl font-black text-blue-900 italic">0</h2>
+            </div>
+            <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-green-600">
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Total HAKI/Buku</p>
+                <h2 id="statHaki" class="text-4xl font-black text-green-600 italic">0</h2>
+            </div>
+            <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-orange-500">
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Total Skor Luaran</p>
+                <h2 id="statTotalSkor" class="text-4xl font-black text-orange-500 italic">0</h2>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <form id="luaranForm" class="bg-white p-8 rounded-[3rem] shadow-2xl border-t-8 border-green-600 sticky top-10">
+                    <h3 class="font-black text-blue-900 uppercase text-xs italic mb-6">Input Luaran Baru</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-[9px] font-black text-gray-400 uppercase ml-2 mb-1 block">Judul Karya</label>
+                            <input type="text" id="judul" placeholder="Masukkan Judul..." class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none text-sm font-bold text-blue-900" required>
+                        </div>
+                        
+                        <div>
+                            <label class="text-[9px] font-black text-gray-400 uppercase ml-2 mb-1 block">Jenis Luaran</label>
+                            <select id="jenis" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none text-sm font-bold text-blue-900">
+                                <option value="Publikasi Jurnal">Publikasi Jurnal</option>
+                                <option value="HAKI">HAKI / Paten</option>
+                                <option value="Buku Ber-ISBN">Buku Ber-ISBN</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-[9px] font-black text-gray-400 uppercase ml-2 mb-1 block">Link Bukti (URL)</label>
+                            <input type="url" id="link" placeholder="https://..." class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-none text-sm font-bold text-blue-900" required>
+                        </div>
+
+                        <button type="submit" id="btnSub" class="w-full bg-green-600 text-white font-black py-5 rounded-[2rem] uppercase text-xs tracking-[0.2em] shadow-lg hover:bg-green-700 transition-all mt-4">
+                            Simpan Luaran <i class="fas fa-paper-plane ml-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="lg:col-span-2 space-y-4">
+                <div class="bg-blue-900 p-6 rounded-t-[2.5rem] flex justify-between items-center shadow-lg">
+                    <h3 class="font-black text-white text-[10px] uppercase tracking-widest italic">Daftar Arsip Anda</h3>
+                    <i class="fas fa-file-contract text-white/20"></i>
+                </div>
+                
+                <div id="loading" class="text-center py-10 text-blue-900/20 font-black uppercase italic animate-pulse">
+                    Menarik Data Cloud...
+                </div>
+
+                <div id="listLuaran" class="space-y-4">
                     </div>
             </div>
         </div>
@@ -37,47 +97,92 @@
         const scriptURL = 'https://script.google.com/macros/s/AKfycbye3Fg2t8LdKUhRPw66QVI8dyt-DjrjnQAVa585TTvN1Fde2BkFYCjkyTddPOZg-xZyGA/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
 
+        if(!user || user.role.toUpperCase() !== "DOSEN") window.location.href = 'index.html';
+
         async function loadLuaran() {
-            const res = await fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "readLuaran", type: "LUARAN", id: user.id })
-            });
-            const data = await res.json();
+            try {
+                const res = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "readLuaran", type: "LUARAN", id: user.id })
+                });
+                const data = await res.json();
+                renderUI(data);
+            } catch (e) {
+                document.getElementById('loading').innerText = "Gagal Sinkronasi.";
+            }
+        }
+
+        function renderUI(data) {
+            document.getElementById('loading').classList.add('hidden');
             const container = document.getElementById('listLuaran');
+            
+            // Hitung Statistik
+            let pub = 0, haki = 0, skor = 0;
             container.innerHTML = "";
+
             data.forEach(item => {
+                if(item.jenis === "Publikasi Jurnal") pub++;
+                else haki++;
+                skor += 10; // Skor flat 10 per luaran sesuai logic script
+
                 container.innerHTML += `
-                    <div class="p-5 bg-slate-50 rounded-[2rem] flex justify-between items-center border border-gray-100">
-                        <div>
-                            <p class="text-[10px] font-black text-green-600 uppercase">${item.jenis}</p>
-                            <p class="text-xs font-bold text-blue-900 uppercase">${item.judul}</p>
-                            <a href="${item.link}" target="_blank" class="text-[9px] text-blue-400 underline italic">Lihat Link Bukti</a>
+                    <div class="bg-white p-6 rounded-[2.5rem] flex justify-between items-center shadow-md border border-gray-100 hover:shadow-xl transition-all">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-green-600 italic font-black text-xs">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-black text-green-600 uppercase italic tracking-tighter">${item.jenis}</p>
+                                <h4 class="text-xs font-black text-blue-900 uppercase leading-tight mt-1">${item.judul}</h4>
+                                <a href="${item.link}" target="_blank" class="text-[9px] text-blue-400 font-bold underline italic">Link Bukti Klik Disini</a>
+                            </div>
                         </div>
-                        <button onclick="hapus('${item.rowId}')" class="text-red-400 p-3"><i class="fas fa-trash"></i></button>
+                        <button onclick="hapus('${item.rowId}')" class="w-10 h-10 bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                     </div>`;
             });
+
+            // Update Statistik Card
+            document.getElementById('statPublikasi').innerText = pub;
+            document.getElementById('statHaki').innerText = haki;
+            document.getElementById('statTotalSkor').innerText = skor;
         }
 
         document.getElementById('luaranForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            document.getElementById('btnSub').innerText = "MENGIRIM...";
+            const btn = document.getElementById('btnSub');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+
             const payload = {
-                action: "INSERT", type: "LUARAN", id: user.id, nama: user.name,
+                action: "INSERT", 
+                type: "LUARAN", 
+                id: user.id, 
+                nama: user.name,
                 judul: document.getElementById('judul').value,
                 jenis: document.getElementById('jenis').value,
                 link: document.getElementById('link').value,
                 rowId: "LUA-" + Date.now()
             };
+
             await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
-            location.reload();
+            btn.innerHTML = 'Simpan Luaran <i class="fas fa-paper-plane ml-2"></i>';
+            btn.disabled = false;
+            document.getElementById('luaranForm').reset();
+            loadLuaran();
         });
 
-        async function hapus(id) {
-            if(confirm("Hapus dari cloud?")) {
-                await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "LUARAN", rowId: id }) });
+        async function hapus(rowId) {
+            if(confirm("Hapus data luaran ini secara permanen?")) {
+                await fetch(scriptURL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ action: "DELETE", type: "LUARAN", rowId: rowId }) 
+                });
                 loadLuaran();
             }
         }
+
         window.onload = loadLuaran;
     </script>
 </body>
