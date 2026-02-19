@@ -10,65 +10,74 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
-        .chart-box { background: white; border-radius: 2.5rem; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .header-bg { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); }
+        .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+        .icon-btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body class="pb-10">
 
-    <nav class="bg-blue-900 text-white p-10 pb-20 rounded-b-[4rem] shadow-2xl relative">
-        <div class="flex justify-between items-center">
+    <nav class="header-bg text-white p-8 pb-20 rounded-b-[4rem] relative">
+        <div class="container mx-auto flex justify-between items-center">
             <div>
-                <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest italic leading-none mb-2">Personal Analytics Hub</p>
-                <h1 id="dosenGreet" class="text-2xl font-black uppercase italic tracking-tighter">Halo, Dosen!</h1>
+                <p class="text-[10px] font-black text-orange-300 uppercase tracking-widest leading-none mb-1">Dosen Analytics Hub</p>
+                <h1 id="dosenGreet" class="text-2xl font-black uppercase tracking-tighter">Halo, Dosen!</h1>
             </div>
-            <button onclick="logout()" class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30">
-                <i class="fas fa-power-off"></i>
+            <button onclick="logout()" class="icon-btn w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30 transition-all duration-200">
+                <i class="fas fa-power-off text-sm"></i>
             </button>
         </div>
     </nav>
 
     <div class="container mx-auto px-5 -mt-12 space-y-6">
         
-        <div class="chart-box">
+        <div class="bg-white rounded-[2.5rem] p-6 card-shadow border border-gray-100">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-[10px] font-black text-blue-900 uppercase italic">Rekap Performa (KPI)</h3>
+                <h3 class="text-[10px] font-black text-blue-900 uppercase italic"><i class="fas fa-chart-line mr-2 text-blue-500"></i> Rekap Performa (KPI)</h3>
                 <span id="scorePerf" class="text-[9px] font-black bg-blue-50 text-blue-900 px-3 py-1 rounded-full italic">0 PTS</span>
             </div>
             <div style="height: 200px;"><canvas id="chartPerforma"></canvas></div>
         </div>
 
-        <div class="chart-box">
+        <div class="bg-white rounded-[2.5rem] p-6 card-shadow border border-gray-100">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-[10px] font-black text-green-700 uppercase italic">Rekap Luaran (Karya)</h3>
+                <h3 class="text-[10px] font-black text-green-700 uppercase italic"><i class="fas fa-award mr-2 text-green-500"></i> Rekap Luaran (Karya Ilmiah)</h3>
                 <span id="scoreLua" class="text-[9px] font-black bg-green-50 text-green-700 px-3 py-1 rounded-full italic">0 PTS</span>
             </div>
             <div style="height: 200px;"><canvas id="chartLuaran"></canvas></div>
         </div>
 
         <div class="grid grid-cols-3 gap-3">
-            <a href="penilaian_logbook.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-orange-500 text-center active:scale-90 transition-all group">
-                <i class="fas fa-tasks text-orange-500 mb-1 group-hover:scale-110"></i>
-                <p class="text-[8px] font-black text-blue-900 uppercase italic">Logbook</p>
+            <a href="penilaian_logbook.html" class="icon-btn bg-white p-5 rounded-3xl card-shadow border-b-4 border-orange-500 text-center active:scale-95 transition-all">
+                <i class="fas fa-tasks text-orange-500 text-xl mb-1"></i>
+                <p class="text-[8px] font-black text-blue-900 uppercase italic leading-none mt-1">Logbook</p>
             </a>
-            <a href="performa_dosen.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-blue-900 text-center active:scale-90 transition-all group">
-                <i class="fas fa-chart-bar text-blue-900 mb-1 group-hover:scale-110"></i>
-                <p class="text-[8px] font-black text-blue-900 uppercase italic">KPI</p>
+            <a href="performa_dosen.html" class="icon-btn bg-white p-5 rounded-3xl card-shadow border-b-4 border-blue-900 text-center active:scale-95 transition-all">
+                <i class="fas fa-chart-bar text-blue-900 text-xl mb-1"></i>
+                <p class="text-[8px] font-black text-blue-900 uppercase italic leading-none mt-1">Performa</p>
             </a>
-            <a href="luaran_dosen.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-green-600 text-center active:scale-90 transition-all group">
-                <i class="fas fa-award text-green-600 mb-1 group-hover:scale-110"></i>
-                <p class="text-[8px] font-black text-blue-900 uppercase italic">Luaran</p>
+            <a href="luaran_dosen.html" class="icon-btn bg-white p-5 rounded-3xl card-shadow border-b-4 border-green-600 text-center active:scale-95 transition-all">
+                <i class="fas fa-file-alt text-green-600 text-xl mb-1"></i>
+                <p class="text-[8px] font-black text-blue-900 uppercase italic leading-none mt-1">Luaran</p>
             </a>
         </div>
     </div>
 
     <script>
-        // GANTI DENGAN URL WEB APP HASIL DEPLOY ULANG
-        const scriptURL = "PASTE_URL_WEB_APP_ANDA_DISINI"; 
+        // ==========================================
+        // KONFIGURASI JAVASCRIPT
+        // ==========================================
+        // GANTI DENGAN URL WEB APP HASIL DEPLOY ULANG DARI GOOGLE APPS SCRIPT ANDA
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxq54EORrrOte5A7GncP_g8O7PbZTJvPmjnOeJ5YaJl11g1MlSqvL4xcdZ4AzNA0FIPuA/exec"; 
         const user = JSON.parse(localStorage.getItem('current_user'));
 
-        if(!user) window.location.href = 'index.html';
+        // Redirect jika user belum login atau bukan dosen
+        if(!user || user.role.toUpperCase() !== "DOSEN") {
+            window.location.href = 'index.html';
+        }
         document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
 
+        // Fungsi utama untuk mengambil dan merender data analytics
         async function fetchAnalytics() {
             try {
                 const response = await fetch(scriptURL, {
@@ -77,29 +86,39 @@
                 });
                 const data = await response.json();
                 
-                renderPieChart('chartPerforma', data.performa, ['#1e3a8a', '#3b82f6', '#93c5fd', '#60a5fa'], 'scorePerf');
-                renderPieChart('chartLuaran', data.luaran, ['#059669', '#10b981', '#34d399', '#6ee7b7'], 'scoreLua');
+                // Render Chart Performa
+                renderPieChart('chartPerforma', data.performa, ['#1e3a8a', '#3b82f6', '#93c5fd', '#60a5fa', '#9e9cf2'], 'scorePerf');
+                // Render Chart Luaran
+                renderPieChart('chartLuaran', data.luaran, ['#059669', '#10b981', '#34d399', '#6ee7b7', '#97e4c3'], 'scoreLua');
+
             } catch (e) {
-                console.error("Gagal memuat data", e);
+                console.error("Gagal memuat data dashboard:", e);
+                alert("Gagal memuat data. Mohon coba lagi nanti atau hubungi Admin.");
             }
         }
 
+        // Fungsi untuk merender Chart.js Doughnut Chart
         function renderPieChart(canvasId, rawData, colors, scoreId) {
+            // Kelompokkan skor berdasarkan jenis kegiatan (e.g., Pengajaran, Penelitian)
             const stats = rawData.reduce((acc, curr) => {
-                acc[curr.jenis] = (acc[curr.jenis] || 0) + curr.skor;
+                const key = curr.jenis || "Lainnya"; // Pastikan ada nama jenis
+                acc[key] = (acc[key] || 0) + curr.skor;
                 return acc;
             }, {});
 
             const labels = Object.keys(stats);
             const values = Object.values(stats);
             const total = values.reduce((a, b) => a + b, 0);
+            
             document.getElementById(scoreId).innerText = total + " PTS";
 
             const ctx = document.getElementById(canvasId).getContext('2d');
             
-            // Hapus chart lama jika ada
-            let chartStatus = Chart.getChart(canvasId);
-            if (chartStatus !== undefined) { chartStatus.destroy(); }
+            // Hapus chart lama sebelum membuat yang baru untuk mencegah duplikasi
+            let existingChart = Chart.getChart(canvasId);
+            if (existingChart) {
+                existingChart.destroy();
+            }
 
             new Chart(ctx, {
                 type: 'doughnut',
@@ -107,27 +126,43 @@
                     labels: labels,
                     datasets: [{
                         data: values,
-                        backgroundColor: colors,
+                        backgroundColor: colors.slice(0, labels.length), // Pastikan jumlah warna cukup
                         borderWidth: 0,
                         hoverOffset: 12
                     }]
                 },
                 options: {
-                    cutout: '75%',
+                    cutout: '75%', // Ukuran tengah lingkaran
                     plugins: {
                         legend: { 
-                            position: 'right', 
-                            labels: { font: { size: 9, weight: 'bold' }, boxWidth: 10, padding: 15 } 
+                            position: 'right', // Posisi legenda
+                            labels: { 
+                                font: { size: 9, weight: 'bold' }, 
+                                boxWidth: 10, 
+                                padding: 15 
+                            } 
                         }
                     },
-                    maintainAspectRatio: false,
-                    responsive: true
+                    maintainAspectRatio: false, // Penting untuk responsivitas
+                    responsive: true,
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
+                    }
                 }
             });
         }
 
+        // Fungsi logout
+        function logout() {
+            if(confirm("Apakah Anda yakin ingin keluar?")) {
+                localStorage.clear();
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Jalankan fungsi fetchAnalytics saat halaman dimuat
         window.onload = fetchAnalytics;
-        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
     </script>
 </body>
 </html>
