@@ -154,3 +154,45 @@
             
             btn.disabled = true;
             btn.innerText = "SINKRONISASI...";
+            
+            // Pilih action berdasarkan apakah ada ID yang sedang diedit
+            const actionType = editId ? "UPDATE" : "INSERT";
+            
+            const payload = {
+                action: actionType, type: "KPI", id: user.id, nama: user.name,
+                kategori: document.getElementById('kat').value,
+                deskripsi: document.getElementById('desk').value,
+                tanggal: document.getElementById('tgl').value,
+                poin: 10, 
+                rowId: editId ? editId : "KPI-" + Date.now()
+            };
+
+            await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
+            resetForm();
+            fetchCloudData();
+            btn.disabled = false;
+        });
+
+        async function hapus(rowId) {
+            if(confirm("Hapus data ini?")) {
+                await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "KPI", rowId: rowId }) });
+                fetchCloudData();
+            }
+        }
+
+        function updateChart(s) {
+            if (chartInstance) chartInstance.destroy();
+            const ctx = document.getElementById('miniChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(s),
+                    datasets: [{ data: Object.values(s), backgroundColor: '#1e3a8a', borderRadius: 10 }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+        window.onload = fetchCloudData;
+    </script>
+</body>
+</html>
