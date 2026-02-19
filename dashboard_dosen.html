@@ -10,7 +10,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
-        .chart-box { background: white; border-radius: 2.5rem; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .chart-box { background: white; border-radius: 2.5rem; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
     </style>
 </head>
 <body class="pb-10">
@@ -21,7 +21,9 @@
                 <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest italic leading-none mb-2">Personal Analytics Hub</p>
                 <h1 id="dosenGreet" class="text-2xl font-black uppercase italic tracking-tighter">Halo, Dosen!</h1>
             </div>
-            <button onclick="logout()" class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30"><i class="fas fa-power-off"></i></button>
+            <button onclick="logout()" class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30">
+                <i class="fas fa-power-off"></i>
+            </button>
         </div>
     </nav>
 
@@ -32,7 +34,7 @@
                 <h3 class="text-[10px] font-black text-blue-900 uppercase italic">Rekap Performa (KPI)</h3>
                 <span id="scorePerf" class="text-[9px] font-black bg-blue-50 text-blue-900 px-3 py-1 rounded-full italic">0 PTS</span>
             </div>
-            <div style="height: 180px;"><canvas id="chartPerforma"></canvas></div>
+            <div style="height: 200px;"><canvas id="chartPerforma"></canvas></div>
         </div>
 
         <div class="chart-box">
@@ -40,54 +42,90 @@
                 <h3 class="text-[10px] font-black text-green-700 uppercase italic">Rekap Luaran (Karya)</h3>
                 <span id="scoreLua" class="text-[9px] font-black bg-green-50 text-green-700 px-3 py-1 rounded-full italic">0 PTS</span>
             </div>
-            <div style="height: 180px;"><canvas id="chartLuaran"></canvas></div>
+            <div style="height: 200px;"><canvas id="chartLuaran"></canvas></div>
         </div>
 
         <div class="grid grid-cols-3 gap-3">
-            <a href="penilaian_logbook.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-orange-500 text-center active:scale-90 transition-all">
-                <i class="fas fa-tasks text-orange-500 mb-1"></i><p class="text-[8px] font-black text-blue-900 uppercase italic">Logbook</p>
+            <a href="penilaian_logbook.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-orange-500 text-center active:scale-90 transition-all group">
+                <i class="fas fa-tasks text-orange-500 mb-1 group-hover:scale-110"></i>
+                <p class="text-[8px] font-black text-blue-900 uppercase italic">Logbook</p>
             </a>
-            <a href="performa_dosen.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-blue-900 text-center active:scale-90 transition-all">
-                <i class="fas fa-chart-bar text-blue-900 mb-1"></i><p class="text-[8px] font-black text-blue-900 uppercase italic">KPI</p>
+            <a href="performa_dosen.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-blue-900 text-center active:scale-90 transition-all group">
+                <i class="fas fa-chart-bar text-blue-900 mb-1 group-hover:scale-110"></i>
+                <p class="text-[8px] font-black text-blue-900 uppercase italic">KPI</p>
             </a>
-            <a href="luaran_dosen.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-green-600 text-center active:scale-90 transition-all">
-                <i class="fas fa-award text-green-600 mb-1"></i><p class="text-[8px] font-black text-blue-900 uppercase italic">Luaran</p>
+            <a href="luaran_dosen.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-green-600 text-center active:scale-90 transition-all group">
+                <i class="fas fa-award text-green-600 mb-1 group-hover:scale-110"></i>
+                <p class="text-[8px] font-black text-blue-900 uppercase italic">Luaran</p>
             </a>
         </div>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwaQ_dCumCWclqnJbLhPY71Q9762UKcLdSVSxq3ce3uGnp9pMbU0b_VdKInq4Srjrf34Q/exec"; 
+        // GANTI DENGAN URL WEB APP HASIL DEPLOY ULANG
+        const scriptURL = "PASTE_URL_WEB_APP_ANDA_DISINI"; 
         const user = JSON.parse(localStorage.getItem('current_user'));
 
         if(!user) window.location.href = 'index.html';
         document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
 
         async function fetchAnalytics() {
-            const response = await fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "readDashboardAnalytics", nama_dosen: user.name })
-            });
-            const data = await response.json();
-            renderPieChart('chartPerforma', data.performa, ['#1e3a8a', '#3b82f6', '#93c5fd'], 'scorePerf');
-            renderPieChart('chartLuaran', data.luaran, ['#059669', '#10b981', '#34d399'], 'scoreLua');
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "readDashboardAnalytics", nama_dosen: user.name })
+                });
+                const data = await response.json();
+                
+                renderPieChart('chartPerforma', data.performa, ['#1e3a8a', '#3b82f6', '#93c5fd', '#60a5fa'], 'scorePerf');
+                renderPieChart('chartLuaran', data.luaran, ['#059669', '#10b981', '#34d399', '#6ee7b7'], 'scoreLua');
+            } catch (e) {
+                console.error("Gagal memuat data", e);
+            }
         }
 
         function renderPieChart(canvasId, rawData, colors, scoreId) {
             const stats = rawData.reduce((acc, curr) => {
-                acc[curr.jenis] = (acc[curr.jenis] || 0) + (parseInt(curr.skor) || 0);
+                acc[curr.jenis] = (acc[curr.jenis] || 0) + curr.skor;
                 return acc;
             }, {});
-            const labels = Object.keys(stats), values = Object.values(stats);
+
+            const labels = Object.keys(stats);
+            const values = Object.values(stats);
             const total = values.reduce((a, b) => a + b, 0);
             document.getElementById(scoreId).innerText = total + " PTS";
 
-            new Chart(document.getElementById(canvasId).getContext('2d'), {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            // Hapus chart lama jika ada
+            let chartStatus = Chart.getChart(canvasId);
+            if (chartStatus !== undefined) { chartStatus.destroy(); }
+
+            new Chart(ctx, {
                 type: 'doughnut',
-                data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, borderWidth: 0 }] },
-                options: { cutout: '75%', plugins: { legend: { position: 'right', labels: { font: { size: 8, weight: 'bold' }, boxWidth: 10 } } }, maintainAspectRatio: false }
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: colors,
+                        borderWidth: 0,
+                        hoverOffset: 12
+                    }]
+                },
+                options: {
+                    cutout: '75%',
+                    plugins: {
+                        legend: { 
+                            position: 'right', 
+                            labels: { font: { size: 9, weight: 'bold' }, boxWidth: 10, padding: 15 } 
+                        }
+                    },
+                    maintainAspectRatio: false,
+                    responsive: true
+                }
             });
         }
+
         window.onload = fetchAnalytics;
         function logout() { localStorage.clear(); window.location.href = 'index.html'; }
     </script>
