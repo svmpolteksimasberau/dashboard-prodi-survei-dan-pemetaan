@@ -3,75 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luaran & Publikasi - PSBC</title>
+    <title>Luaran & Publikasi - ISMAP</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
     </style>
 </head>
-<body class="min-h-screen pb-20">
-
-    <nav class="bg-blue-900 text-white p-10 rounded-b-[4rem] shadow-2xl mb-10 border-b-8 border-green-600">
-        <div class="container mx-auto max-w-5xl flex justify-between items-center text-center md:text-left">
-            <div class="flex flex-col md:flex-row items-center gap-5">
-                <a href="dashboard_dosen.html" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-green-500 rounded-2xl transition-all shadow-lg">
-                    <i class="fas fa-arrow-left"></i>
-                </a>
-                <div>
-                    <h1 class="text-2xl font-black uppercase italic tracking-tighter leading-none">Luaran & Publikasi</h1>
-                    <p class="text-green-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-2 italic">Arsip Karya Ilmiah & HAKI</p>
-                </div>
+<body class="p-4 md:p-8">
+    <div class="container mx-auto max-w-6xl">
+        <div class="flex justify-between items-center mb-8">
+            <a href="dashboard_dosen.html" class="text-blue-900 font-black flex items-center gap-2 hover:scale-105 transition-all text-xs uppercase italic tracking-widest">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <div class="text-right">
+                <h1 class="text-xl font-black text-blue-900 uppercase tracking-tighter italic leading-none">Output & Publication</h1>
+                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1 italic">Integrated System of Survey and Mapping</p>
             </div>
         </div>
-    </nav>
 
-    <div class="container mx-auto px-6 max-w-5xl">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-blue-900 text-center md:text-left">
-                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Publikasi Jurnal</p>
-                <h2 id="statPublikasi" class="text-4xl font-black text-blue-900 italic">0</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-center md:text-left">
+            <div class="bg-gradient-to-br from-green-900 to-green-700 p-10 rounded-[3.5rem] shadow-2xl text-white border-b-[10px] border-orange-500">
+                <p class="text-[10px] font-black uppercase opacity-60 tracking-[0.4em] mb-2">Skor Luaran</p>
+                <h2 id="totalSkorDisplay" class="text-7xl font-black italic tracking-tighter">0</h2>
+                <div id="statusSync" class="mt-4 text-[8px] font-bold opacity-30 uppercase tracking-widest italic">Cloud Status: Syncing...</div>
             </div>
-            <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-green-600 text-center md:text-left">
-                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">HAKI / Buku</p>
-                <h2 id="statHaki" class="text-4xl font-black text-green-600 italic">0</h2>
-            </div>
-            <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-orange-500 text-center md:text-left">
-                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Total Poin Luaran</p>
-                <h2 id="statTotalSkor" class="text-4xl font-black text-orange-500 italic">0</h2>
+            <div class="md:col-span-2 bg-white p-8 rounded-[3.5rem] shadow-xl border border-gray-100 flex items-center">
+                <div class="h-44 w-full"><canvas id="miniChart"></canvas></div>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-1">
-                <form id="luaranForm" class="bg-white p-8 rounded-[3rem] shadow-2xl border-t-8 border-green-600 sticky top-10">
-                    <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs italic mb-6">Input Luaran Baru</h3>
-                    
-                    <input type="hidden" id="rowIdInput"> <div class="space-y-4">
-                        <input type="text" id="judul" placeholder="Judul Karya..." class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-sm text-blue-900" required>
-                        <select id="jenis" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-black text-blue-900 text-sm italic">
-                            <option value="Publikasi Jurnal">Publikasi Jurnal</option>
-                            <option value="HAKI">HAKI / Paten</option>
-                            <option value="Buku Ber-ISBN">Buku Ber-ISBN</option>
-                        </select>
-                        <input type="url" id="link" placeholder="Link Bukti (https://...)" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-sm text-blue-900" required>
-                        
-                        <div class="flex gap-2">
-                            <button type="submit" id="btnSub" class="flex-1 bg-green-600 text-white font-black py-5 rounded-[2rem] uppercase text-xs tracking-widest shadow-lg hover:bg-green-700 transition-all">SIMPAN LUARAN</button>
-                            <button type="button" id="btnBatal" onclick="resetForm()" class="hidden bg-gray-200 text-gray-500 font-black px-6 py-5 rounded-[2rem] uppercase text-[10px] active:scale-95 transition-all">Batal</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            <form id="luaranForm" class="bg-white p-8 rounded-[3.5rem] shadow-2xl border-t-[10px] border-orange-500 space-y-4">
+                <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs italic mb-4">Input Luaran Baru</h3>
+                
+                <input type="hidden" id="rowIdInput">
 
-            <div class="lg:col-span-2 space-y-4">
-                <div class="bg-blue-900 p-6 rounded-t-[2.5rem] flex justify-between items-center shadow-lg">
-                    <h3 class="font-black text-white text-[10px] uppercase tracking-widest italic">Riwayat Luaran Cloud</h3>
-                    <i class="fas fa-cloud text-white/20"></i>
+                <input type="text" id="judul" placeholder="Judul Karya..." class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-sm" required>
+                <select id="jenis" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-black text-blue-900 text-sm italic">
+                    <option value="Publikasi Jurnal">Publikasi Jurnal (+10)</option>
+                    <option value="HAKI">HAKI / Paten (+10)</option>
+                    <option value="Buku Ber-ISBN">Buku Ber-ISBN (+10)</option>
+                </select>
+                <input type="url" id="link" placeholder="Link Bukti (https://...)" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-sm text-blue-900" required>
+                
+                <div class="flex gap-2">
+                    <button type="submit" id="btnSubmit" class="flex-1 bg-green-800 text-white font-black py-5 rounded-[2rem] shadow-xl active:scale-95 transition-all text-xs tracking-widest uppercase mt-2">SIMPAN KE CLOUD</button>
+                    <button type="button" id="btnBatal" onclick="resetForm()" class="hidden bg-gray-200 text-gray-500 font-black px-6 py-5 rounded-[2rem] active:scale-95 transition-all text-xs tracking-widest uppercase mt-2">BATAL</button>
                 </div>
-                <div id="listLuaran" class="space-y-4 min-h-[200px]">
-                    <p class="text-center py-10 text-gray-300 font-black italic animate-pulse">Menghubungkan Database...</p>
+            </form>
+
+            <div class="lg:col-span-2 bg-white rounded-[3.5rem] shadow-2xl border border-gray-100 overflow-hidden">
+                <div class="p-8 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                    <h3 class="font-black text-blue-900 uppercase text-xs italic tracking-widest">Arsip Luaran</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-white text-[10px] text-gray-400 uppercase font-black">
+                            <tr><th class="p-8 pl-12">Jenis Luaran</th><th class="p-8">Judul & Link</th><th class="p-8 text-center pr-12">Aksi</th></tr>
+                        </thead>
+                        <tbody id="histBody" class="divide-y divide-gray-100 text-[11px]">
+                            <tr><td colspan="3" class="p-10 text-center text-gray-300 italic">Menghubungkan...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -80,9 +76,10 @@
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxZt7H5vtk9f8cSGetLxBo9v1JngqYK0u-QMRyB9ajACf5MFdsd_4U4gePE2yF6kkt_LQ/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
+        let chartInstance = null;
         let luaranCached = [];
 
-        async function loadLuaran() {
+        async function fetchCloudData() {
             try {
                 const res = await fetch(scriptURL, {
                     method: 'POST',
@@ -91,40 +88,40 @@
                 const data = await res.json();
                 luaranCached = data;
                 renderUI(data);
-            } catch (e) { document.getElementById('listLuaran').innerText = "Gagal Sinkronasi."; }
+                document.getElementById('statusSync').innerText = "Cloud Connection: Active";
+            } catch (e) { document.getElementById('statusSync').innerText = "Cloud Connection: Error"; }
         }
 
         function renderUI(data) {
-            const container = document.getElementById('listLuaran');
-            let pub = 0, haki = 0, skor = 0;
-            container.innerHTML = "";
+            const body = document.getElementById('histBody');
+            body.innerHTML = "";
+            let scoreTotal = 0;
+            const stats = { "Publikasi Jurnal": 0, "HAKI": 0, "Buku Ber-ISBN": 0 };
 
             if(data.length === 0) {
-                container.innerHTML = '<p class="text-center py-10 text-gray-300 font-black italic">Belum ada data luaran.</p>';
+                body.innerHTML = '<tr><td colspan="3" class="p-10 text-center text-gray-300 italic">Belum ada data luaran.</td></tr>';
             }
 
             data.forEach(item => {
-                if(item.jenis === "Publikasi Jurnal") pub++; else haki++;
-                skor += 10;
-                container.innerHTML += `
-                    <div class="bg-white p-6 rounded-[2.5rem] flex justify-between items-center shadow-md border border-gray-50 group">
-                        <div class="flex items-center gap-5">
-                            <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-green-600 italic font-black text-xs"><i class="fas fa-file-alt"></i></div>
-                            <div>
-                                <p class="text-[9px] font-black text-green-600 uppercase italic leading-none">${item.jenis}</p>
-                                <h4 class="text-xs font-black text-blue-900 uppercase leading-tight mt-1">${item.judul}</h4>
-                                <a href="${item.link}" target="_blank" class="text-[9px] text-blue-400 font-bold underline italic hover:text-blue-600 transition-colors">Buka Link Bukti</a>
+                scoreTotal += 10;
+                if(stats[item.jenis] !== undefined) stats[item.jenis]++;
+                body.innerHTML += `
+                    <tr>
+                        <td class="p-8 pl-12 font-black text-green-700 uppercase italic text-xs">${item.jenis}</td>
+                        <td class="p-8">
+                            <span class="font-bold text-blue-900 text-sm leading-tight">${item.judul}</span><br>
+                            <a href="${item.link}" target="_blank" class="text-blue-400 underline italic font-bold">Buka Link Bukti</a>
+                        </td>
+                        <td class="p-8 text-center pr-12">
+                            <div class="flex gap-2 justify-center">
+                                <button onclick="siapEdit('${item.rowId}')" class="w-9 h-9 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><i class="fas fa-edit text-[10px]"></i></button>
+                                <button onclick="hapus('${item.rowId}')" class="w-9 h-9 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt text-[10px]"></i></button>
                             </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="siapEdit('${item.rowId}')" class="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all"><i class="fas fa-edit"></i></button>
-                            <button onclick="hapus('${item.rowId}')" class="w-10 h-10 bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </div>`;
+                        </td>
+                    </tr>`;
             });
-            document.getElementById('statPublikasi').innerText = pub;
-            document.getElementById('statHaki').innerText = haki;
-            document.getElementById('statTotalSkor').innerText = skor;
+            document.getElementById('totalSkorDisplay').innerText = scoreTotal;
+            updateChart(stats);
         }
 
         function siapEdit(rowId) {
@@ -134,10 +131,10 @@
                 document.getElementById('judul').value = item.judul;
                 document.getElementById('jenis').value = item.jenis;
                 document.getElementById('link').value = item.link;
-
+                
                 document.getElementById('formTitle').innerText = "Edit Luaran";
-                document.getElementById('btnSub').innerText = "UPDATE LUARAN";
-                document.getElementById('btnSub').classList.replace('bg-green-600', 'bg-orange-500');
+                document.getElementById('btnSubmit').innerText = "UPDATE KE CLOUD";
+                document.getElementById('btnSubmit').classList.replace('bg-green-800', 'bg-orange-600');
                 document.getElementById('btnBatal').classList.remove('hidden');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
@@ -147,18 +144,18 @@
             document.getElementById('luaranForm').reset();
             document.getElementById('rowIdInput').value = "";
             document.getElementById('formTitle').innerText = "Input Luaran Baru";
-            document.getElementById('btnSub').innerText = "SIMPAN LUARAN";
-            document.getElementById('btnSub').classList.replace('bg-orange-500', 'bg-green-600');
+            document.getElementById('btnSubmit').innerText = "SIMPAN KE CLOUD";
+            document.getElementById('btnSubmit').classList.replace('bg-orange-600', 'bg-green-800');
             document.getElementById('btnBatal').classList.add('hidden');
         }
 
         document.getElementById('luaranForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btnSub');
+            const btn = document.getElementById('btnSubmit');
             const editId = document.getElementById('rowIdInput').value;
             
             btn.disabled = true;
-            btn.innerText = "SINKRONISASI...";
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SINKRON...';
             
             const payload = {
                 action: editId ? "UPDATE" : "INSERT", 
@@ -174,18 +171,39 @@
 
             await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
             resetForm();
-            loadLuaran(); // Refresh list tanpa reload halaman
+            await fetchCloudData();
             btn.disabled = false;
         });
 
         async function hapus(rowId) {
             if(confirm("Hapus data luaran ini?")) {
                 await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "LUARAN", rowId: rowId }) });
-                loadLuaran();
+                fetchCloudData();
             }
         }
-        
-        window.onload = loadLuaran;
+
+        function updateChart(s) {
+            if (chartInstance) chartInstance.destroy();
+            const ctx = document.getElementById('miniChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(s),
+                    datasets: [{ 
+                        data: Object.values(s), 
+                        backgroundColor: '#166534', // Green-800
+                        borderRadius: 10 
+                    }]
+                },
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
+            });
+        }
+
+        window.onload = fetchCloudData;
     </script>
 </body>
 </html>
