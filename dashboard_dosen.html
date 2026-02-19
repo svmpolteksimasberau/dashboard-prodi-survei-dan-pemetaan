@@ -9,176 +9,104 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: #f8fafc; 
-            color: #1e293b;
-        }
-
-        .glass-header {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-            border-bottom: 6px solid #f59e0b;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .chart-card {
-            background: white;
-            border-radius: 2.5rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
-            transition: transform 0.3s ease;
-        }
-
-        .chart-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .menu-btn {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .menu-btn:hover {
-            transform: scale(1.02);
-        }
-
-        .custom-shadow {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-        }
-
-        /* Loading Animation */
-        .shimmer {
-            background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f5f9; color: #1e293b; }
+        .glass-header { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
+        .compact-card { background: white; border-radius: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .menu-icon { transition: all 0.3s ease; }
+        .menu-card:hover .menu-icon { transform: scale(1.1); }
     </style>
 </head>
-<body class="min-h-screen pb-10">
+<body class="min-h-screen bg-slate-50">
 
-    <header class="glass-header text-white pt-10 pb-28 px-6 rounded-b-[3.5rem] shadow-2xl relative overflow-hidden">
-        <div class="absolute top-[-10%] left-[-5%] w-64 h-64 bg-white/5 rounded-full"></div>
-        <div class="absolute bottom-[-20%] right-[-5%] w-40 h-40 bg-orange-500/10 rounded-full"></div>
-
-        <div class="container mx-auto max-w-5xl relative z-10">
-            <div class="flex justify-between items-center mb-8">
-                <div class="flex items-center gap-4">
-                    <div class="relative">
-                        <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center border border-white/30 backdrop-blur-md">
-                            <i class="fas fa-user-tie text-2xl text-orange-400"></i>
-                        </div>
-                        <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-4 border-[#1e3a8a] rounded-full"></div>
-                    </div>
-                    <div>
-                        <h1 id="dosenGreet" class="text-2xl font-extrabold tracking-tight italic">Halo, Dosen!</h1>
-                        <p class="text-blue-200 text-xs font-semibold uppercase tracking-widest italic opacity-80">Dashboard Analitik</p>
-                    </div>
+    <header class="glass-header text-white pt-6 pb-20 px-6 rounded-b-[2.5rem] shadow-xl relative overflow-hidden">
+        <div class="container mx-auto max-w-5xl flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-user-tie text-xl"></i>
                 </div>
-                <button onclick="logout()" class="w-12 h-12 rounded-2xl bg-red-500/10 hover:bg-red-500 border border-red-500/20 flex items-center justify-center transition-all">
-                    <i class="fas fa-power-off"></i>
-                </button>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div class="stat-card p-6 rounded-3xl">
-                    <p class="text-[10px] font-bold text-blue-200 uppercase tracking-widest mb-1">Poin Terkumpul</p>
-                    <div class="flex items-baseline gap-2">
-                        <span id="totalScoreText" class="text-4xl font-black italic tracking-tighter">0</span>
-                        <span class="text-xs font-bold text-orange-400 italic">POIN</span>
-                    </div>
-                </div>
-                <div class="stat-card p-6 rounded-3xl">
-                    <p class="text-[10px] font-bold text-blue-200 uppercase tracking-widest mb-1">Koneksi Cloud</p>
-                    <div id="syncStatus" class="flex items-center gap-2 mt-2">
-                        <span class="relative flex h-3 w-3">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                        </span>
-                        <span class="text-xs font-extrabold uppercase italic tracking-tighter">Sinkron</span>
+                <div>
+                    <h1 id="dosenGreet" class="text-lg font-extrabold italic leading-none">Dosen PSBC</h1>
+                    <div id="syncStatus" class="flex items-center gap-1.5 mt-1">
+                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                        <span class="text-[9px] font-bold uppercase tracking-widest opacity-70">Cloud Sync Active</span>
                     </div>
                 </div>
             </div>
+            <button onclick="logout()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-red-500 flex items-center justify-center transition-all border border-white/10">
+                <i class="fas fa-power-off text-xs"></i>
+            </button>
         </div>
     </header>
 
-    <main class="container mx-auto max-w-5xl px-6 -mt-12 relative z-20 space-y-6">
+    <main class="container mx-auto max-w-5xl px-4 -mt-10 space-y-4">
         
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="penilaian_logbook.html" class="menu-btn md:col-span-1 bg-orange-500 p-6 rounded-[2rem] text-white flex items-center justify-between shadow-lg shadow-orange-500/30">
-                <div class="flex items-center gap-4">
-                    <i class="fas fa-tasks text-2xl"></i>
-                    <span class="font-bold uppercase text-xs italic tracking-wider">Logbook Mahasiswa</span>
+        <section class="grid grid-cols-3 gap-3">
+            <a href="penilaian_logbook.html" class="menu-card compact-card p-4 flex flex-col items-center text-center group">
+                <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-2 menu-icon">
+                    <i class="fas fa-tasks text-lg"></i>
                 </div>
-                <i class="fas fa-chevron-right opacity-50"></i>
+                <span class="text-[9px] font-black uppercase text-slate-600 tracking-tighter">Logbook</span>
             </a>
-            
-            <a href="performa_dosen.html" class="menu-btn bg-white p-6 rounded-[2rem] flex items-center gap-4 custom-shadow border border-gray-100">
-                <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-900">
-                    <i class="fas fa-chart-line"></i>
+            <a href="performa_dosen.html" class="menu-card compact-card p-4 flex flex-col items-center text-center group">
+                <div class="w-12 h-12 bg-blue-100 text-blue-800 rounded-2xl flex items-center justify-center mb-2 menu-icon">
+                    <i class="fas fa-chart-line text-lg"></i>
                 </div>
-                <span class="font-bold uppercase text-[10px] text-blue-900 italic tracking-widest">Input KPI</span>
+                <span class="text-[9px] font-black uppercase text-slate-600 tracking-tighter">Input KPI</span>
             </a>
-
-            <a href="luaran_dosen.html" class="menu-btn bg-white p-6 rounded-[2rem] flex items-center gap-4 custom-shadow border border-gray-100">
-                <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-600">
-                    <i class="fas fa-award"></i>
+            <a href="luaran_dosen.html" class="menu-card compact-card p-4 flex flex-col items-center text-center group">
+                <div class="w-12 h-12 bg-green-100 text-green-700 rounded-2xl flex items-center justify-center mb-2 menu-icon">
+                    <i class="fas fa-award text-lg"></i>
                 </div>
-                <span class="font-bold uppercase text-[10px] text-green-700 italic tracking-widest">Input Luaran</span>
+                <span class="text-[9px] font-black uppercase text-slate-600 tracking-tighter">Input Luaran</span>
             </a>
         </section>
 
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="chart-card p-8">
-                <div class="flex justify-between items-center mb-8">
-                    <div>
-                        <h3 class="text-sm font-black text-blue-900 uppercase italic tracking-wider">Pencapaian KPI</h3>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">Tridharma Perguruan Tinggi</p>
-                    </div>
-                    <div id="scorePerfText" class="bg-blue-900 text-white px-4 py-1.5 rounded-full text-[10px] font-black italic">0 PTS</div>
+        <section class="compact-card p-5 flex justify-between items-center bg-white border-l-8 border-orange-500">
+            <div>
+                <p class="text-[10px] font-black text-slate-400 uppercase italic">Total Kumulatif Poin</p>
+                <h2 id="totalScoreText" class="text-3xl font-black text-slate-800 italic leading-none mt-1">0</h2>
+            </div>
+            <div class="text-right">
+                <p class="text-[9px] font-bold text-slate-400 uppercase">Update: 2026</p>
+                <i class="fas fa-medal text-orange-400 text-2xl mt-1"></i>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="compact-card p-5">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-[10px] font-black text-blue-900 uppercase italic">Performa KPI</h3>
+                    <span id="scorePerfText" class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-lg">0 PTS</span>
                 </div>
-                <div class="h-[220px]">
+                <div class="h-[140px] w-full">
                     <canvas id="chartPerforma"></canvas>
                 </div>
             </div>
 
-            <div class="chart-card p-8">
-                <div class="flex justify-between items-center mb-8">
-                    <div>
-                        <h3 class="text-sm font-black text-green-700 uppercase italic tracking-wider">Luaran & Publikasi</h3>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">Karya Ilmiah & HAKI</p>
-                    </div>
-                    <div id="scoreLuaText" class="bg-green-600 text-white px-4 py-1.5 rounded-full text-[10px] font-black italic">0 PTS</div>
+            <div class="compact-card p-5">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-[10px] font-black text-green-700 uppercase italic">Luaran Karya</h3>
+                    <span id="scoreLuaText" class="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-lg">0 PTS</span>
                 </div>
-                <div class="h-[220px]">
+                <div class="h-[140px] w-full">
                     <canvas id="chartLuaran"></canvas>
                 </div>
             </div>
         </section>
 
-        <footer class="text-center pt-8">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.5em] italic">Politeknik Sinar Mas Berau Coal</p>
+        <footer class="text-center py-4">
+            <p class="text-[8px] font-bold text-slate-300 uppercase tracking-[0.4em]">Integrated Academic System PSBC</p>
         </footer>
     </main>
 
     <script>
-        // MASUKKAN URL WEB APP DISINI
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwX6f_wS9gNm-yBZvk7rwtAPmIOzmWMOkcm9OJy34tsHRorSudB2nfn4tz3P5QujpXQuw/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
 
         if(!user || user.role.toUpperCase() !== "DOSEN") {
             window.location.href = 'index.html';
         } else {
-            document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
+            document.getElementById('dosenGreet').innerText = user.name;
         }
 
         async function fetchAnalytics() {
@@ -189,8 +117,8 @@
                 });
                 const data = await response.json();
 
-                renderEnhancedChart('chartPerforma', data.performa, '#1e3a8a', 'scorePerfText');
-                renderEnhancedChart('chartLuaran', data.luaran, '#10b981', 'scoreLuaText');
+                renderCompactChart('chartPerforma', data.performa, '#1e3a8a', 'scorePerfText');
+                renderCompactChart('chartLuaran', data.luaran, '#10b981', 'scoreLuaText');
 
                 const totalPerf = data.performa.reduce((a, b) => a + (Number(b.skor) || 0), 0);
                 const totalLua = data.luaran.reduce((a, b) => a + (Number(b.skor) || 0), 0);
@@ -198,11 +126,10 @@
 
             } catch (e) {
                 console.error("Sync Error:", e);
-                document.getElementById('syncStatus').innerHTML = '<span class="text-xs text-red-400 font-bold uppercase italic italic">Sync Failed</span>';
             }
         }
 
-        function renderEnhancedChart(canvasId, rawData, color, scoreId) {
+        function renderCompactChart(canvasId, rawData, color, scoreId) {
             const stats = rawData.reduce((acc, curr) => {
                 const key = curr.jenis || "Lainnya";
                 acc[key] = (acc[key] || 0) + (Number(curr.skor) || 0);
@@ -225,8 +152,8 @@
                     datasets: [{
                         data: values,
                         backgroundColor: color,
-                        borderRadius: 8,
-                        barThickness: 15,
+                        borderRadius: 6,
+                        barThickness: 12,
                     }]
                 },
                 options: {
@@ -234,10 +161,10 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { display: false, grid: { display: false } },
+                        x: { display: false },
                         y: { 
-                            grid: { display: false },
-                            ticks: { font: { size: 9, weight: '600' }, color: '#64748b' } 
+                            ticks: { font: { size: 8, weight: '700' }, color: '#64748b' },
+                            grid: { display: false }
                         }
                     }
                 }
@@ -245,10 +172,7 @@
         }
 
         function logout() {
-            if(confirm("Apakah Anda yakin ingin keluar?")) {
-                localStorage.clear();
-                window.location.href = 'index.html';
-            }
+            if(confirm("Keluar?")) { localStorage.clear(); window.location.href = 'index.html'; }
         }
 
         window.onload = fetchAnalytics;
