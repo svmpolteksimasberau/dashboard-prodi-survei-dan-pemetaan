@@ -46,8 +46,9 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-1">
                 <form id="luaranForm" class="bg-white p-8 rounded-[3rem] shadow-2xl border-t-8 border-green-600 sticky top-10">
-                    <h3 class="font-black text-blue-900 uppercase text-xs italic mb-6">Input Luaran Baru</h3>
-                    <div class="space-y-4">
+                    <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs italic mb-6">Input Luaran Baru</h3>
+                    
+                    <input type="hidden" id="rowIdInput"> <div class="space-y-4">
                         <input type="text" id="judul" placeholder="Judul Karya..." class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-sm text-blue-900" required>
                         <select id="jenis" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-black text-blue-900 text-sm italic">
                             <option value="Publikasi Jurnal">Publikasi Jurnal</option>
@@ -55,7 +56,11 @@
                             <option value="Buku Ber-ISBN">Buku Ber-ISBN</option>
                         </select>
                         <input type="url" id="link" placeholder="Link Bukti (https://...)" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-sm text-blue-900" required>
-                        <button type="submit" id="btnSub" class="w-full bg-green-600 text-white font-black py-5 rounded-[2rem] uppercase text-xs tracking-widest shadow-lg hover:bg-green-700 transition-all">SIMPAN LUARAN</button>
+                        
+                        <div class="flex gap-2">
+                            <button type="submit" id="btnSub" class="flex-1 bg-green-600 text-white font-black py-5 rounded-[2rem] uppercase text-xs tracking-widest shadow-lg hover:bg-green-700 transition-all">SIMPAN LUARAN</button>
+                            <button type="button" id="btnBatal" onclick="resetForm()" class="hidden bg-gray-200 text-gray-500 font-black px-6 py-5 rounded-[2rem] uppercase text-[10px] active:scale-95 transition-all">Batal</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -73,8 +78,9 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwX6f_wS9gNm-yBZvk7rwtAPmIOzmWMOkcm9OJy34tsHRorSudB2nfn4tz3P5QujpXQuw/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxZt7H5vtk9f8cSGetLxBo9v1JngqYK0u-QMRyB9ajACf5MFdsd_4U4gePE2yF6kkt_LQ/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
+        let luaranCached = [];
 
         async function loadLuaran() {
             try {
@@ -83,6 +89,7 @@
                     body: JSON.stringify({ action: "readLuaran", id: user.id })
                 });
                 const data = await res.json();
+                luaranCached = data;
                 renderUI(data);
             } catch (e) { document.getElementById('listLuaran').innerText = "Gagal Sinkronasi."; }
         }
@@ -92,20 +99,27 @@
             let pub = 0, haki = 0, skor = 0;
             container.innerHTML = "";
 
+            if(data.length === 0) {
+                container.innerHTML = '<p class="text-center py-10 text-gray-300 font-black italic">Belum ada data luaran.</p>';
+            }
+
             data.forEach(item => {
                 if(item.jenis === "Publikasi Jurnal") pub++; else haki++;
                 skor += 10;
                 container.innerHTML += `
-                    <div class="bg-white p-6 rounded-[2.5rem] flex justify-between items-center shadow-md border border-gray-50">
+                    <div class="bg-white p-6 rounded-[2.5rem] flex justify-between items-center shadow-md border border-gray-50 group">
                         <div class="flex items-center gap-5">
                             <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-green-600 italic font-black text-xs"><i class="fas fa-file-alt"></i></div>
                             <div>
                                 <p class="text-[9px] font-black text-green-600 uppercase italic leading-none">${item.jenis}</p>
                                 <h4 class="text-xs font-black text-blue-900 uppercase leading-tight mt-1">${item.judul}</h4>
-                                <a href="${item.link}" target="_blank" class="text-[9px] text-blue-400 font-bold underline italic">Buka Link Bukti</a>
+                                <a href="${item.link}" target="_blank" class="text-[9px] text-blue-400 font-bold underline italic hover:text-blue-600 transition-colors">Buka Link Bukti</a>
                             </div>
                         </div>
-                        <button onclick="hapus('${item.rowId}')" class="w-10 h-10 bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt"></i></button>
+                        <div class="flex gap-2">
+                            <button onclick="siapEdit('${item.rowId}')" class="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all"><i class="fas fa-edit"></i></button>
+                            <button onclick="hapus('${item.rowId}')" class="w-10 h-10 bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt"></i></button>
+                        </div>
                     </div>`;
             });
             document.getElementById('statPublikasi').innerText = pub;
@@ -113,22 +127,55 @@
             document.getElementById('statTotalSkor').innerText = skor;
         }
 
+        function siapEdit(rowId) {
+            const item = luaranCached.find(d => d.rowId === rowId);
+            if(item) {
+                document.getElementById('rowIdInput').value = item.rowId;
+                document.getElementById('judul').value = item.judul;
+                document.getElementById('jenis').value = item.jenis;
+                document.getElementById('link').value = item.link;
+
+                document.getElementById('formTitle').innerText = "Edit Luaran";
+                document.getElementById('btnSub').innerText = "UPDATE LUARAN";
+                document.getElementById('btnSub').classList.replace('bg-green-600', 'bg-orange-500');
+                document.getElementById('btnBatal').classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('luaranForm').reset();
+            document.getElementById('rowIdInput').value = "";
+            document.getElementById('formTitle').innerText = "Input Luaran Baru";
+            document.getElementById('btnSub').innerText = "SIMPAN LUARAN";
+            document.getElementById('btnSub').classList.replace('bg-orange-500', 'bg-green-600');
+            document.getElementById('btnBatal').classList.add('hidden');
+        }
+
         document.getElementById('luaranForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSub');
+            const editId = document.getElementById('rowIdInput').value;
+            
             btn.disabled = true;
             btn.innerText = "SINKRONISASI...";
             
             const payload = {
-                action: "INSERT", type: "LUARAN", id: user.id, nama: user.name,
+                action: editId ? "UPDATE" : "INSERT", 
+                type: "LUARAN", 
+                id: user.id, 
+                nama: user.name,
                 jenis: document.getElementById('jenis').value,
                 judul: document.getElementById('judul').value,
                 link: document.getElementById('link').value,
-                poin: 10, rowId: "LUA-" + Date.now()
+                poin: 10, 
+                rowId: editId ? editId : "LUA-" + Date.now()
             };
 
             await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
-            location.reload();
+            resetForm();
+            loadLuaran(); // Refresh list tanpa reload halaman
+            btn.disabled = false;
         });
 
         async function hapus(rowId) {
@@ -137,6 +184,7 @@
                 loadLuaran();
             }
         }
+        
         window.onload = loadLuaran;
     </script>
 </body>
