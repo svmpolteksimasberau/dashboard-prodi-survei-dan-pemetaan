@@ -10,96 +10,95 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #0f172a; }
+        
         .brand-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
-        .compact-card { background: white; border-radius: 1.5rem; border: 1px solid #e2e8f0; transition: all 0.3s ease; }
-        .compact-card:hover { border-color: #3b82f6; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
+        
+        .compact-card { 
+            background: white; 
+            border-radius: 1.25rem; 
+            border: 1px solid #e2e8f0; 
+            transition: all 0.2s ease;
+        }
+
+        .menu-btn:active { transform: scale(0.95); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen pb-10">
+<body class="min-h-screen pb-8">
 
-    <header class="brand-gradient text-white pt-6 pb-20 px-6 rounded-b-[2.5rem] shadow-2xl relative overflow-hidden">
-        <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
-        
-        <div class="container mx-auto max-w-5xl relative z-10">
-            <div class="flex justify-between items-center mb-8">
-                <div class="flex items-center gap-3">
-                    <div class="bg-blue-600 px-3 py-1.5 rounded-xl shadow-lg border-b-4 border-blue-800 flex items-center justify-center">
-                        <span class="text-white font-black text-xl tracking-tighter">ISMAP</span>
-                    </div>
-                    <div class="h-8 w-[1px] bg-white/10 mx-1"></div>
-                    <div>
-                        <h1 class="text-[10px] font-black tracking-[0.2em] text-white/90 uppercase leading-none">Integrated System of</h1>
-                        <p class="text-[9px] font-bold text-blue-400 mt-1 uppercase italic tracking-wider">Surveying and Mapping</p>
-                    </div>
+    <header class="brand-gradient text-white pt-4 pb-12 px-5 rounded-b-[2rem] shadow-lg relative">
+        <div class="container mx-auto max-w-5xl flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="relative w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg border-b-4 border-orange-500">
+                    <i class="fas fa-compass text-blue-900 text-xl"></i>
+                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full border-2 border-blue-900"></div>
                 </div>
-                <button onclick="logout()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-red-500/20 flex items-center justify-center transition-all border border-white/5">
-                    <i class="fas fa-power-off text-xs text-red-400"></i>
-                </button>
-            </div>
-
-            <div class="flex justify-between items-end">
                 <div>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 italic">Authorized Personnel</p>
-                    <h2 id="dosenGreet" class="text-2xl font-black tracking-tight italic text-white leading-none">Loading Profile...</h2>
-                </div>
-                <div class="hidden sm:block">
-                    <div id="syncStatus" class="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
-                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                        <span class="text-[9px] font-black uppercase tracking-tighter text-white/70">Database Verified</span>
-                    </div>
+                    <h1 class="text-xl font-black tracking-tighter leading-none italic">ISMAP</h1>
+                    <p id="dosenGreet" class="text-[10px] font-bold text-blue-300 mt-0.5 italic">Halo, Dosen!</p>
                 </div>
             </div>
+            <button onclick="logout()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-red-500/40 flex items-center justify-center transition-all">
+                <i class="fas fa-power-off text-xs text-red-400"></i>
+            </button>
         </div>
     </header>
 
-    <main class="container mx-auto max-w-5xl px-4 -mt-10 space-y-4">
+    <main class="container mx-auto max-w-5xl px-4 -mt-6 space-y-3">
         
-        <section class="grid grid-cols-3 gap-3">
-            <a href="penilaian_logbook.html" class="compact-card p-4 flex flex-col items-center group transition-all active:scale-95">
-                <div class="w-11 h-11 bg-orange-50 text-orange-500 rounded-xl flex items-center justify-center mb-2 group-hover:bg-orange-500 group-hover:text-white transition-all">
-                    <i class="fas fa-tasks text-lg"></i>
+        <section class="grid grid-cols-3 gap-2">
+            <a href="penilaian_logbook.html" class="menu-btn compact-card p-3 flex flex-col items-center shadow-sm">
+                <div class="w-10 h-10 bg-orange-50 text-orange-500 rounded-xl flex items-center justify-center mb-1.5">
+                    <i class="fas fa-tasks text-sm"></i>
                 </div>
-                <span class="text-[10px] font-black uppercase text-slate-500 tracking-tighter">Logbook</span>
+                <span class="text-[9px] font-black uppercase text-slate-500 tracking-tighter italic">Logbook</span>
             </a>
-            <a href="performa_dosen.html" class="compact-card p-4 flex flex-col items-center group transition-all active:scale-95">
-                <div class="w-11 h-11 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-2 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                    <i class="fas fa-chart-pie text-lg"></i>
+            <a href="performa_dosen.html" class="menu-btn compact-card p-3 flex flex-col items-center shadow-sm">
+                <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-1.5">
+                    <i class="fas fa-chart-pie text-sm"></i>
                 </div>
-                <span class="text-[10px] font-black uppercase text-slate-500 tracking-tighter">Input KPI</span>
+                <span class="text-[9px] font-black uppercase text-slate-500 tracking-tighter italic">Input KPI</span>
             </a>
-            <a href="luaran_dosen.html" class="compact-card p-4 flex flex-col items-center group transition-all active:scale-95">
-                <div class="w-11 h-11 bg-green-50 text-green-600 rounded-xl flex items-center justify-center mb-2 group-hover:bg-green-600 group-hover:text-white transition-all">
-                    <i class="fas fa-award text-lg"></i>
+            <a href="luaran_dosen.html" class="menu-btn compact-card p-3 flex flex-col items-center shadow-sm">
+                <div class="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center mb-1.5">
+                    <i class="fas fa-award text-sm"></i>
                 </div>
-                <span class="text-[10px] font-black uppercase text-slate-500 tracking-tighter">Luaran</span>
+                <span class="text-[9px] font-black uppercase text-slate-500 tracking-tighter italic">Luaran</span>
             </a>
         </section>
 
-        <section class="compact-card p-5 flex justify-between items-center border-l-8 border-orange-500">
+        <section class="compact-card p-4 flex justify-between items-center border-l-4 border-orange-500 shadow-sm bg-white">
             <div>
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Accumulated Academic Score</p>
-                <h2 id="totalScoreText" class="text-4xl font-black text-slate-800 italic leading-none mt-2">0</h2>
+                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Total Accumulated Points</p>
+                <div class="flex items-baseline gap-1.5 mt-1">
+                    <h2 id="totalScoreText" class="text-3xl font-black text-slate-800 italic leading-none">0</h2>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase">Pts</span>
+                </div>
             </div>
-            <div class="text-right">
-                <span class="text-[9px] font-bold text-white bg-slate-800 px-3 py-1 rounded-full uppercase italic">Prodi Survei Pemetaan</span>
+            <div id="syncStatus" class="flex items-center gap-1.5 bg-green-50 px-2 py-1 rounded-full">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="text-[8px] font-bold text-green-700 uppercase tracking-tighter">Sync Active</span>
             </div>
         </section>
 
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="compact-card p-5">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-[10px] font-black text-blue-900 uppercase italic">KPI Performance</h3>
-                    <span id="scorePerfText" class="text-[10px] font-bold text-white bg-blue-900 px-2.5 py-1 rounded-lg">0 PTS</span>
+        <section class="grid grid-cols-2 gap-3">
+            <div class="compact-card p-3 shadow-sm h-[190px]">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-[8px] font-black text-blue-900 uppercase italic tracking-tighter">KPI Analysis</h3>
+                    <span id="scorePerfText" class="text-[8px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded">0</span>
                 </div>
                 <div class="h-[140px] w-full">
                     <canvas id="chartPerforma"></canvas>
                 </div>
             </div>
 
-            <div class="compact-card p-5">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-[10px] font-black text-green-700 uppercase italic">Research Outputs</h3>
-                    <span id="scoreLuaText" class="text-[10px] font-bold text-white bg-green-700 px-2.5 py-1 rounded-lg">0 PTS</span>
+            <div class="compact-card p-3 shadow-sm h-[190px]">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-[8px] font-black text-green-700 uppercase italic tracking-tighter">Research</h3>
+                    <span id="scoreLuaText" class="text-[8px] font-bold text-green-700 bg-green-50 px-1.5 py-0.5 rounded">0</span>
                 </div>
                 <div class="h-[140px] w-full">
                     <canvas id="chartLuaran"></canvas>
@@ -107,42 +106,53 @@
             </div>
         </section>
 
-        <footer class="text-center py-6">
-            <p class="text-[8px] font-black text-slate-300 uppercase tracking-[0.5em]">ISMAP Legacy System • PSBC 2026</p>
+        <footer class="text-center pt-2">
+            <p class="text-[8px] font-black text-slate-300 uppercase tracking-[0.4em] italic">ISMAP Legacy System v1.0</p>
         </footer>
     </main>
 
     <script>
+        // GANTI DENGAN URL WEB APP HASIL DEPLOY APPS SCRIPT
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwX6f_wS9gNm-yBZvk7rwtAPmIOzmWMOkcm9OJy34tsHRorSudB2nfn4tz3P5QujpXQuw/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
 
+        // Cek Login & Role
         if(!user || user.role.toUpperCase() !== "DOSEN") {
             window.location.href = 'index.html';
         } else {
-            document.getElementById('dosenGreet').innerText = user.name;
+            document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
         }
 
-        async function fetchAnalytics() {
+        async function fetchDashboardData() {
             try {
                 const response = await fetch(scriptURL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "readDashboardAnalytics", nama_dosen: user.name })
+                    body: JSON.stringify({ 
+                        action: "readDashboardAnalytics", 
+                        nama_dosen: user.name 
+                    })
                 });
+                
                 const data = await response.json();
 
-                renderChart('chartPerforma', data.performa, '#1e3a8a', 'scorePerfText');
-                renderChart('chartLuaran', data.luaran, '#15803d', 'scoreLuaText');
+                // Render Chart & Skor
+                renderMiniChart('chartPerforma', data.performa, '#1e3a8a', 'scorePerfText');
+                renderMiniChart('chartLuaran', data.luaran, '#15803d', 'scoreLuaText');
 
+                // Hitung Total Kumulatif
                 const totalPerf = data.performa.reduce((a, b) => a + (Number(b.skor) || 0), 0);
                 const totalLua = data.luaran.reduce((a, b) => a + (Number(b.skor) || 0), 0);
                 document.getElementById('totalScoreText').innerText = totalPerf + totalLua;
 
-            } catch (e) { console.error("Sync Error:", e); }
+            } catch (e) {
+                console.error("Fetch Error:", e);
+                document.getElementById('syncStatus').innerHTML = '<span class="text-[8px] font-bold text-red-500 uppercase">Offline</span>';
+            }
         }
 
-        function renderChart(canvasId, rawData, color, scoreId) {
+        function renderMiniChart(canvasId, rawData, color, scoreId) {
             const stats = rawData.reduce((acc, curr) => {
-                const key = curr.jenis || "Lainnya";
+                const key = curr.jenis || "Lain";
                 acc[key] = (acc[key] || 0) + (Number(curr.skor) || 0);
                 return acc;
             }, {});
@@ -153,32 +163,45 @@
             document.getElementById(scoreId).innerText = total + " PTS";
 
             const ctx = document.getElementById(canvasId).getContext('2d');
-            let chartStatus = Chart.getChart(canvasId);
-            if (chartStatus !== undefined) chartStatus.destroy();
+            let chartExist = Chart.getChart(canvasId);
+            if (chartExist) chartExist.destroy();
 
             new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
-                    datasets: [{ data: values, backgroundColor: color, borderRadius: 4, barThickness: 12 }]
+                    datasets: [{
+                        data: values,
+                        backgroundColor: color,
+                        borderRadius: 4,
+                        barThickness: 10
+                    }]
                 },
                 options: {
                     indexAxis: 'y',
                     maintainAspectRatio: false,
+                    responsive: true,
                     plugins: { legend: { display: false } },
                     scales: {
                         x: { display: false },
-                        y: { ticks: { font: { size: 8, weight: '700' }, color: '#64748b' }, grid: { display: false } }
+                        y: { 
+                            grid: { display: false },
+                            ticks: { font: { size: 7, weight: 'bold' }, color: '#64748b' } 
+                        }
                     }
                 }
             });
         }
 
         function logout() {
-            if(confirm("Keluar dari ISMAP?")) { localStorage.clear(); window.location.href = 'index.html'; }
+            if(confirm("Keluar dari ISMAP?")) {
+                localStorage.clear();
+                window.location.href = 'index.html';
+            }
         }
 
-        window.onload = fetchAnalytics;
+        // Jalankan fetch data saat halaman dimuat
+        window.onload = fetchDashboardData;
     </script>
 </body>
 </html>
