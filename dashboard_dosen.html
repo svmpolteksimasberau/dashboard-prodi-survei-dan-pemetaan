@@ -3,225 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Dosen - PSBC Analytics</title>
+    <title>Dashboard Dosen Analytics</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .stat-glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2); }
-        .menu-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .menu-card:hover { transform: translateY(-5px); }
-        canvas { filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05)); }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        .chart-box { background: white; border-radius: 2.5rem; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body class="min-h-screen pb-12">
+<body class="pb-10">
 
-    <nav class="bg-blue-900 text-white p-10 pb-32 rounded-b-[4rem] shadow-2xl relative overflow-hidden">
-        <div class="absolute top-0 right-0 p-10 opacity-10 text-9xl -mr-16 -mt-16 transform rotate-12">
-            <i class="fas fa-chart-pie"></i>
-        </div>
-        
-        <div class="container mx-auto relative z-10">
-            <div class="flex justify-between items-start mb-8">
-                <div>
-                    <p class="text-[10px] font-black text-orange-400 uppercase tracking-[0.4em] mb-2 italic">Dosen Analytics Hub</p>
-                    <h1 id="dosenGreet" class="font-black text-3xl tracking-tighter uppercase italic leading-none text-white">Halo, Dosen!</h1>
-                </div>
-                <button onclick="logout()" class="w-12 h-12 bg-red-500/20 hover:bg-red-500 rounded-2xl flex items-center justify-center transition-all border border-red-500/30">
-                    <i class="fas fa-power-off text-sm"></i>
-                </button>
+    <nav class="bg-blue-900 text-white p-10 pb-20 rounded-b-[4rem] shadow-2xl relative">
+        <div class="flex justify-between items-center">
+            <div>
+                <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest italic leading-none mb-2">Personal Analytics Hub</p>
+                <h1 id="dosenGreet" class="text-2xl font-black uppercase italic tracking-tighter">Halo, Dosen!</h1>
             </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-                <div class="stat-glass p-5 rounded-[2.5rem]">
-                    <p class="text-[8px] font-black text-blue-200 uppercase tracking-widest mb-1 italic">Personal Score</p>
-                    <div class="flex items-end gap-2">
-                        <span id="totalScoreText" class="text-3xl font-black italic">0</span>
-                        <span class="text-[9px] font-bold mb-2 opacity-50 uppercase italic">Points</span>
-                    </div>
-                </div>
-                <div class="stat-glass p-5 rounded-[2.5rem]">
-                    <p class="text-[8px] font-black text-blue-200 uppercase tracking-widest mb-1 italic">System Status</p>
-                    <div id="syncStatus" class="flex items-center gap-2 mt-2">
-                        <div class="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-                        <span class="text-[10px] font-black uppercase italic italic">Syncing...</span>
-                    </div>
-                </div>
-            </div>
+            <button onclick="logout()" class="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30"><i class="fas fa-power-off"></i></button>
         </div>
     </nav>
 
-    <div class="container mx-auto px-6 -mt-16 relative z-20">
-        <div class="bg-white rounded-[3.5rem] shadow-2xl p-8 mb-6 border border-gray-100">
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="font-black text-blue-900 text-[10px] uppercase tracking-widest italic leading-none">Capaian & Distribusi Skor</h3>
-                <i class="fas fa-chart-line text-blue-900/10 text-2xl"></i>
+    <div class="container mx-auto px-5 -mt-12 space-y-6">
+        
+        <div class="chart-box">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-[10px] font-black text-blue-900 uppercase italic">Rekap Performa (KPI)</h3>
+                <span id="scorePerf" class="text-[9px] font-black bg-blue-50 text-blue-900 px-3 py-1 rounded-full italic">0 PTS</span>
             </div>
-            
-            <div class="relative h-64 mb-10 flex justify-center">
-                <canvas id="scoreChart"></canvas>
-            </div>
-
-            <div class="space-y-6">
-                <div>
-                    <h4 class="text-[9px] font-black text-blue-900 uppercase tracking-widest mb-3 flex items-center gap-2">
-                        <div class="w-2 h-2 bg-blue-900 rounded-full"></div> Performa (KPI & Logbook)
-                    </h4>
-                    <div id="perfLegend" class="grid grid-cols-2 gap-3">
-                        <p class="col-span-2 text-center text-[8px] text-gray-300 italic uppercase">Memproses Data...</p>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-[9px] font-black text-green-600 uppercase tracking-widest mb-3 flex items-center gap-2">
-                        <div class="w-2 h-2 bg-green-600 rounded-full"></div> Luaran (Publikasi & HAKI)
-                    </h4>
-                    <div id="luaLegend" class="grid grid-cols-2 gap-3">
-                        <p class="col-span-2 text-center text-[8px] text-gray-300 italic uppercase">Memproses Data...</p>
-                    </div>
-                </div>
-            </div>
+            <div style="height: 180px;"><canvas id="chartPerforma"></canvas></div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4">
-            <a href="penilaian_logbook.html" class="menu-card flex items-center gap-6 bg-white p-7 rounded-[3rem] shadow-xl border-b-8 border-orange-500 active:scale-95 group transition-all">
-                <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition-all">
-                    <i class="fas fa-tasks text-xl"></i>
-                </div>
-                <div>
-                    <h3 class="font-black text-blue-900 text-sm uppercase leading-none italic">Penilaian Logbook</h3>
-                    <p class="text-[9px] text-gray-400 font-bold uppercase mt-1 italic tracking-widest">Validasi Portofolio</p>
-                </div>
+        <div class="chart-box">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-[10px] font-black text-green-700 uppercase italic">Rekap Luaran (Karya)</h3>
+                <span id="scoreLua" class="text-[9px] font-black bg-green-50 text-green-700 px-3 py-1 rounded-full italic">0 PTS</span>
+            </div>
+            <div style="height: 180px;"><canvas id="chartLuaran"></canvas></div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+            <a href="penilaian_logbook.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-orange-500 text-center active:scale-90 transition-all">
+                <i class="fas fa-tasks text-orange-500 mb-1"></i><p class="text-[8px] font-black text-blue-900 uppercase italic">Logbook</p>
             </a>
-
-            <div class="grid grid-cols-2 gap-4">
-                <a href="performa_dosen.html" class="menu-card bg-white p-7 rounded-[2.5rem] shadow-xl border-b-8 border-blue-900 active:scale-95 text-center group transition-all">
-                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-900 mx-auto mb-2 group-hover:bg-blue-900 group-hover:text-white transition-all">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="font-black text-blue-900 text-[10px] uppercase italic">Performa</h3>
-                </a>
-                <a href="luaran_dosen.html" class="menu-card bg-white p-7 rounded-[2.5rem] shadow-xl border-b-8 border-green-600 active:scale-95 text-center group transition-all">
-                    <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center text-green-700 mx-auto mb-2 group-hover:bg-green-700 group-hover:text-white transition-all">
-                        <i class="fas fa-file-signature"></i>
-                    </div>
-                    <h3 class="font-black text-blue-900 text-[10px] uppercase italic">Luaran</h3>
-                </a>
-            </div>
+            <a href="performa_dosen.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-blue-900 text-center active:scale-90 transition-all">
+                <i class="fas fa-chart-bar text-blue-900 mb-1"></i><p class="text-[8px] font-black text-blue-900 uppercase italic">KPI</p>
+            </a>
+            <a href="luaran_dosen.html" class="bg-white p-5 rounded-3xl shadow-lg border-b-4 border-green-600 text-center active:scale-90 transition-all">
+                <i class="fas fa-award text-green-600 mb-1"></i><p class="text-[8px] font-black text-blue-900 uppercase italic">Luaran</p>
+            </a>
         </div>
-
-        <p class="text-center text-[9px] text-gray-300 font-black uppercase tracking-widest mt-10 italic">Politeknik Sinar Mas Berau Coal &copy; 2026</p>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwn24njfrXXJe8FEZwlpLFHlOmDQiQm-c1G6s8Mt9Hfy47oMF7mTRhyclisPIqECHCJ2A/exec"; 
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwaQ_dCumCWclqnJbLhPY71Q9762UKcLdSVSxq3ce3uGnp9pMbU0b_VdKInq4Srjrf34Q/exec"; 
         const user = JSON.parse(localStorage.getItem('current_user'));
 
-        if(!user || user.role.toUpperCase() !== "DOSEN") window.location.href = 'index.html';
+        if(!user) window.location.href = 'index.html';
         document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
 
-        async function fetchDashboardData() {
-            try {
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify({ 
-                        action: "readDashboardAnalytics", 
-                        nama_dosen: user.name 
-                    })
-                });
-                const rawData = await response.json();
-
-                // Kelompokkan data berdasarkan kategori
-                const categorized = rawData.reduce((acc, curr) => {
-                    if (!acc[curr.kategori]) acc[curr.kategori] = {};
-                    acc[curr.kategori][curr.jenis] = (acc[curr.kategori][curr.jenis] || 0) + (parseInt(curr.skor) || 0);
-                    return acc;
-                }, {});
-
-                renderAll(categorized);
-                document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-green-500 rounded-full"></div><span class="text-[10px] font-black uppercase italic">Connected</span>';
-            } catch (e) {
-                document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-red-500 rounded-full"></div><span class="text-[10px] font-black uppercase italic">Error</span>';
-            }
+        async function fetchAnalytics() {
+            const response = await fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "readDashboardAnalytics", nama_dosen: user.name })
+            });
+            const data = await response.json();
+            renderPieChart('chartPerforma', data.performa, ['#1e3a8a', '#3b82f6', '#93c5fd'], 'scorePerf');
+            renderPieChart('chartLuaran', data.luaran, ['#059669', '#10b981', '#34d399'], 'scoreLua');
         }
 
-        function renderAll(data) {
-            const ctx = document.getElementById('scoreChart').getContext('2d');
-            let labels = [], values = [], colors = [];
-            let grandTotal = 0;
+        function renderPieChart(canvasId, rawData, colors, scoreId) {
+            const stats = rawData.reduce((acc, curr) => {
+                acc[curr.jenis] = (acc[curr.jenis] || 0) + (parseInt(curr.skor) || 0);
+                return acc;
+            }, {});
+            const labels = Object.keys(stats), values = Object.values(stats);
+            const total = values.reduce((a, b) => a + b, 0);
+            document.getElementById(scoreId).innerText = total + " PTS";
 
-            const perfLegend = document.getElementById('perfLegend');
-            const luaLegend = document.getElementById('luaLegend');
-            perfLegend.innerHTML = "";
-            luaLegend.innerHTML = "";
-
-            // Proses Performa (Biru)
-            if (data["PERFORMA"]) {
-                Object.entries(data["PERFORMA"]).forEach(([jenis, skor]) => {
-                    labels.push(jenis);
-                    values.push(skor);
-                    colors.push('#1e3a8a');
-                    grandTotal += skor;
-                    perfLegend.innerHTML += createLegendItem(jenis, skor);
-                });
-            } else { perfLegend.innerHTML = "<p class='col-span-2 text-[8px] text-gray-300 italic'>Belum ada data performa</p>"; }
-
-            // Proses Luaran (Hijau)
-            if (data["LUARAN"]) {
-                Object.entries(data["LUARAN"]).forEach(([jenis, skor]) => {
-                    labels.push(jenis);
-                    values.push(skor);
-                    colors.push('#10b981');
-                    grandTotal += skor;
-                    luaLegend.innerHTML += createLegendItem(jenis, skor);
-                });
-            } else { luaLegend.innerHTML = "<p class='col-span-2 text-[8px] text-gray-300 italic'>Belum ada data luaran</p>"; }
-
-            document.getElementById('totalScoreText').innerText = grandTotal;
-
-            new Chart(ctx, {
+            new Chart(document.getElementById(canvasId).getContext('2d'), {
                 type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: values,
-                        backgroundColor: colors,
-                        borderWidth: 0,
-                        hoverOffset: 20,
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    cutout: '80%',
-                    plugins: { legend: { display: false } },
-                    maintainAspectRatio: false,
-                    animation: { duration: 2000, easing: 'easeOutQuart' }
-                }
+                data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, borderWidth: 0 }] },
+                options: { cutout: '75%', plugins: { legend: { position: 'right', labels: { font: { size: 8, weight: 'bold' }, boxWidth: 10 } } }, maintainAspectRatio: false }
             });
         }
-
-        function createLegendItem(label, val) {
-            return `
-                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100">
-                    <div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-                    <div class="overflow-hidden">
-                        <p class="text-[7px] font-black text-gray-400 uppercase italic truncate leading-none mb-1">${label}</p>
-                        <p class="text-[10px] font-black text-blue-900 italic leading-none">${val} <small class="text-[7px] opacity-40">pts</small></p>
-                    </div>
-                </div>
-            `;
-        }
-
-        function logout() {
-            if(confirm("Keluar dari sistem?")) {
-                localStorage.clear();
-                window.location.href = 'index.html';
-            }
-        }
-
-        window.onload = fetchDashboardData;
+        window.onload = fetchAnalytics;
+        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
     </script>
 </body>
 </html>
