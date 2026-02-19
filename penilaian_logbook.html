@@ -3,112 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoring Prakerin - PSBC</title>
+    <title>Monitoring Portofolio - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
-        .mhs-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        .mhs-card { transition: all 0.3s ease; }
+        .mhs-card:hover { transform: translateY(-8px); shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
     </style>
 </head>
 <body class="min-h-screen pb-20">
 
-    <nav class="bg-blue-900 text-white p-10 rounded-b-[3.5rem] shadow-2xl mb-8">
-        <div class="container mx-auto max-w-5xl">
-            <h1 class="text-2xl font-black uppercase italic tracking-tighter">Monitoring Portofolio Mahasiswa</h1>
-            <p class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-1 italic">Politeknik Sinar Mas Berau Coal</p>
+    <nav class="bg-blue-900 text-white p-10 rounded-b-[4rem] shadow-2xl mb-10 border-b-8 border-orange-500">
+        <div class="container mx-auto max-w-5xl flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-black uppercase italic tracking-tighter leading-none">Monitoring Portofolio</h1>
+                <p class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-2 italic">Politeknik Sinar Mas Berau Coal</p>
+            </div>
+            <a href="dashboard_dosen.html" class="bg-white/10 hover:bg-white/20 p-4 rounded-3xl transition-all">
+                <i class="fas fa-th-large"></i>
+            </a>
         </div>
     </nav>
 
     <div class="container mx-auto px-6 max-w-5xl">
         
-        <div class="relative mb-8">
+        <div class="relative mb-10">
             <input type="text" id="searchBox" onkeyup="filterMhs()" placeholder="Cari Nama atau NIM Mahasiswa..." 
-                class="w-full p-5 pl-14 rounded-3xl shadow-lg border-none outline-none focus:ring-4 focus:ring-orange-500/20 font-bold text-blue-900">
+                class="w-full p-6 pl-14 rounded-[2.5rem] shadow-xl border-none outline-none focus:ring-4 focus:ring-orange-500/20 font-bold text-blue-900 placeholder:text-blue-900/20 transition-all">
             <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-blue-900/30 text-xl"></i>
         </div>
 
         <div id="loading" class="text-center py-20 text-blue-900/20 font-black uppercase italic animate-pulse">
-            <i class="fas fa-sync fa-spin text-4xl mb-4"></i><br>Sinkronisasi Database Cloud...
+            <i class="fas fa-cloud-download-alt text-5xl mb-4"></i><br>
+            Menyambungkan ke Cloud Database...
         </div>
 
-        <div id="mhsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="mhsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
     </div>
 
-    <div id="modalDetail" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-3xl max-h-[90vh] rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
-            <div class="p-8 bg-blue-900 text-white flex justify-between items-center">
+    <div id="modalDetail" class="fixed inset-0 bg-blue-900/60 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-4xl max-h-[85vh] rounded-[4rem] overflow-hidden flex flex-col shadow-2xl border-b-[15px] border-orange-500">
+            <div class="p-10 bg-blue-900 text-white flex justify-between items-center">
                 <div>
-                    <h2 id="modalNama" class="font-black uppercase italic text-lg leading-none">Nama Mahasiswa</h2>
-                    <p id="modalNim" class="text-orange-400 text-[10px] font-bold uppercase tracking-widest mt-1">NIM: --</p>
+                    <h2 id="modalNama" class="font-black uppercase italic text-2xl tracking-tighter leading-none">Nama Mahasiswa</h2>
+                    <p id="modalNim" class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.4em] mt-2 italic">NIM: --</p>
                 </div>
-                <button onclick="closeModal()" class="text-white/50 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
+                <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition-all">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div id="modalContent" class="overflow-y-auto p-8 space-y-4 bg-gray-50 flex-1">
+            <div id="modalContent" class="overflow-y-auto p-10 space-y-6 bg-gray-50 flex-1 scrollbar-hide">
                 </div>
         </div>
     </div>
 
     <script>
+        // MASUKKAN URL WEB APP ANDA
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxawq_0J0vfivnxCKy8uEnmUICkh5lHScbw5A7EjPil3IjZ_XYLoFx9Cd5pJyGJW8J8/exec';
-        let allData = [];
+        const user = JSON.parse(localStorage.getItem('current_user'));
+        let allLogs = [];
 
-        async function loadAllLogbooks() {
+        // Proteksi Akses Dosen
+        if (!user || user.role.toUpperCase() !== "DOSEN") {
+            alert("Akses ditolak. Halaman ini hanya untuk Dosen.");
+            window.location.href = 'index.html';
+        }
+
+        async function loadMasterData() {
             try {
-                // Catatan: Karena di Apps Script 'readLogbook' butuh data.nim, 
-                // Kita perlu membuat action baru 'readAll' atau memodifikasi sedikit.
-                // Untuk sementara, kita pakai cara memanggil semua baris (Dosen punya akses).
+                // Mengambil semua data logbook (nim: "ALL")
                 const response = await fetch(scriptURL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "readLogbook", nim: "ALL" }) 
+                    body: JSON.stringify({ action: "readLogbook", nim: "ALL" })
                 });
-                // Note: Kamu perlu menambah logika 'if(data.nim === "ALL")' di Code.gs agar mengembalikan semua data.
-                
-                allData = await response.json();
-                renderMhsCards(allData);
+                allLogs = await response.json();
+                renderMhsList(allLogs);
             } catch (e) {
-                document.getElementById('loading').innerText = "Gagal memuat database.";
+                document.getElementById('loading').innerHTML = "<i class='fas fa-exclamation-triangle text-red-500 mb-2'></i><br>Koneksi Database Gagal";
             }
         }
 
-        function renderMhsCards(data) {
+        function renderMhsList(data) {
             document.getElementById('loading').classList.add('hidden');
             const container = document.getElementById('mhsContainer');
             
-            // Kelompokkan data berdasarkan NIM
-            const grouped = data.reduce((acc, curr) => {
-                if (!acc[curr.nim]) acc[curr.nim] = { nama: curr.nama, nim: curr.nim, logs: [], totalSkor: 0 };
+            // Pengelompokan data per NIM
+            const groupedMhs = data.reduce((acc, curr) => {
+                if (!acc[curr.nim]) {
+                    acc[curr.nim] = { 
+                        nama: curr.nama, 
+                        nim: curr.nim, 
+                        logs: [], 
+                        totalSkor: 0,
+                        lastUpdate: curr.tanggal 
+                    };
+                }
                 acc[curr.nim].logs.push(curr);
-                // Hitung skor numerik
-                const s = parseInt(curr.skor) || 0;
-                acc[curr.nim].totalSkor += s;
+                acc[curr.nim].totalSkor += (parseInt(curr.skor) || 0);
                 return acc;
             }, {});
 
             container.innerHTML = "";
-            Object.values(grouped).forEach(mhs => {
+            Object.values(groupedMhs).forEach(mhs => {
                 container.innerHTML += `
-                    <div class="mhs-card bg-white p-8 rounded-[3rem] shadow-xl border-b-[10px] border-blue-900 mhs-item">
+                    <div class="mhs-card bg-white p-8 rounded-[3.5rem] shadow-xl border-b-[10px] border-blue-900 flex flex-col mhs-item">
                         <div class="flex justify-between items-start mb-6">
-                            <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-900 shadow-inner text-2xl">
-                                <i class="fas fa-user-circle"></i>
+                            <div class="w-16 h-16 bg-blue-50 rounded-[1.5rem] flex items-center justify-center text-blue-900 shadow-inner text-2xl">
+                                <i class="fas fa-user-graduate"></i>
                             </div>
                             <div class="text-right">
-                                <p class="text-[8px] font-black text-gray-400 uppercase italic leading-none">Skor Akhir</p>
-                                <p class="text-2xl font-black text-blue-900">${mhs.totalSkor}</p>
+                                <p class="text-[8px] font-black text-gray-300 uppercase italic leading-none mb-1">Total Poin</p>
+                                <p class="text-3xl font-black text-blue-900 tracking-tighter italic">${mhs.totalSkor}</p>
                             </div>
                         </div>
-                        <h3 class="font-black text-blue-900 uppercase text-sm leading-tight mhs-name">${mhs.nama}</h3>
+                        
+                        <h3 class="font-black text-blue-900 uppercase text-sm leading-tight mhs-name italic">${mhs.nama}</h3>
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1 mhs-nim">NIM: ${mhs.nim}</p>
                         
-                        <div class="mt-6 pt-6 border-t border-gray-100 grid grid-cols-2 gap-3">
-                            <button onclick="openPortfolio('${mhs.nim}')" class="bg-blue-900 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-lg active:scale-95 transition-all">
-                                <i class="fas fa-folder-open mr-1"></i> Portofolio
+                        <div class="mt-auto pt-8 flex gap-3">
+                            <button onclick="openPortfolio('${mhs.nim}')" class="flex-1 bg-blue-900 text-white font-black py-4 rounded-[1.2rem] text-[9px] uppercase tracking-[0.2em] shadow-lg active:scale-95 transition-all">
+                                <i class="fas fa-folder-open mr-2"></i> Portofolio
                             </button>
-                            <button onclick="window.open('${mhs.logs[0].geotagging}')" class="bg-green-100 text-green-700 font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest active:scale-95 transition-all">
-                                <i class="fas fa-map-marker-alt mr-1"></i> Lokasi
+                            <button onclick="window.open('${mhs.logs[0].geotagging}')" class="w-14 h-14 bg-orange-100 text-orange-600 rounded-[1.2rem] flex items-center justify-center shadow-lg active:scale-95 transition-all">
+                                <i class="fas fa-map-marked-alt text-lg"></i>
                             </button>
                         </div>
                     </div>
@@ -117,24 +137,33 @@
         }
 
         function openPortfolio(nim) {
-            const mhsData = allData.filter(d => d.nim == nim);
-            document.getElementById('modalNama').innerText = mhsData[0].nama;
+            const dataMhs = allLogs.filter(l => l.nim == nim);
+            document.getElementById('modalNama').innerText = dataMhs[0].nama;
             document.getElementById('modalNim').innerText = "NIM: " + nim;
+            
             const content = document.getElementById('modalContent');
             content.innerHTML = "";
 
-            mhsData.forEach(log => {
+            dataMhs.forEach(log => {
                 content.innerHTML += `
-                    <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-[9px] font-black text-orange-500 uppercase italic">${log.tanggal}</span>
-                            <span class="text-[8px] bg-blue-900 text-white px-3 py-1 rounded-full font-black uppercase tracking-widest">${log.jenis}</span>
+                    <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm relative overflow-hidden">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[9px] font-black text-orange-500 uppercase italic tracking-widest">${log.tanggal}</span>
+                            <span class="text-[8px] bg-blue-100 text-blue-900 px-4 py-1 rounded-full font-black uppercase tracking-widest italic">${log.jenis}</span>
                         </div>
-                        <p class="text-[11px] font-bold text-blue-900 mb-1 uppercase">${log.lokasi}</p>
-                        <p class="text-[11px] text-gray-500 italic leading-relaxed">"${log.deskripsi}"</p>
-                        <div class="mt-4 flex gap-3">
-                            <a href="${log.foto}" target="_blank" class="text-[10px] font-black text-blue-600 underline uppercase italic">Lihat Foto</a>
-                            <a href="${log.geotagging}" target="_blank" class="text-[10px] font-black text-green-600 underline uppercase italic">Cek Lokasi</a>
+                        <h4 class="font-black text-blue-900 text-xs uppercase mb-2 tracking-tight">${log.lokasi}</h4>
+                        <p class="text-[11px] text-gray-500 italic leading-relaxed mb-6">"${log.deskripsi}"</p>
+                        
+                        <div class="flex justify-between items-center pt-5 border-t border-gray-50">
+                            <div class="flex gap-4">
+                                <a href="${log.foto}" target="_blank" class="text-[10px] font-black text-blue-600 underline uppercase italic tracking-widest">
+                                    <i class="fas fa-camera mr-1"></i> Foto
+                                </a>
+                                <a href="${log.geotagging}" target="_blank" class="text-[10px] font-black text-green-600 underline uppercase italic tracking-widest">
+                                    <i class="fas fa-map-marker-alt mr-1"></i> GPS
+                                </a>
+                            </div>
+                            <span class="text-[10px] font-black text-blue-900 bg-gray-100 px-3 py-1 rounded-lg">SKOR: ${log.skor}</span>
                         </div>
                     </div>
                 `;
@@ -146,16 +175,16 @@
         function closeModal() { document.getElementById('modalDetail').classList.add('hidden'); }
 
         function filterMhs() {
-            const val = document.getElementById('searchBox').value.toUpperCase();
-            const items = document.getElementsByClassName('mhs-item');
-            for(let i=0; i<items.length; i++) {
-                const name = items[i].querySelector('.mhs-name').innerText;
-                const nim = items[i].querySelector('.mhs-nim').innerText;
-                items[i].style.display = (name.toUpperCase().includes(val) || nim.toUpperCase().includes(val)) ? "" : "none";
+            const keyword = document.getElementById('searchBox').value.toUpperCase();
+            const cards = document.getElementsByClassName('mhs-item');
+            for (let i = 0; i < cards.length; i++) {
+                const nama = cards[i].querySelector('.mhs-name').innerText;
+                const nim = cards[i].querySelector('.mhs-nim').innerText;
+                cards[i].style.display = (nama.toUpperCase().includes(keyword) || nim.toUpperCase().includes(keyword)) ? "" : "none";
             }
         }
 
-        window.onload = loadAllLogbooks;
+        window.onload = loadMasterData;
     </script>
 </body>
 </html>
