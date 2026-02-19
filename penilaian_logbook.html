@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penilaian Logbook Mahasiswa - PSBC</title>
+    <title>Penilaian Logbook - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
-        .mhs-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .mhs-card:hover { transform: translateY(-8px); shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .mhs-card { transition: all 0.3s ease; }
+        .mhs-card:hover { transform: translateY(-8px); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -28,7 +28,7 @@
     <nav class="bg-blue-900 text-white p-10 rounded-b-[4rem] shadow-2xl mb-10 border-b-8 border-orange-500">
         <div class="container mx-auto max-w-5xl flex justify-between items-center">
             <div class="flex items-center gap-5">
-                <a href="dashboard_dosen.html" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-orange-500 rounded-2xl transition-all shadow-lg">
+                <a href="dashboard_dosen.html" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-orange-500 rounded-2xl transition-all shadow-lg text-lg">
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <div>
@@ -36,7 +36,7 @@
                     <p class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-2 italic">Monitoring Portofolio Mahasiswa</p>
                 </div>
             </div>
-            <button onclick="location.reload()" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-2xl transition-all">
+            <button onclick="loadMasterData()" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-2xl transition-all">
                 <i class="fas fa-sync-alt"></i>
             </button>
         </div>
@@ -50,11 +50,11 @@
                 <h2 id="statTotalMhs" class="text-4xl font-black text-blue-900 italic">0</h2>
             </div>
             <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-orange-500">
-                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Total Laporan</p>
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Total Laporan Masuk</p>
                 <h2 id="statTotalLog" class="text-4xl font-black text-orange-500 italic">0</h2>
             </div>
             <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-green-600">
-                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Avg Score / Mhs</p>
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Rata-rata Skor</p>
                 <h2 id="statAvgScore" class="text-4xl font-black text-green-600 italic">0</h2>
             </div>
         </div>
@@ -66,20 +66,20 @@
         </div>
 
         <div id="loading" class="text-center py-20 text-blue-900/20 font-black uppercase italic animate-pulse">
-            <i class="fas fa-satellite-dish text-5xl mb-4"></i><br>Sinkronisasi Database Portofolio...
+            <i class="fas fa-sync fa-spin text-5xl mb-4"></i><br>Sinkronisasi Database Cloud...
         </div>
 
         <div id="mhsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </div>
 
-    <div id="modalDetail" class="fixed inset-0 bg-blue-900/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div id="modalDetail" class="fixed inset-0 bg-blue-900/60 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-4xl max-h-[85vh] rounded-[4rem] overflow-hidden flex flex-col shadow-2xl border-b-[15px] border-orange-500">
             <div class="p-10 bg-blue-900 text-white flex justify-between items-center">
                 <div>
                     <h2 id="modalNama" class="font-black uppercase italic text-2xl tracking-tighter leading-none">Nama Mahasiswa</h2>
                     <p id="modalNim" class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.4em] mt-2 italic">NIM: --</p>
                 </div>
-                <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition-all text-xl">
+                <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition-all">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -89,15 +89,17 @@
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyc3PTfnMe84nRGpCthhPMtYcKnqNFf6PBt8yfFNeJfEl3rSG0iMhkhl_8XgeUhskVB/exec";
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyc3PTfnMe84nRGpCthhPMtYcKnqNFf6PBt8yfFNeJfEl3rSG0iMhkhl_8XgeUhskVB/exec';
         let allLogs = [];
 
         async function loadMasterData() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('mhsContainer').innerHTML = "";
+            
             try {
-                // Mengambil semua data logbook (nim: "ALL")
                 const response = await fetch(scriptURL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "readLogbook", nim: "ALL" })
+                    body: JSON.stringify({ action: "readAllLogbook" }) // Sesuai dengan Apps Script kamu
                 });
                 allLogs = await response.json();
                 renderUI(allLogs);
@@ -112,7 +114,9 @@
             
             // Pengelompokan data per NIM
             const groupedMhs = data.reduce((acc, curr) => {
-                if (!acc[curr.nim]) acc[curr.nim] = { nama: curr.nama, nim: curr.nim, logs: [], totalSkor: 0 };
+                if (!acc[curr.nim]) {
+                    acc[curr.nim] = { nama: curr.nama, nim: curr.nim, logs: [], totalSkor: 0 };
+                }
                 acc[curr.nim].logs.push(curr);
                 acc[curr.nim].totalSkor += (parseInt(curr.skor) || 0);
                 return acc;
@@ -120,7 +124,7 @@
 
             const mhsArray = Object.values(groupedMhs);
             
-            // Update Statistik Atas
+            // Statistik Rekap
             document.getElementById('statTotalMhs').innerText = mhsArray.length;
             document.getElementById('statTotalLog').innerText = data.length;
             const avg = mhsArray.length > 0 ? (data.reduce((s, c) => s + (parseInt(c.skor)||0), 0) / mhsArray.length).toFixed(0) : 0;
@@ -129,25 +133,22 @@
             container.innerHTML = "";
             mhsArray.forEach(mhs => {
                 container.innerHTML += `
-                    <div class="mhs-card bg-white p-8 rounded-[3.5rem] shadow-xl border-b-[10px] border-blue-900 mhs-item flex flex-col">
+                    <div class="bg-white p-8 rounded-[3.5rem] shadow-xl border-b-[10px] border-blue-900 mhs-item mhs-card flex flex-col">
                         <div class="flex justify-between items-start mb-6">
                             <div class="w-16 h-16 bg-blue-50 rounded-[1.5rem] flex items-center justify-center text-blue-900 text-2xl shadow-inner italic">
                                 <i class="fas fa-user-graduate"></i>
                             </div>
                             <div class="text-right">
-                                <p class="text-[8px] font-black text-gray-300 uppercase italic leading-none mb-1">Skor Akhir</p>
+                                <p class="text-[8px] font-black text-gray-300 uppercase italic mb-1">Skor Akhir</p>
                                 <p class="text-3xl font-black text-blue-900 tracking-tighter italic">${mhs.totalSkor}</p>
                             </div>
                         </div>
                         <h3 class="font-black text-blue-900 uppercase text-sm leading-tight mhs-name italic">${mhs.nama}</h3>
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1 mhs-nim">NIM: ${mhs.nim}</p>
-                        
-                        <div class="mt-8 pt-8 border-t border-gray-100 flex gap-3">
-                            <button onclick="openPortfolio('${mhs.nim}')" class="flex-1 bg-blue-900 text-white font-black py-4 rounded-[1.2rem] text-[9px] uppercase tracking-widest shadow-lg active:scale-95 transition-all italic">
-                                <i class="fas fa-folder-open mr-2"></i> Portofolio
-                            </button>
-                            <button onclick="window.open('${mhs.logs[0].geotagging}')" class="w-14 h-14 bg-orange-100 text-orange-600 rounded-[1.2rem] flex items-center justify-center shadow-lg active:scale-95 transition-all">
-                                <i class="fas fa-map-marked-alt text-lg"></i>
+                        <div class="mt-8 pt-6 border-t border-gray-100 flex gap-2">
+                            <button onclick="openPortfolio('${mhs.nim}')" class="flex-1 bg-blue-900 text-white font-black py-4 rounded-2xl text-[9px] uppercase tracking-widest shadow-lg active:scale-95 transition-all italic">Portofolio</button>
+                            <button onclick="window.open('${mhs.logs[0].geotagging}')" class="w-12 h-12 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-all">
+                                <i class="fas fa-map-marker-alt"></i>
                             </button>
                         </div>
                     </div>
@@ -161,41 +162,38 @@
             document.getElementById('modalNim').innerText = "NIM: " + nim;
             const content = document.getElementById('modalContent');
             content.innerHTML = "";
-
+            
             dataMhs.forEach(log => {
                 content.innerHTML += `
-                    <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm relative">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[9px] font-black text-orange-500 uppercase italic tracking-widest">${log.tanggal}</span>
-                            <span class="text-[8px] bg-blue-900 text-white px-4 py-1 rounded-full font-black uppercase italic tracking-widest italic">${log.jenis}</span>
+                    <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[9px] font-black text-orange-500 uppercase italic">${log.tanggal}</span>
+                            <span class="text-[8px] bg-blue-900 text-white px-3 py-1 rounded-full font-black uppercase tracking-widest">${log.jenis}</span>
                         </div>
-                        <h4 class="font-black text-blue-900 text-xs uppercase mb-2 tracking-tight">${log.lokasi}</h4>
-                        <p class="text-[11px] text-gray-500 italic leading-relaxed mb-6">"${log.deskripsi}"</p>
-                        <div class="flex justify-between items-center pt-5 border-t border-gray-100">
-                            <div class="flex gap-4">
-                                <a href="${log.foto}" target="_blank" class="text-[10px] font-black text-blue-600 underline uppercase italic tracking-tighter">Lihat Foto</a>
-                                <a href="${log.geotagging}" target="_blank" class="text-[10px] font-black text-green-600 underline uppercase italic tracking-tighter">Lokasi GPS</a>
-                            </div>
-                            <span class="text-[10px] font-black text-blue-900 bg-gray-100 px-3 py-1 rounded-lg italic">POIN: ${log.skor}</span>
+                        <p class="text-[11px] font-bold text-blue-900 mb-1 uppercase italic">${log.lokasi}</p>
+                        <p class="text-[11px] text-gray-500 italic leading-relaxed">"${log.deskripsi}"</p>
+                        <div class="mt-4 flex gap-3 border-t pt-4">
+                            <a href="${log.foto}" target="_blank" class="text-[9px] font-black text-blue-600 underline uppercase italic">Foto Bukti</a>
+                            <a href="${log.geotagging}" target="_blank" class="text-[9px] font-black text-green-600 underline uppercase italic">Lokasi GPS</a>
                         </div>
                     </div>
                 `;
             });
-
             document.getElementById('modalDetail').classList.remove('hidden');
         }
 
+        function closeModal() { document.getElementById('modalDetail').classList.add('hidden'); }
+        
         function filterMhs() {
-            const kw = document.getElementById('searchBox').value.toUpperCase();
-            const cards = document.getElementsByClassName('mhs-item');
-            for (let i = 0; i < cards.length; i++) {
-                const name = cards[i].querySelector('.mhs-name').innerText;
-                const nim = cards[i].querySelector('.mhs-nim').innerText;
-                cards[i].style.display = (name.toUpperCase().includes(kw) || nim.toUpperCase().includes(kw)) ? "" : "none";
+            const val = document.getElementById('searchBox').value.toUpperCase();
+            const items = document.getElementsByClassName('mhs-item');
+            for(let i=0; i<items.length; i++) {
+                const name = items[i].querySelector('.mhs-name').innerText;
+                const nim = items[i].querySelector('.mhs-nim').innerText;
+                items[i].style.display = (name.toUpperCase().includes(val) || nim.toUpperCase().includes(val)) ? "" : "none";
             }
         }
 
-        function closeModal() { document.getElementById('modalDetail').classList.add('hidden'); }
         window.onload = loadMasterData;
     </script>
 </body>
