@@ -9,28 +9,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
     </style>
 </head>
-<body class="bg-gray-100 p-4 md:p-8">
+<body class="p-4 md:p-8">
     <div class="container mx-auto max-w-6xl">
-        
         <div class="flex justify-between items-center mb-8">
             <a href="dashboard_dosen.html" class="text-blue-900 font-black flex items-center gap-2 hover:scale-105 transition-all text-xs uppercase italic tracking-widest">
                 <i class="fas fa-arrow-left"></i> Dashboard
             </a>
             <div class="text-right">
-                <h1 class="text-xl font-black text-blue-900 uppercase tracking-tighter italic">KPI Performance</h1>
-                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Politeknik Sinar Mas Berau Coal</p>
+                <h1 class="text-xl font-black text-blue-900 uppercase tracking-tighter italic leading-none">KPI Performance</h1>
+                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">Politeknik Sinar Mas Berau Coal</p>
             </div>
         </div>
 
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-gradient-to-br from-blue-900 to-blue-700 p-10 rounded-[3.5rem] shadow-2xl text-white text-center flex flex-col justify-center border-b-[10px] border-orange-500">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-center md:text-left">
+            <div class="bg-gradient-to-br from-blue-900 to-blue-700 p-10 rounded-[3.5rem] shadow-2xl text-white border-b-[10px] border-orange-500">
                 <p class="text-[10px] font-black uppercase opacity-60 tracking-[0.4em] mb-2">Total Skor Anda</p>
                 <h2 id="totalSkorDisplay" class="text-7xl font-black italic tracking-tighter">0</h2>
-                <div id="statusSync" class="mt-4 text-[8px] font-bold opacity-30 uppercase tracking-widest italic">Syncing with Cloud Drive...</div>
+                <div id="statusSync" class="mt-4 text-[8px] font-bold opacity-30 uppercase tracking-widest italic">Cloud Status: Syncing...</div>
             </div>
             <div class="md:col-span-2 bg-white p-8 rounded-[3.5rem] shadow-xl border border-gray-100 flex items-center">
                 <div class="h-44 w-full"><canvas id="miniChart"></canvas></div>
@@ -38,54 +36,31 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <form id="kpiForm" class="bg-white p-8 rounded-[3.5rem] shadow-2xl border-t-[10px] border-orange-500 space-y-5 h-fit">
-                <h3 id="formTitle" class="font-black text-blue-900 uppercase text-xs italic mb-4"><i class="fas fa-edit mr-2 text-orange-500"></i> Input Aktivitas</h3>
-                <input type="hidden" id="editRowId">
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4 italic">Tanggal</label>
-                        <input type="date" id="tgl" class="w-full mt-1 p-5 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-900 font-bold text-sm" required>
-                    </div>
-
-                    <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4 italic">Kategori KPI</label>
-                        <select id="kat" class="w-full mt-1 p-5 bg-gray-50 border-none rounded-2xl font-black text-blue-900 outline-none focus:ring-2 focus:ring-blue-900 text-sm italic">
-                            <option value="Pengajaran">Pengajaran (+5 Poin)</option>
-                            <option value="Penelitian">Penelitian (+5 Poin)</option>
-                            <option value="Pengabdian">Pengabdian (+5 Poin)</option>
-                            <option value="Administrasi">Administrasi (+5 Poin)</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4 italic">Deskripsi Tugas</label>
-                        <textarea id="desk" rows="3" class="w-full mt-1 p-5 bg-gray-50 border-none rounded-2xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-900" placeholder="Detail aktivitas..." required></textarea>
-                    </div>
-                </div>
-
-                <div class="pt-4">
-                    <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-6 rounded-[2rem] shadow-xl active:scale-95 transition-all text-xs tracking-widest uppercase">Sinkronisasi ke Cloud</button>
-                    <button type="button" id="btnBatal" class="hidden w-full bg-gray-200 text-gray-400 font-black py-4 rounded-2xl uppercase text-[10px] mt-2">Batal Edit</button>
-                </div>
+            <form id="kpiForm" class="bg-white p-8 rounded-[3.5rem] shadow-2xl border-t-[10px] border-orange-500 space-y-4">
+                <h3 class="font-black text-blue-900 uppercase text-xs italic mb-4">Input Aktivitas</h3>
+                <input type="date" id="tgl" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-sm" required>
+                <select id="kat" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-black text-blue-900 text-sm italic">
+                    <option value="Pengajaran">Pengajaran (+10 Poin)</option>
+                    <option value="Penelitian">Penelitian (+10 Poin)</option>
+                    <option value="Pengabdian">Pengabdian (+10 Poin)</option>
+                    <option value="Administrasi">Administrasi (+10 Poin)</option>
+                </select>
+                <textarea id="desk" rows="3" class="w-full p-4 bg-gray-50 rounded-2xl text-sm font-semibold outline-none" placeholder="Detail aktivitas..." required></textarea>
+                <button type="submit" id="btnSubmit" class="w-full bg-blue-900 text-white font-black py-5 rounded-[2rem] shadow-xl active:scale-95 transition-all text-xs tracking-widest uppercase mt-2">SIMPAN KE CLOUD</button>
             </form>
 
             <div class="lg:col-span-2 bg-white rounded-[3.5rem] shadow-2xl border border-gray-100 overflow-hidden">
-                <div class="p-8 bg-gray-50 border-b border-gray-100 flex justify-between items-center px-12">
-                    <h3 class="font-black text-blue-900 uppercase text-xs italic tracking-widest">Riwayat Aktivitas Cloud</h3>
-                    <i class="fas fa-cloud-upload-alt text-blue-200 text-xl"></i>
+                <div class="p-8 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                    <h3 class="font-black text-blue-900 uppercase text-xs italic tracking-widest">Riwayat Aktivitas</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead class="bg-white text-[10px] text-gray-400 uppercase font-black">
-                            <tr>
-                                <th class="p-8 pl-12">Tanggal</th>
-                                <th class="p-8">Aktivitas</th>
-                                <th class="p-8 text-center pr-12">Aksi</th>
-                            </tr>
+                            <tr><th class="p-8 pl-12">Tanggal</th><th class="p-8">Aktivitas</th><th class="p-8 text-center pr-12">Aksi</th></tr>
                         </thead>
                         <tbody id="histBody" class="divide-y divide-gray-100 text-[11px]">
-                            </tbody>
+                            <tr><td colspan="3" class="p-10 text-center text-gray-300 italic">Menghubungkan...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -93,116 +68,67 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbw6If85bPNrj5tPyJRFk2AljfyC3xpEzxpuZ2GLwhA0gAPVy67NZ7yKQkR_H_M043qNWA/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwX6f_wS9gNm-yBZvk7rwtAPmIOzmWMOkcm9OJy34tsHRorSudB2nfn4tz3P5QujpXQuw/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
-        if (!user) window.location.href = 'index.html';
-
         let chartInstance = null;
 
-        // FUNGSI 1: LOAD DATA DARI CLOUD
         async function fetchCloudData() {
-            const body = document.getElementById('histBody');
-            body.innerHTML = '<tr><td colspan="3" class="p-20 text-center font-black text-blue-200 animate-pulse uppercase text-[10px] tracking-[0.4em] italic">Menghubungkan ke Database...</td></tr>';
-            
             try {
-                const response = await fetch(scriptURL, {
+                const res = await fetch(scriptURL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "readKPI", id: user.id, type: "KPI" })
+                    body: JSON.stringify({ action: "readKPI", id: user.id })
                 });
-                const data = await response.json();
+                const data = await res.json();
                 renderUI(data);
                 document.getElementById('statusSync').innerText = "Cloud Connection: Active";
-            } catch (e) {
-                body.innerHTML = '<tr><td colspan="3" class="p-20 text-center text-red-400 font-black uppercase text-[10px]">Gagal Menghubungkan ke Cloud!</td></tr>';
-            }
+            } catch (e) { document.getElementById('statusSync').innerText = "Cloud Connection: Error"; }
         }
 
-        // FUNGSI 2: RENDER UI & CHART
         function renderUI(data) {
             const body = document.getElementById('histBody');
-            const scoreLabel = document.getElementById('totalSkorDisplay');
             body.innerHTML = "";
-            
             let scoreTotal = 0;
             const stats = { Pengajaran: 0, Penelitian: 0, Pengabdian: 0, Administrasi: 0 };
 
-            data.forEach((item) => {
-                scoreTotal += 5;
+            data.forEach(item => {
+                scoreTotal += 10;
                 if(stats[item.kategori] !== undefined) stats[item.kategori]++;
-                
-                body.insertAdjacentHTML('beforeend', `
-                    <tr class="hover:bg-blue-50/50 transition-all">
+                body.innerHTML += `
+                    <tr>
                         <td class="p-8 pl-12 font-bold text-gray-400 italic">${item.tanggal}</td>
-                        <td class="p-8">
-                            <span class="font-black text-blue-900 uppercase tracking-tighter text-sm">${item.kategori}</span><br>
-                            <span class="text-gray-500 font-medium italic">"${item.deskripsi}"</span>
-                        </td>
-                        <td class="p-8 text-center pr-12">
-                            <div class="flex justify-center gap-3">
-                                <button onclick="prepEdit('${item.rowId}', '${item.tanggal}', '${item.kategori}', '${item.deskripsi.replace(/'/g, "\\'")}')" class="w-11 h-11 flex items-center justify-center bg-blue-50 text-blue-500 rounded-2xl hover:bg-blue-900 hover:text-white transition-all shadow-sm"><i class="fas fa-pen text-xs"></i></button>
-                                <button onclick="hapusCloud('${item.rowId}')" class="w-11 h-11 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all shadow-sm"><i class="fas fa-trash-alt text-xs"></i></button>
-                            </div>
-                        </td>
-                    </tr>`);
+                        <td class="p-8"><span class="font-black text-blue-900 uppercase text-sm italic">${item.kategori}</span><br><span class="text-gray-400 italic">"${item.deskripsi}"</span></td>
+                        <td class="p-8 text-center pr-12"><button onclick="hapus('${item.rowId}')" class="w-10 h-10 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt"></i></button></td>
+                    </tr>`;
             });
-
-            scoreLabel.innerText = scoreTotal;
+            document.getElementById('totalSkorDisplay').innerText = scoreTotal;
             updateChart(stats);
         }
 
-        // FUNGSI 3: KIRIM/UPDATE
-        document.getElementById('kpiForm').addEventListener('submit', async function(e) {
+        document.getElementById('kpiForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
-            const editId = document.getElementById('editRowId').value;
-            const isEdit = !!editId;
-
-            btn.innerText = "SINKRONISASI...";
             btn.disabled = true;
-
+            btn.innerText = "SINKRONISASI...";
+            
             const payload = {
-                action: isEdit ? "UPDATE" : "INSERT",
-                type: "KPI",
-                id: user.id,
-                nama: user.name,
+                action: "INSERT", type: "KPI", id: user.id, nama: user.name,
                 kategori: document.getElementById('kat').value,
                 deskripsi: document.getElementById('desk').value,
                 tanggal: document.getElementById('tgl').value,
-                rowId: isEdit ? editId : "ID-KPI-" + Date.now(),
-                poin: 5
+                poin: 10, rowId: "KPI-" + Date.now()
             };
 
-            try {
-                await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
-                location.reload(); 
-            } catch (e) {
-                alert("Gagal Sinkronisasi!");
-                btn.innerText = "Sinkronisasi ke Cloud";
-                btn.disabled = false;
-            }
+            await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
+            location.reload();
         });
 
-        // FUNGSI 4: HAPUS
-        async function hapusCloud(rowId) {
-            if(confirm("Hapus data dari Database Cloud secara permanen?")) {
+        async function hapus(rowId) {
+            if(confirm("Hapus data ini?")) {
                 await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "DELETE", type: "KPI", rowId: rowId }) });
                 fetchCloudData();
             }
         }
 
-        // FUNGSI 5: PREP EDIT
-        window.prepEdit = function(rowId, tgl, kat, desk) {
-            document.getElementById('formTitle').innerText = "Edit Aktivitas";
-            document.getElementById('editRowId').value = rowId;
-            document.getElementById('kat').value = kat;
-            document.getElementById('desk').value = desk;
-            document.getElementById('tgl').value = tgl;
-            document.getElementById('btnSubmit').innerText = "Update Cloud";
-            document.getElementById('btnBatal').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        // CHART JS
         function updateChart(s) {
             if (chartInstance) chartInstance.destroy();
             const ctx = document.getElementById('miniChart').getContext('2d');
@@ -210,29 +136,12 @@
                 type: 'bar',
                 data: {
                     labels: Object.keys(s),
-                    datasets: [{
-                        data: Object.values(s),
-                        backgroundColor: '#1e3a8a',
-                        borderRadius: 12,
-                        barThickness: 40
-                    }]
+                    datasets: [{ data: Object.values(s), backgroundColor: '#1e3a8a', borderRadius: 10 }]
                 },
-                options: {
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { 
-                        y: { beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1 } },
-                        x: { grid: { display: false } }
-                    }
-                }
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
-
-        document.getElementById('btnBatal').onclick = () => location.reload();
         window.onload = fetchCloudData;
     </script>
 </body>
 </html>
-
-
-
