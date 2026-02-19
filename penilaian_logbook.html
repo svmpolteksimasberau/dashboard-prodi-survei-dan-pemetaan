@@ -3,69 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoring Portofolio - PSBC</title>
+    <title>Penilaian Logbook Mahasiswa - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
         .mhs-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .mhs-card:hover { transform: translateY(-8px); }
+        .mhs-card:hover { transform: translateY(-8px); shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="min-h-screen pb-20">
 
     <script>
+        // PROTEKSI AKSES DOSEN
         const user = JSON.parse(localStorage.getItem('current_user'));
         if (!user || user.role.toUpperCase() !== "DOSEN") {
-            alert("Akses Ditolak! Halaman ini hanya untuk Dosen Pembimbing.");
+            alert("Akses Ditolak! Sesi ini hanya untuk Dosen Pembimbing.");
             window.location.href = 'index.html';
         }
     </script>
 
     <nav class="bg-blue-900 text-white p-10 rounded-b-[4rem] shadow-2xl mb-10 border-b-8 border-orange-500">
         <div class="container mx-auto max-w-5xl flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-black uppercase italic tracking-tighter leading-none">Monitoring Portofolio</h1>
-                <p class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-2 italic">Politeknik Sinar Mas Berau Coal</p>
+            <div class="flex items-center gap-5">
+                <a href="dashboard_dosen.html" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-orange-500 rounded-2xl transition-all shadow-lg">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-black uppercase italic tracking-tighter leading-none">Penilaian Logbook</h1>
+                    <p class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-2 italic">Monitoring Portofolio Mahasiswa</p>
+                </div>
             </div>
-            <div class="flex gap-4">
-                <button onclick="location.reload()" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-2xl transition-all shadow-lg">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-                <button onclick="logout()" class="w-12 h-12 flex items-center justify-center bg-red-500/20 hover:bg-red-500 rounded-2xl transition-all shadow-lg">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
+            <button onclick="location.reload()" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-2xl transition-all">
+                <i class="fas fa-sync-alt"></i>
+            </button>
         </div>
     </nav>
 
     <div class="container mx-auto px-6 max-w-5xl">
         
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-blue-900">
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Total Mahasiswa</p>
+                <h2 id="statTotalMhs" class="text-4xl font-black text-blue-900 italic">0</h2>
+            </div>
+            <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-orange-500">
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Total Laporan</p>
+                <h2 id="statTotalLog" class="text-4xl font-black text-orange-500 italic">0</h2>
+            </div>
+            <div class="bg-white p-8 rounded-[3rem] shadow-xl border-l-[12px] border-green-600">
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 italic">Avg Score / Mhs</p>
+                <h2 id="statAvgScore" class="text-4xl font-black text-green-600 italic">0</h2>
+            </div>
+        </div>
+
         <div class="relative mb-10">
             <input type="text" id="searchBox" onkeyup="filterMhs()" placeholder="Cari Nama atau NIM Mahasiswa..." 
-                class="w-full p-6 pl-14 rounded-[2.5rem] shadow-xl border-none outline-none focus:ring-4 focus:ring-orange-500/20 font-bold text-blue-900 placeholder:text-blue-900/20 transition-all">
+                class="w-full p-6 pl-14 rounded-[2.5rem] shadow-xl border-none outline-none focus:ring-4 focus:ring-orange-500/20 font-bold text-blue-900 transition-all">
             <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-blue-900/30 text-xl"></i>
         </div>
 
         <div id="loading" class="text-center py-20 text-blue-900/20 font-black uppercase italic animate-pulse">
-            <i class="fas fa-cloud-download-alt text-5xl mb-4"></i><br>
-            Menyinkronkan Portofolio Digital...
+            <i class="fas fa-satellite-dish text-5xl mb-4"></i><br>Sinkronisasi Database Portofolio...
         </div>
 
-        <div id="mhsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            </div>
+        <div id="mhsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </div>
 
-    <div id="modalDetail" class="fixed inset-0 bg-blue-900/60 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div id="modalDetail" class="fixed inset-0 bg-blue-900/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-4xl max-h-[85vh] rounded-[4rem] overflow-hidden flex flex-col shadow-2xl border-b-[15px] border-orange-500">
             <div class="p-10 bg-blue-900 text-white flex justify-between items-center">
                 <div>
                     <h2 id="modalNama" class="font-black uppercase italic text-2xl tracking-tighter leading-none">Nama Mahasiswa</h2>
                     <p id="modalNim" class="text-orange-400 text-[10px] font-bold uppercase tracking-[0.4em] mt-2 italic">NIM: --</p>
                 </div>
-                <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition-all">
+                <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition-all text-xl">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -75,59 +89,60 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyc3PTfnMe84nRGpCthhPMtYcKnqNFf6PBt8yfFNeJfEl3rSG0iMhkhl_8XgeUhskVB/exec';
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyc3PTfnMe84nRGpCthhPMtYcKnqNFf6PBt8yfFNeJfEl3rSG0iMhkhl_8XgeUhskVB/exec";
         let allLogs = [];
 
         async function loadMasterData() {
             try {
+                // Mengambil semua data logbook (nim: "ALL")
                 const response = await fetch(scriptURL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: "readAllLogbook" })
+                    body: JSON.stringify({ action: "readLogbook", nim: "ALL" })
                 });
                 allLogs = await response.json();
-                renderMhsList(allLogs);
+                renderUI(allLogs);
             } catch (e) {
                 document.getElementById('loading').innerHTML = "<i class='fas fa-exclamation-triangle text-red-500 mb-2'></i><br>Database Gagal Dimuat";
             }
         }
 
-        function renderMhsList(data) {
+        function renderUI(data) {
             document.getElementById('loading').classList.add('hidden');
             const container = document.getElementById('mhsContainer');
             
-            // Pengelompokan data logbook berdasarkan NIM
+            // Pengelompokan data per NIM
             const groupedMhs = data.reduce((acc, curr) => {
-                if (!acc[curr.nim]) {
-                    acc[curr.nim] = { 
-                        nama: curr.nama, 
-                        nim: curr.nim, 
-                        logs: [], 
-                        totalSkor: 0
-                    };
-                }
+                if (!acc[curr.nim]) acc[curr.nim] = { nama: curr.nama, nim: curr.nim, logs: [], totalSkor: 0 };
                 acc[curr.nim].logs.push(curr);
                 acc[curr.nim].totalSkor += (parseInt(curr.skor) || 0);
                 return acc;
             }, {});
 
+            const mhsArray = Object.values(groupedMhs);
+            
+            // Update Statistik Atas
+            document.getElementById('statTotalMhs').innerText = mhsArray.length;
+            document.getElementById('statTotalLog').innerText = data.length;
+            const avg = mhsArray.length > 0 ? (data.reduce((s, c) => s + (parseInt(c.skor)||0), 0) / mhsArray.length).toFixed(0) : 0;
+            document.getElementById('statAvgScore').innerText = avg;
+
             container.innerHTML = "";
-            Object.values(groupedMhs).forEach(mhs => {
+            mhsArray.forEach(mhs => {
                 container.innerHTML += `
-                    <div class="mhs-card bg-white p-8 rounded-[3.5rem] shadow-xl border-b-[10px] border-blue-900 flex flex-col mhs-item">
+                    <div class="mhs-card bg-white p-8 rounded-[3.5rem] shadow-xl border-b-[10px] border-blue-900 mhs-item flex flex-col">
                         <div class="flex justify-between items-start mb-6">
-                            <div class="w-16 h-16 bg-blue-50 rounded-[1.5rem] flex items-center justify-center text-blue-900 shadow-inner text-2xl italic">
+                            <div class="w-16 h-16 bg-blue-50 rounded-[1.5rem] flex items-center justify-center text-blue-900 text-2xl shadow-inner italic">
                                 <i class="fas fa-user-graduate"></i>
                             </div>
                             <div class="text-right">
-                                <p class="text-[8px] font-black text-gray-300 uppercase italic leading-none mb-1">Total Poin</p>
+                                <p class="text-[8px] font-black text-gray-300 uppercase italic leading-none mb-1">Skor Akhir</p>
                                 <p class="text-3xl font-black text-blue-900 tracking-tighter italic">${mhs.totalSkor}</p>
                             </div>
                         </div>
-                        
                         <h3 class="font-black text-blue-900 uppercase text-sm leading-tight mhs-name italic">${mhs.nama}</h3>
                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1 mhs-nim">NIM: ${mhs.nim}</p>
                         
-                        <div class="mt-8 pt-6 border-t border-gray-100 flex gap-3">
+                        <div class="mt-8 pt-8 border-t border-gray-100 flex gap-3">
                             <button onclick="openPortfolio('${mhs.nim}')" class="flex-1 bg-blue-900 text-white font-black py-4 rounded-[1.2rem] text-[9px] uppercase tracking-widest shadow-lg active:scale-95 transition-all italic">
                                 <i class="fas fa-folder-open mr-2"></i> Portofolio
                             </button>
@@ -144,7 +159,6 @@
             const dataMhs = allLogs.filter(l => l.nim == nim);
             document.getElementById('modalNama').innerText = dataMhs[0].nama;
             document.getElementById('modalNim').innerText = "NIM: " + nim;
-            
             const content = document.getElementById('modalContent');
             content.innerHTML = "";
 
@@ -153,19 +167,14 @@
                     <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm relative">
                         <div class="flex justify-between items-start mb-4">
                             <span class="text-[9px] font-black text-orange-500 uppercase italic tracking-widest">${log.tanggal}</span>
-                            <span class="text-[8px] bg-blue-100 text-blue-900 px-4 py-1 rounded-full font-black uppercase tracking-widest italic">${log.jenis}</span>
+                            <span class="text-[8px] bg-blue-900 text-white px-4 py-1 rounded-full font-black uppercase italic tracking-widest italic">${log.jenis}</span>
                         </div>
                         <h4 class="font-black text-blue-900 text-xs uppercase mb-2 tracking-tight">${log.lokasi}</h4>
                         <p class="text-[11px] text-gray-500 italic leading-relaxed mb-6">"${log.deskripsi}"</p>
-                        
-                        <div class="flex justify-between items-center pt-5 border-t border-gray-50">
+                        <div class="flex justify-between items-center pt-5 border-t border-gray-100">
                             <div class="flex gap-4">
-                                <a href="${log.foto}" target="_blank" class="text-[10px] font-black text-blue-600 underline uppercase italic tracking-tighter">
-                                    <i class="fas fa-camera mr-1"></i> Foto Bukti
-                                </a>
-                                <a href="${log.geotagging}" target="_blank" class="text-[10px] font-black text-green-600 underline uppercase italic tracking-tighter">
-                                    <i class="fas fa-map-marker-alt mr-1"></i> Lokasi GPS
-                                </a>
+                                <a href="${log.foto}" target="_blank" class="text-[10px] font-black text-blue-600 underline uppercase italic tracking-tighter">Lihat Foto</a>
+                                <a href="${log.geotagging}" target="_blank" class="text-[10px] font-black text-green-600 underline uppercase italic tracking-tighter">Lokasi GPS</a>
                             </div>
                             <span class="text-[10px] font-black text-blue-900 bg-gray-100 px-3 py-1 rounded-lg italic">POIN: ${log.skor}</span>
                         </div>
@@ -187,8 +196,6 @@
         }
 
         function closeModal() { document.getElementById('modalDetail').classList.add('hidden'); }
-        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-
         window.onload = loadMasterData;
     </script>
 </body>
