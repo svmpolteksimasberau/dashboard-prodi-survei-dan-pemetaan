@@ -1,7 +1,7 @@
 {
-  "name": "SVM-HUB PORTAL",
+  "name": "SVM-HUB PORTAL SVM",
   "short_name": "SVM-HUB",
-  "description": "Portal Akademik Survei dan Pemetaan",
+  "description": "Integrated System of Survey and Mapping Portal",
   "start_url": "index.html",
   "display": "standalone",
   "orientation": "portrait",
@@ -17,12 +17,6 @@
     {
       "src": "https://cdn-icons-png.flaticon.com/512/854/854929.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/854/854929.png",
-      "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     }
