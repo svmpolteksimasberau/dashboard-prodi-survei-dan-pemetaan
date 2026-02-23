@@ -8,13 +8,21 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SVM-HUB">
     
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/854/854929.png">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/854/854929.png">
     
     <link rel="manifest" href="manifest.json">
-    
     <meta name="theme-color" content="#0f172a">
-    <title>SURVEI DAN PEMETAAN</title>
+    
+    <title>SVM-HUB | SURVEI DAN PEMETAAN</title>
+    
+    <script>
+        const userSession = JSON.parse(localStorage.getItem('current_user'));
+        if (userSession) {
+            window.location.href = (userSession.role === "DOSEN") ? 'dashboard_dosen.html' : 'logbook.html';
+        }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -144,6 +152,7 @@
     </script>
 </body>
 </html>
+
 
 
 
