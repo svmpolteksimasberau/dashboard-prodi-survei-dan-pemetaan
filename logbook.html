@@ -14,14 +14,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     
-    <title>SVM-HUB | SURVEI DAN PEMETAAN</title>
-    
-    <script>
-        const userSession = JSON.parse(localStorage.getItem('current_user'));
-        if (userSession) {
-            window.location.href = (userSession.role === "DOSEN") ? 'dashboard_dosen.html' : 'logbook.html';
-        }
-    </script>
+    <title>Logbook Prakerin</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -273,6 +266,7 @@
     </script>
 </body>
 </html>
+
 
 
 
