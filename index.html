@@ -8,14 +8,26 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SVM-HUB">
 
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/854/854929.png">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/854/854929.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     
-    <title>SURVEI DAN PEMETAAN</title>
+    <title>PORTAL SVM | SURVEI DAN PEMETAAN</title>
     
+    <script>
+        const userSession = JSON.parse(localStorage.getItem('current_user'));
+        if (userSession && userSession.role) {
+            const role = userSession.role.toUpperCase();
+            if (role === "DOSEN") {
+                window.location.replace('dashboard_dosen.html');
+            } else if (role === "MAHASISWA") {
+                window.location.replace('logbook.html');
+            }
+        }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -33,8 +45,8 @@
     <div class="glass-effect w-full max-w-sm p-8 rounded-[3rem] shadow-2xl text-center border-b-[12px] border-orange-600 relative z-10 transition-all">
         
         <div class="mb-8">
-            <div class="w-20 h-20 bg-white rounded-[2rem] mx-auto flex items-center justify-center shadow-xl mb-4 transform -rotate-3 border-b-4 border-orange-500 relative">
-                <i class="fas fa-compass text-blue-900 text-4xl"></i>
+            <div class="w-24 h-24 bg-white rounded-[2rem] mx-auto flex items-center justify-center shadow-xl mb-4 transform -rotate-3 border-b-4 border-orange-500 relative overflow-hidden">
+                <img src="logo.png" alt="Logo SVM" class="w-full h-full object-cover">
                 <div class="absolute top-1 right-1 w-4 h-4 bg-orange-500 rounded-full border-2 border-white"></div>
             </div>
             
@@ -85,7 +97,6 @@
     </div>
 
     <script>
-        // MASUKKAN URL WEB APP GOOGLE SCRIPT ANDA DI SINI
         const scriptURL = "https://script.google.com/macros/s/AKfycbxfNzd0wWXutaAVJD2uxmhCgAAMI9UPf2JymP8dppbq8XAOTcNny8wRuOiEunq8_EgO7g/exec";
 
         async function handleLogin() {
@@ -120,10 +131,11 @@
                         role: result.role 
                     }));
 
-                    if(result.role === "DOSEN") {
-                        window.location.href = 'dashboard_dosen.html';
+                    const role = result.role.toUpperCase();
+                    if(role === "DOSEN") {
+                        window.location.replace('dashboard_dosen.html');
                     } else {
-                        window.location.href = 'logbook.html';
+                        window.location.replace('logbook.html');
                     }
                 } else {
                     alert("⚠️ Gagal: " + result.msg);
@@ -131,7 +143,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert("❌ Gagal terhubung ke Cloud ISMAP.");
+                alert("❌ Gagal terhubung ke Cloud SVM-HUB.");
                 resetButton(btn);
             }
         }
@@ -145,16 +157,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
