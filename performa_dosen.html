@@ -105,18 +105,16 @@
             } catch (e) { document.getElementById('statusSync').innerText = "Cloud Connection: Error"; }
         }
 
-        // Fungsi baru untuk mencegah tanggal mundur di tampilan
+        // Perbaikan Fungsi: Menggunakan string splitting agar tidak dipengaruhi timezone
         function formatTanggalTampil(tglString) {
             if(!tglString) return "-";
-            const d = new Date(tglString);
-            // Jika d valid, ambil komponen tanggal secara manual agar tidak terpengaruh Timezone
-            if (!isNaN(d.getTime())) {
-                const day = String(d.getDate()).padStart(2, '0');
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const year = d.getFullYear();
-                return `${day}/${month}/${year}`;
+            // Jika format ISO dari database (YYYY-MM-DDTHH:mm:ss...)
+            const tglHanya = tglString.split('T')[0]; 
+            const bagian = tglHanya.split('-');
+            if(bagian.length === 3) {
+                return `${bagian[2]}/${bagian[1]}/${bagian[0]}`;
             }
-            return tglString; // Balikin apa adanya jika format aneh
+            return tglString; 
         }
 
         function renderUI(data) {
@@ -132,7 +130,6 @@
                 scoreTotal += poinAktivitas;
                 if(stats[item.kategori] !== undefined) stats[item.kategori]++;
                 
-                // Gunakan formatTanggalTampil agar tidak backdate
                 const tglTampil = formatTanggalTampil(item.tanggal);
                 
                 body.innerHTML += `
@@ -155,13 +152,11 @@
             const item = kpiDataCached.find(d => d.rowId === rowId);
             if(item) {
                 document.getElementById('rowIdInput').value = item.rowId;
-                const d = new Date(item.tanggal);
-                if (!isNaN(d.getTime())) {
-                    const yyyy = d.getFullYear();
-                    const mm = String(d.getMonth() + 1).padStart(2, '0');
-                    const dd = String(d.getDate()).padStart(2, '0');
-                    document.getElementById('tgl').value = `${yyyy}-${mm}-${dd}`;
-                }
+                
+                // Perbaikan: Ambil string tanggal murni tanpa lewat objek Date agar tidak backdate
+                const tglMurni = item.tanggal.split('T')[0];
+                document.getElementById('tgl').value = tglMurni;
+
                 document.getElementById('kat').value = item.kategori;
                 document.getElementById('desk').value = item.deskripsi;
                 document.getElementById('formTitle').innerText = "Edit Aktivitas";
