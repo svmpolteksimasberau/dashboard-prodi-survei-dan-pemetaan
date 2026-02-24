@@ -13,30 +13,30 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #0f172a; margin: 0; }
-        .brand-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); min-height: 160px; }
+        .brand-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); min-height: 180px; }
         .compact-card { background: white; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
     </style>
 </head>
 <body class="min-h-screen pb-10">
 
-    <header class="brand-gradient text-white pt-6 pb-20 px-6 rounded-b-[2.5rem] shadow-xl relative">
+    <header class="brand-gradient text-white pt-8 pb-20 px-6 rounded-b-[2.5rem] shadow-xl relative">
         <div class="container mx-auto max-w-5xl">
-            <div class="flex justify-between items-start">
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md p-0.5 overflow-hidden">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-5">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-2xl p-0.5 overflow-hidden border border-white/20">
                         <img src="logo.png" alt="Logo" class="w-full h-full object-contain">
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
                             <h1 class="text-2xl font-black tracking-tighter leading-none italic uppercase">PORTAL SVM</h1>
-                            <span class="text-[10px] bg-blue-600 px-2 py-0.5 rounded-md font-bold text-blue-100 uppercase tracking-widest">PSBC</span>
+                            <span class="text-[10px] bg-blue-600 px-2 py-0.5 rounded-md font-bold text-blue-100 uppercase tracking-widest text-center">PSBC</span>
                         </div>
                         <p class="text-[9px] font-bold text-blue-300 mt-1 uppercase tracking-wider opacity-80 italic">Integrated System of Survey and Mapping</p>
                         <p id="dosenGreet" class="text-sm font-semibold text-white mt-2 italic">Memuat nama...</p>
                     </div>
                 </div>
-                <button onclick="logout()" class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center active:scale-90">
-                    <i class="fas fa-power-off text-sm text-red-400"></i>
+                <button onclick="logout()" class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10 active:scale-90 transition-transform">
+                    <i class="fas fa-power-off text-lg text-red-400"></i>
                 </button>
             </div>
         </div>
@@ -44,31 +44,31 @@
 
     <main class="container mx-auto max-w-5xl px-4 -mt-10 relative z-10 space-y-4">
         <section class="grid grid-cols-3 gap-3">
-            <a href="penilaian_logbook.html" class="compact-card p-4 flex flex-col items-center text-center">
+            <a href="penilaian_logbook.html" class="compact-card p-4 flex flex-col items-center text-center hover:bg-gray-50 transition-colors">
                 <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-tasks text-xl"></i></div>
                 <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter">Monitoring Prakerin</span>
             </a>
-            <a href="performa_dosen.html" class="compact-card p-4 flex flex-col items-center text-center">
+            <a href="performa_dosen.html" class="compact-card p-4 flex flex-col items-center text-center hover:bg-gray-50 transition-colors">
                 <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-chart-pie text-xl"></i></div>
                 <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter">Performance</span>
             </a>
-            <a href="luaran_dosen.html" class="compact-card p-4 flex flex-col items-center text-center">
+            <a href="luaran_dosen.html" class="compact-card p-4 flex flex-col items-center text-center hover:bg-gray-50 transition-colors">
                 <div class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-award text-xl"></i></div>
                 <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter">Research Outputs</span>
             </a>
         </section>
 
-        <section class="compact-card p-5 flex justify-between items-center border-l-[6px] border-orange-500">
+        <section class="compact-card p-6 flex justify-between items-center border-l-[6px] border-orange-500">
             <div>
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Total Accumulated Points</p>
                 <div class="flex items-baseline gap-2 mt-2">
-                    <h2 id="totalScoreText" class="text-4xl font-black text-slate-800 italic leading-none">0</h2>
+                    <h2 id="totalScoreText" class="text-5xl font-black text-slate-800 italic leading-none">0</h2>
                     <span class="text-xs font-bold text-slate-400 uppercase">Points</span>
                 </div>
             </div>
-            <div class="bg-green-50 px-3 py-1.5 rounded-full flex items-center gap-2">
+            <div class="bg-green-50 px-4 py-2 rounded-full flex items-center gap-2">
                 <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                <span class="text-[9px] font-black text-green-700 uppercase">Sync Active</span>
+                <span class="text-[10px] font-black text-green-700 uppercase tracking-tighter text-center">Sync Active</span>
             </div>
         </section>
     </main>
@@ -76,6 +76,7 @@
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxZt7H5vtk9f8cSGetLxBo9v1JngqYK0u-QMRyB9ajACf5MFdsd_4U4gePE2yF6kkt_LQ/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
+        
         if(!user || user.role.toUpperCase() !== "DOSEN") window.location.replace('index.html');
         document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
         
@@ -87,6 +88,7 @@
                 document.getElementById('totalScoreText').innerText = total;
             } catch (e) { console.error(e); }
         }
+
         function logout() { if(confirm("Keluar dari Sistem?")) { localStorage.clear(); window.location.replace('index.html'); } }
         window.onload = fetchDashboardData;
     </script>
