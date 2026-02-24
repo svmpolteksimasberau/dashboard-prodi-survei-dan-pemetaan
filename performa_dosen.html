@@ -105,18 +105,17 @@
             } catch (e) { document.getElementById('statusSync').innerText = "Cloud Connection: Error"; }
         }
 
-        // PERBAIKAN: Fungsi ini murni memanipulasi STRING, tidak pakai objek Date agar tidak kena timezone
+        // PERBAIKAN UTAMA: Menggunakan getUTC untuk menghindari backdate akibat Timezone
         function formatTanggalTampil(tglString) {
             if(!tglString) return "-";
-            // Jika database kirim "2026-02-24T00:00:00.000Z" atau "2026-02-24"
-            const tglHanya = tglString.split('T')[0]; 
-            const bagian = tglHanya.split('-');
-            if(bagian.length === 3) {
-                // Return format DD/MM/YYYY
-                return `${bagian[2]}/${bagian[1]}/${bagian[0]}`;
+            const d = new Date(tglString);
+            if (!isNaN(d.getTime())) {
+                const day = String(d.getUTCDate()).padStart(2, '0');
+                const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+                const year = d.getUTCFullYear();
+                return `${day}/${month}/${year}`;
             }
-            // Fallback jika formatnya ternyata DD/MM/YYYY dari awal
-            return tglString; 
+            return tglString;
         }
 
         function renderUI(data) {
@@ -155,9 +154,14 @@
             if(item) {
                 document.getElementById('rowIdInput').value = item.rowId;
                 
-                // PERBAIKAN: Ambil string murni YYYY-MM-DD langsung tanpa objek Date
-                const tglMurni = item.tanggal.split('T')[0]; 
-                document.getElementById('tgl').value = tglMurni;
+                // PERBAIKAN EDIT: Menggunakan UTC agar tanggal input tidak mundur
+                const d = new Date(item.tanggal);
+                if (!isNaN(d.getTime())) {
+                    const yyyy = d.getUTCFullYear();
+                    const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+                    const dd = String(d.getUTCDate()).padStart(2, '0');
+                    document.getElementById('tgl').value = `${yyyy}-${mm}-${dd}`;
+                }
 
                 document.getElementById('kat').value = item.kategori;
                 document.getElementById('desk').value = item.deskripsi;
