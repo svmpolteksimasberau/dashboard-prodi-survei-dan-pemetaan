@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <meta name="theme-color" content="#0f172a">
@@ -27,8 +25,8 @@
     <div class="glass-effect w-full max-w-sm p-8 rounded-[3rem] shadow-2xl text-center border-b-[12px] border-orange-600 relative z-10">
         
         <div class="mb-8">
-            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl mx-auto mb-4 overflow-hidden border border-white/10">
-                <img src="logo.png" alt="Logo SVM" class="w-full h-full object-cover scale-110">
+            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl mx-auto mb-4 overflow-hidden border border-white/20">
+                <img src="logo.png" alt="Logo SVM" class="w-full h-full object-contain scale-[1.55]">
             </div>
             
             <h1 class="font-black text-3xl text-blue-900 tracking-tighter leading-none italic uppercase">PORTAL SVM</h1>
@@ -86,17 +84,8 @@
                 const result = await response.json();
 
                 if(result.success) {
-                    localStorage.setItem('current_user', JSON.stringify({ 
-                        id: result.id, 
-                        name: result.nama, 
-                        role: result.role 
-                    }));
-                    
-                    if(result.role.toUpperCase() === "DOSEN") {
-                        window.location.replace('dashboard_dosen.html');
-                    } else {
-                        window.location.replace('logbook.html');
-                    }
+                    localStorage.setItem('current_user', JSON.stringify({ id: result.id, name: result.nama, role: result.role }));
+                    window.location.replace(result.role.toUpperCase() === "DOSEN" ? 'dashboard_dosen.html' : 'logbook.html');
                 } else {
                     alert("⚠️ Akses Ditolak: " + result.msg);
                     resetButton(btn);
