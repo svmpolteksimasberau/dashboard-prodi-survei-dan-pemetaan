@@ -13,7 +13,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #0f172a; margin: 0; }
-        .brand-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); min-height: 180px; }
+        .brand-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); min-height: 160px; }
         .compact-card { background: white; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
     </style>
 </head>
@@ -22,21 +22,21 @@
     <header class="brand-gradient text-white pt-8 pb-20 px-6 rounded-b-[2.5rem] shadow-xl relative">
         <div class="container mx-auto max-w-5xl">
             <div class="flex justify-between items-center">
-                <div class="flex items-center gap-5">
-                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-2xl p-0.5 overflow-hidden border border-white/20">
-                        <img src="logo.png" alt="Logo" class="w-full h-full object-contain">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border border-white/10">
+                        <img src="logo.png" alt="Logo" class="w-full h-full object-cover scale-105">
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
                             <h1 class="text-2xl font-black tracking-tighter leading-none italic uppercase">PORTAL SVM</h1>
-                            <span class="text-[10px] bg-blue-600 px-2 py-0.5 rounded-md font-bold text-blue-100 uppercase tracking-widest text-center">PSBC</span>
+                            <span class="text-[10px] bg-blue-600 px-2 py-0.5 rounded-md font-bold text-blue-100 uppercase tracking-widest text-center text-white">PSBC</span>
                         </div>
                         <p class="text-[9px] font-bold text-blue-300 mt-1 uppercase tracking-wider opacity-80 italic">Integrated System of Survey and Mapping</p>
                         <p id="dosenGreet" class="text-sm font-semibold text-white mt-2 italic">Memuat nama...</p>
                     </div>
                 </div>
-                <button onclick="logout()" class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10 active:scale-90 transition-transform">
-                    <i class="fas fa-power-off text-lg text-red-400"></i>
+                <button onclick="logout()" class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center border border-white/10 active:scale-90 transition-transform">
+                    <i class="fas fa-power-off text-base text-red-400"></i>
                 </button>
             </div>
         </div>
@@ -68,7 +68,7 @@
             </div>
             <div class="bg-green-50 px-4 py-2 rounded-full flex items-center gap-2">
                 <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                <span class="text-[10px] font-black text-green-700 uppercase tracking-tighter text-center">Sync Active</span>
+                <span class="text-[10px] font-black text-green-700 uppercase tracking-tighter">Sync Active</span>
             </div>
         </section>
     </main>
@@ -77,19 +77,39 @@
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxZt7H5vtk9f8cSGetLxBo9v1JngqYK0u-QMRyB9ajACf5MFdsd_4U4gePE2yF6kkt_LQ/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
         
-        if(!user || user.role.toUpperCase() !== "DOSEN") window.location.replace('index.html');
-        document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
+        // Proteksi Halaman
+        if(!user || user.role.toUpperCase() !== "DOSEN") {
+            window.location.replace('index.html');
+        } else {
+            document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
+        }
         
+        // Ambil Data Analytics
         async function fetchDashboardData() {
             try {
-                const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "readDashboardAnalytics", nama_dosen: user.name }) });
+                const response = await fetch(scriptURL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ action: "readDashboardAnalytics", nama_dosen: user.name }) 
+                });
                 const data = await response.json();
-                const total = [...data.performa, ...data.luaran].reduce((a, b) => a + (Number(b.skor) || 0), 0);
+                
+                // Gabungkan skor dari performa dan luaran
+                const combinedData = [...(data.performa || []), ...(data.luaran || [])];
+                const total = combinedData.reduce((a, b) => a + (Number(b.skor) || 0), 0);
+                
                 document.getElementById('totalScoreText').innerText = total;
-            } catch (e) { console.error(e); }
+            } catch (e) { 
+                console.error("Error fetching data:", e); 
+            }
         }
 
-        function logout() { if(confirm("Keluar dari Sistem?")) { localStorage.clear(); window.location.replace('index.html'); } }
+        function logout() { 
+            if(confirm("Keluar dari Sistem?")) { 
+                localStorage.clear(); 
+                window.location.replace('index.html'); 
+            } 
+        }
+
         window.onload = fetchDashboardData;
     </script>
 </body>
