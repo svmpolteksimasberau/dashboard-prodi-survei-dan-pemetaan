@@ -3,14 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="SVM-HUB">
-    
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
-    
     <meta name="theme-color" content="#1e3a8a">
     <title>SVM Dashboard - PSBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,19 +13,8 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #0f172a; margin: 0; padding: 0; }
-        
-        .brand-gradient { 
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); 
-            min-height: 160px;
-        }
-        
-        .compact-card { 
-            background: white; 
-            border-radius: 1.25rem; 
-            border: 1px solid #e2e8f0; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
+        .brand-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); min-height: 160px; }
+        .compact-card { background: white; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
         .menu-btn:active { transform: scale(0.95); transition: 0.1s; }
     </style>
 </head>
@@ -41,22 +24,19 @@
         <div class="container mx-auto max-w-5xl">
             <div class="flex justify-between items-start">
                 <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 flex items-center justify-center overflow-hidden">
+                    <div class="w-14 h-14">
                         <img src="logo.png" alt="Logo" class="w-full h-full object-contain">
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <h1 class="text-2xl font-black tracking-tighter leading-none italic">PORTAL SVM</h1>
+                            <h1 class="text-2xl font-black tracking-tighter leading-none italic uppercase">PORTAL SVM</h1>
                             <span class="text-[10px] bg-blue-600 px-2 py-0.5 rounded-md font-bold text-blue-100 uppercase tracking-widest">PSBC</span>
                         </div>
-                        <p class="text-[9px] font-bold text-blue-300 mt-1 uppercase tracking-wider opacity-80">
-                            Integrated System of Survey and Mapping
-                        </p>
+                        <p class="text-[9px] font-bold text-blue-300 mt-1 uppercase tracking-wider opacity-80 italic">Integrated System of Survey and Mapping</p>
                         <p id="dosenGreet" class="text-sm font-semibold text-white mt-2 italic">Memuat nama...</p>
                     </div>
                 </div>
-                
-                <button onclick="logout()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-red-500/40 flex items-center justify-center border border-white/10">
+                <button onclick="logout()" class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10 active:scale-90">
                     <i class="fas fa-power-off text-sm text-red-400"></i>
                 </button>
             </div>
@@ -64,24 +44,17 @@
     </header>
 
     <main class="container mx-auto max-w-5xl px-4 -mt-10 relative z-10 space-y-4">
-        
         <section class="grid grid-cols-3 gap-3">
             <a href="penilaian_logbook.html" class="menu-btn compact-card p-4 flex flex-col items-center text-center">
-                <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center mb-2">
-                    <i class="fas fa-tasks text-xl"></i>
-                </div>
+                <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-tasks text-xl"></i></div>
                 <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter">Monitoring Prakerin</span>
             </a>
             <a href="performa_dosen.html" class="menu-btn compact-card p-4 flex flex-col items-center text-center">
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-2">
-                    <i class="fas fa-chart-pie text-xl"></i>
-                </div>
+                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-chart-pie text-xl"></i></div>
                 <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter">Performance</span>
             </a>
             <a href="luaran_dosen.html" class="menu-btn compact-card p-4 flex flex-col items-center text-center">
-                <div class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-2">
-                    <i class="fas fa-award text-xl"></i>
-                </div>
+                <div class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-award text-xl"></i></div>
                 <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter">Research Outputs</span>
             </a>
         </section>
@@ -101,99 +74,43 @@
         </section>
 
         <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="compact-card p-5 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-[10px] font-black text-blue-900 uppercase italic">Performance Analysis</h3>
-                    <span id="scorePerfText" class="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">0 PTS</span>
-                </div>
-                <div class="h-[180px] w-full">
-                    <canvas id="chartPerforma"></canvas>
-                </div>
-            </div>
-
-            <div class="compact-card p-5 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-[10px] font-black text-green-700 uppercase italic">Research Outputs Analysis</h3>
-                    <span id="scoreLuaText" class="text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded">0 PTS</span>
-                </div>
-                <div class="h-[180px] w-full">
-                    <canvas id="chartLuaran"></canvas>
-                </div>
-            </div>
+            <div class="compact-card p-5"><canvas id="chartPerforma"></canvas></div>
+            <div class="compact-card p-5"><canvas id="chartLuaran"></canvas></div>
         </section>
-
     </main>
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxZt7H5vtk9f8cSGetLxBo9v1JngqYK0u-QMRyB9ajACf5MFdsd_4U4gePE2yF6kkt_LQ/exec';
-        
-        const rawData = localStorage.getItem('current_user');
-        const user = rawData ? JSON.parse(rawData) : null;
+        const user = JSON.parse(localStorage.getItem('current_user'));
 
-        if(!user || !user.role || user.role.toUpperCase() !== "DOSEN") {
-            window.location.replace('index.html');
-        } else {
-            document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
-        }
+        if(!user || user.role.toUpperCase() !== "DOSEN") window.location.replace('index.html');
+        document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
 
         async function fetchDashboardData() {
             try {
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "readDashboardAnalytics", nama_dosen: user.name })
-                });
+                const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "readDashboardAnalytics", nama_dosen: user.name }) });
                 const data = await response.json();
-
-                renderMiniChart('chartPerforma', data.performa, '#1e3a8a', 'scorePerfText');
-                renderMiniChart('chartLuaran', data.luaran, '#15803d', 'scoreLuaText');
-
-                const totalPerf = data.performa.reduce((a, b) => a + (Number(b.skor) || 0), 0);
-                const totalLua = data.luaran.reduce((a, b) => a + (Number(b.skor) || 0), 0);
-                document.getElementById('totalScoreText').innerText = totalPerf + totalLua;
-            } catch (e) {
-                console.error(e);
-            }
+                renderMiniChart('chartPerforma', data.performa, '#1e3a8a');
+                renderMiniChart('chartLuaran', data.luaran, '#15803d');
+                const total = [...data.performa, ...data.luaran].reduce((a, b) => a + (Number(b.skor) || 0), 0);
+                document.getElementById('totalScoreText').innerText = total;
+            } catch (e) { console.error(e); }
         }
 
-        function renderMiniChart(canvasId, rawData, color, scoreId) {
+        function renderMiniChart(canvasId, rawData, color) {
             const stats = rawData.reduce((acc, curr) => {
                 const key = curr.jenis || "Lain";
                 acc[key] = (acc[key] || 0) + (Number(curr.skor) || 0);
                 return acc;
             }, {});
-
-            const labels = Object.keys(stats);
-            const values = Object.values(stats);
-            document.getElementById(scoreId).innerText = values.reduce((a, b) => a + b, 0) + " PTS";
-
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            let chartExist = Chart.getChart(canvasId);
-            if (chartExist) chartExist.destroy();
-
-            new Chart(ctx, {
+            new Chart(document.getElementById(canvasId), {
                 type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{ data: values, backgroundColor: color, borderRadius: 5, barThickness: 15 }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { display: false },
-                        y: { ticks: { font: { size: 9, weight: 'bold' } }, grid: { display: false } }
-                    }
-                }
+                data: { labels: Object.keys(stats), datasets: [{ data: Object.values(stats), backgroundColor: color, borderRadius: 5 }] },
+                options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
 
-        function logout() {
-            if(confirm("Keluar dari Sistem?")) {
-                localStorage.clear();
-                window.location.replace('index.html');
-            }
-        }
+        function logout() { if(confirm("Keluar dari Sistem?")) { localStorage.clear(); window.location.replace('index.html'); } }
         window.onload = fetchDashboardData;
     </script>
 </body>
