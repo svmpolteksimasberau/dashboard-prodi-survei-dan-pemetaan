@@ -8,8 +8,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SVM-HUB">
 
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/854/854929.png">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/854/854929.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -56,7 +56,9 @@
                     <option value="Pengajaran">Pengajaran (+10 Poin)</option>
                     <option value="Penelitian">Penelitian (+10 Poin)</option>
                     <option value="Pengabdian">Pengabdian (+10 Poin)</option>
-                    <option value="Administrasi">Administrasi (+10 Poin)</option>
+                    <option value="Pelatihan">Pelatihan (+10 Poin)</option>
+                    <option value="Project">Project (+10 Poin)</option>
+                    <option value="Administrasi">Administrasi (+5 Poin)</option>
                 </select>
                 <textarea id="desk" rows="3" class="w-full p-4 bg-gray-50 rounded-2xl text-sm font-semibold outline-none" placeholder="Detail aktivitas..." required></textarea>
                 
@@ -85,11 +87,10 @@
     </div>
 
     <script>
-        // PASTIKAN URL SUDAH SESUAI
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxZt7H5vtk9f8cSGetLxBo9v1JngqYK0u-QMRyB9ajACf5MFdsd_4U4gePE2yF6kkt_LQ/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
         let chartInstance = null;
-        let kpiDataCached = []; // Untuk simpan data sementara
+        let kpiDataCached = [];
 
         async function fetchCloudData() {
             try {
@@ -98,7 +99,7 @@
                     body: JSON.stringify({ action: "readKPI", id: user.id })
                 });
                 const data = await res.json();
-                kpiDataCached = data; // Cache data untuk fungsi edit
+                kpiDataCached = data;
                 renderUI(data);
                 document.getElementById('statusSync').innerText = "Cloud Connection: Active";
             } catch (e) { document.getElementById('statusSync').innerText = "Cloud Connection: Error"; }
@@ -108,15 +109,20 @@
             const body = document.getElementById('histBody');
             body.innerHTML = "";
             let scoreTotal = 0;
-            const stats = { Pengajaran: 0, Penelitian: 0, Pengabdian: 0, Administrasi: 0 };
+            const stats = { Pengajaran: 0, Penelitian: 0, Pengabdian: 0, Pelatihan: 0, Project: 0, Administrasi: 0 };
 
             data.forEach(item => {
-                scoreTotal += 10;
+                // Perhitungan Skor Dinamis
+                let poinAktivitas = 10;
+                if(item.kategori === "Administrasi") poinAktivitas = 5;
+                
+                scoreTotal += poinAktivitas;
                 if(stats[item.kategori] !== undefined) stats[item.kategori]++;
+                
                 body.innerHTML += `
                     <tr>
                         <td class="p-8 pl-12 font-bold text-gray-400 italic">${item.tanggal}</td>
-                        <td class="p-8"><span class="font-black text-blue-900 uppercase text-sm italic">${item.kategori}</span><br><span class="text-gray-400 italic">"${item.deskripsi}"</span></td>
+                        <td class="p-8"><span class="font-black text-blue-900 uppercase text-sm italic">${item.kategori} (+${poinAktivitas})</span><br><span class="text-gray-400 italic">"${item.deskripsi}"</span></td>
                         <td class="p-8 text-center pr-12">
                             <div class="flex gap-2 justify-center">
                                 <button onclick="siapEdit('${item.rowId}')" class="w-9 h-9 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><i class="fas fa-edit text-[10px]"></i></button>
@@ -129,25 +135,29 @@
             updateChart(stats);
         }
 
-        // FUNGSI AKTIFKAN MODE EDIT
         function siapEdit(rowId) {
             const item = kpiDataCached.find(d => d.rowId === rowId);
             if(item) {
                 document.getElementById('rowIdInput').value = item.rowId;
-                document.getElementById('tgl').value = item.tanggal;
+                // Fix tanggal agar tidak bergeser saat masuk ke input date
+                const datePart = item.tanggal.split('/'); 
+                if(datePart.length === 3) {
+                    const formattedDate = `${datePart[2]}-${datePart[1].padStart(2, '0')}-${datePart[0].padStart(2, '0')}`;
+                    document.getElementById('tgl').value = formattedDate;
+                } else {
+                    document.getElementById('tgl').value = item.tanggal;
+                }
+                
                 document.getElementById('kat').value = item.kategori;
                 document.getElementById('desk').value = item.deskripsi;
-                
                 document.getElementById('formTitle').innerText = "Edit Aktivitas";
                 document.getElementById('btnSubmit').innerText = "UPDATE KE CLOUD";
                 document.getElementById('btnSubmit').classList.replace('bg-blue-900', 'bg-orange-600');
                 document.getElementById('btnBatal').classList.remove('hidden');
-                
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        // RESET FORM KE MODE INPUT BIASA
         function resetForm() {
             document.getElementById('kpiForm').reset();
             document.getElementById('rowIdInput').value = "";
@@ -161,19 +171,23 @@
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
             const editId = document.getElementById('rowIdInput').value;
+            const kat = document.getElementById('kat').value;
             
             btn.disabled = true;
             btn.innerText = "SINKRONISASI...";
             
-            // Pilih action berdasarkan apakah ada ID yang sedang diedit
             const actionType = editId ? "UPDATE" : "INSERT";
             
+            // Set poin sesuai aturan baru
+            let poinFinal = 10;
+            if(kat === "Administrasi") poinFinal = 5;
+
             const payload = {
                 action: actionType, type: "KPI", id: user.id, nama: user.name,
-                kategori: document.getElementById('kat').value,
+                kategori: kat,
                 deskripsi: document.getElementById('desk').value,
-                tanggal: document.getElementById('tgl').value,
-                poin: 10, 
+                tanggal: document.getElementById('tgl').value, // Mengirim string murni YYYY-MM-DD
+                poin: poinFinal, 
                 rowId: editId ? editId : "KPI-" + Date.now()
             };
 
@@ -199,15 +213,14 @@
                     labels: Object.keys(s),
                     datasets: [{ data: Object.values(s), backgroundColor: '#1e3a8a', borderRadius: 10 }]
                 },
-                options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
             });
         }
         window.onload = fetchCloudData;
     </script>
 </body>
 </html>
-
-
-
-
-
