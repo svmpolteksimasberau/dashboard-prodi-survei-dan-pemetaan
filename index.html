@@ -42,12 +42,11 @@
     <div class="absolute -top-20 -left-20 w-80 h-80 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
     <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
 
-    <div class="glass-effect w-full max-w-sm p-8 rounded-[3rem] shadow-2xl text-center border-b-[12px] border-orange-600 relative z-10 transition-all">
+    <div class="glass-effect w-full max-w-sm p-8 rounded-[3rem] shadow-2xl text-center border-b-[12px] border-orange-600 relative z-10">
         
         <div class="mb-8">
-            <div class="w-28 h-28 mx-auto mb-4 relative">
+            <div class="w-24 h-24 mx-auto mb-4">
                 <img src="logo.png" alt="Logo SVM" class="w-full h-full object-contain">
-                <div class="absolute top-2 right-2 w-4 h-4 bg-orange-500 rounded-full border-2 border-white"></div>
             </div>
             
             <h1 class="font-black text-3xl text-blue-900 tracking-tighter leading-none italic uppercase">PORTAL SVM</h1>
@@ -88,7 +87,7 @@
                 <i class="fas fa-info-circle text-orange-500 mt-0.5 text-sm"></i>
                 <div class="text-[9px] text-orange-900 font-bold leading-relaxed uppercase">
                     Auto-Registration Enabled
-                    <p class="text-orange-700/60 font-medium normal-case mt-0.5 italic leading-tight">Untuk akses pertama kali, masukkan ID Anda dan tentukan PIN baru untuk mendaftar secara otomatis.</p>
+                    <p class="text-orange-700/60 font-medium normal-case mt-0.5 italic leading-tight">Gunakan ID Anda dan tentukan PIN baru untuk mendaftar otomatis.</p>
                 </div>
             </div>
         </div>
@@ -115,34 +114,19 @@
             try {
                 const response = await fetch(scriptURL, {
                     method: 'POST',
-                    body: JSON.stringify({ 
-                        action: "login", 
-                        id_user: idUser, 
-                        password: pass 
-                    })
+                    body: JSON.stringify({ action: "login", id_user: idUser, password: pass })
                 });
-                
                 const result = await response.json();
 
                 if(result.success) {
-                    localStorage.setItem('current_user', JSON.stringify({ 
-                        id: result.id, 
-                        name: result.nama,
-                        role: result.role 
-                    }));
-
+                    localStorage.setItem('current_user', JSON.stringify({ id: result.id, name: result.nama, role: result.role }));
                     const role = result.role.toUpperCase();
-                    if(role === "DOSEN") {
-                        window.location.replace('dashboard_dosen.html');
-                    } else {
-                        window.location.replace('logbook.html');
-                    }
+                    window.location.replace(role === "DOSEN" ? 'dashboard_dosen.html' : 'logbook.html');
                 } else {
                     alert("⚠️ Gagal: " + result.msg);
                     resetButton(btn);
                 }
             } catch (err) {
-                console.error(err);
                 alert("❌ Gagal terhubung ke Cloud SVM-HUB.");
                 resetButton(btn);
             }
@@ -152,7 +136,6 @@
             btn.disabled = false;
             btn.innerHTML = 'Login System <i class="fas fa-chevron-right text-[10px]"></i>';
         }
-
         document.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
     </script>
 </body>
