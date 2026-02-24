@@ -87,7 +87,7 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxZt7H5vtk9f8cSGetLxBo9v1JngqYK0u-QMRyB9ajACf5MFdsd_4U4gePE2yF6kkt_LQ/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwi3EPxJ7duapP_A3y4nsCN9X6PwNNTOj6YyE-l-qUDm61yZ0Q1DSTULQ1j1g4YvPnITw/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
         let chartInstance = null;
         let kpiDataCached = [];
@@ -105,15 +105,18 @@
             } catch (e) { document.getElementById('statusSync').innerText = "Cloud Connection: Error"; }
         }
 
-        // PERBAIKAN UTAMA: Menggunakan getUTC untuk menghindari backdate akibat Timezone
+        // PERBAIKAN: Mengambil string tanggal secara murni (Anti-Backdate)
         function formatTanggalTampil(tglString) {
             if(!tglString) return "-";
-            const d = new Date(tglString);
-            if (!isNaN(d.getTime())) {
-                const day = String(d.getUTCDate()).padStart(2, '0');
-                const month = String(d.getUTCMonth() + 1).padStart(2, '0');
-                const year = d.getUTCFullYear();
-                return `${day}/${month}/${year}`;
+            // Jika database kirim YYYY-MM-DD
+            const tglHanya = tglString.split('T')[0];
+            const bagian = tglHanya.split('-');
+            
+            if(bagian.length === 3) {
+                // Jika formatnya YYYY-MM-DD, kita ubah ke DD/MM/YYYY
+                if(bagian[0].length === 4) return `${bagian[2]}/${bagian[1]}/${bagian[0]}`;
+                // Jika format sudah DD-MM-YYYY, tinggal ganti separator
+                return `${bagian[0]}/${bagian[1]}/${bagian[2]}`;
             }
             return tglString;
         }
@@ -154,14 +157,9 @@
             if(item) {
                 document.getElementById('rowIdInput').value = item.rowId;
                 
-                // PERBAIKAN EDIT: Menggunakan UTC agar tanggal input tidak mundur
-                const d = new Date(item.tanggal);
-                if (!isNaN(d.getTime())) {
-                    const yyyy = d.getUTCFullYear();
-                    const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
-                    const dd = String(d.getUTCDate()).padStart(2, '0');
-                    document.getElementById('tgl').value = `${yyyy}-${mm}-${dd}`;
-                }
+                // Ambil string murni YYYY-MM-DD tanpa konversi objek Date
+                const tglMurni = item.tanggal.split('T')[0];
+                document.getElementById('tgl').value = tglMurni;
 
                 document.getElementById('kat').value = item.kategori;
                 document.getElementById('desk').value = item.deskripsi;
