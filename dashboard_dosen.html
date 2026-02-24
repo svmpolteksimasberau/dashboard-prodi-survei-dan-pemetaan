@@ -17,19 +17,19 @@
         .compact-card { background: white; border-radius: 1.25rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
     </style>
 </head>
-<body class="min-h-screen pb-10">
+<body class="min-h-screen pb-20">
 
     <header class="brand-gradient text-white pt-8 pb-20 px-6 rounded-b-[2.5rem] shadow-xl relative">
         <div class="container mx-auto max-w-5xl">
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border border-white/10">
-                        <img src="logo.png" alt="Logo" class="w-full h-full object-cover scale-105">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg overflow-hidden border border-white/20">
+                        <img src="logo.png" alt="Logo" class="w-full h-full object-contain scale-[1.55]">
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
                             <h1 class="text-2xl font-black tracking-tighter leading-none italic uppercase">PORTAL SVM</h1>
-                            <span class="text-[10px] bg-blue-600 px-2 py-0.5 rounded-md font-bold text-blue-100 uppercase tracking-widest text-center text-white">PSBC</span>
+                            <span class="text-[10px] bg-blue-600 px-2 py-0.5 rounded-md font-bold text-blue-100 uppercase tracking-widest text-center">PSBC</span>
                         </div>
                         <p class="text-[9px] font-bold text-blue-300 mt-1 uppercase tracking-wider opacity-80 italic">Integrated System of Survey and Mapping</p>
                         <p id="dosenGreet" class="text-sm font-semibold text-white mt-2 italic">Memuat nama...</p>
@@ -43,21 +43,7 @@
     </header>
 
     <main class="container mx-auto max-w-5xl px-4 -mt-10 relative z-10 space-y-4">
-        <section class="grid grid-cols-3 gap-3">
-            <a href="penilaian_logbook.html" class="compact-card p-4 flex flex-col items-center text-center hover:bg-gray-50 transition-colors">
-                <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-tasks text-xl"></i></div>
-                <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter">Monitoring Prakerin</span>
-            </a>
-            <a href="performa_dosen.html" class="compact-card p-4 flex flex-col items-center text-center hover:bg-gray-50 transition-colors">
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-chart-pie text-xl"></i></div>
-                <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter">Performance</span>
-            </a>
-            <a href="luaran_dosen.html" class="compact-card p-4 flex flex-col items-center text-center hover:bg-gray-50 transition-colors">
-                <div class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-award text-xl"></i></div>
-                <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter">Research Outputs</span>
-            </a>
-        </section>
-
+        
         <section class="compact-card p-6 flex justify-between items-center border-l-[6px] border-orange-500">
             <div>
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Total Accumulated Points</p>
@@ -71,20 +57,41 @@
                 <span class="text-[10px] font-black text-green-700 uppercase tracking-tighter">Sync Active</span>
             </div>
         </section>
+
+        <section class="grid grid-cols-3 gap-3">
+            <a href="penilaian_logbook.html" class="compact-card p-4 flex flex-col items-center text-center hover:bg-gray-50 transition-colors">
+                <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-tasks text-xl"></i></div>
+                <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter leading-tight">Monitoring Prakerin</span>
+            </a>
+            <a href="performa_dosen.html" class="compact-card p-4 flex flex-col items-center text-center hover:bg-gray-50 transition-colors">
+                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-chart-pie text-xl"></i></div>
+                <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter leading-tight">Performance</span>
+            </a>
+            <a href="luaran_dosen.html" class="compact-card p-4 flex flex-col items-center text-center hover:bg-gray-50 transition-colors">
+                <div class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-2"><i class="fas fa-award text-xl"></i></div>
+                <span class="text-[9px] font-extrabold uppercase text-slate-600 tracking-tighter leading-tight">Research Outputs</span>
+            </a>
+        </section>
+
+        <section class="compact-card p-5">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xs font-black text-slate-800 uppercase italic tracking-widest">Monthly Performance Analysis</h3>
+                <i class="fas fa-chart-line text-blue-500 opacity-50"></i>
+            </div>
+            <div class="h-48 w-full">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </section>
+
     </main>
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxZt7H5vtk9f8cSGetLxBo9v1JngqYK0u-QMRyB9ajACf5MFdsd_4U4gePE2yF6kkt_LQ/exec';
         const user = JSON.parse(localStorage.getItem('current_user'));
         
-        // Proteksi Halaman
-        if(!user || user.role.toUpperCase() !== "DOSEN") {
-            window.location.replace('index.html');
-        } else {
-            document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
-        }
+        if(!user || user.role.toUpperCase() !== "DOSEN") window.location.replace('index.html');
+        document.getElementById('dosenGreet').innerText = "Halo, " + user.name + "!";
         
-        // Ambil Data Analytics
         async function fetchDashboardData() {
             try {
                 const response = await fetch(scriptURL, { 
@@ -93,23 +100,54 @@
                 });
                 const data = await response.json();
                 
-                // Gabungkan skor dari performa dan luaran
+                // Hitung Total Skor
                 const combinedData = [...(data.performa || []), ...(data.luaran || [])];
                 const total = combinedData.reduce((a, b) => a + (Number(b.skor) || 0), 0);
-                
                 document.getElementById('totalScoreText').innerText = total;
+
+                // Render Chart
+                renderChart(data.performa);
             } catch (e) { 
                 console.error("Error fetching data:", e); 
             }
         }
 
-        function logout() { 
-            if(confirm("Keluar dari Sistem?")) { 
-                localStorage.clear(); 
-                window.location.replace('index.html'); 
-            } 
+        function renderChart(performaData) {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            // Dummy data jika performa kosong, sesuaikan dengan struktur data kamu
+            const labels = performaData?.length ? performaData.map(d => d.bulan || 'Unit') : ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
+            const scores = performaData?.length ? performaData.map(d => d.skor) : [0, 0, 0, 0, 0, 0];
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Points',
+                        data: scores,
+                        borderColor: '#1e3a8a',
+                        backgroundColor: 'rgba(30, 58, 138, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#f97316'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 10 } } },
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
         }
 
+        function logout() { if(confirm("Keluar dari Sistem?")) { localStorage.clear(); window.location.replace('index.html'); } }
         window.onload = fetchDashboardData;
     </script>
 </body>
