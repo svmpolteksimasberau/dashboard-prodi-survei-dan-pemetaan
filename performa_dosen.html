@@ -105,6 +105,20 @@
             } catch (e) { document.getElementById('statusSync').innerText = "Cloud Connection: Error"; }
         }
 
+        // Fungsi baru untuk mencegah tanggal mundur di tampilan
+        function formatTanggalTampil(tglString) {
+            if(!tglString) return "-";
+            const d = new Date(tglString);
+            // Jika d valid, ambil komponen tanggal secara manual agar tidak terpengaruh Timezone
+            if (!isNaN(d.getTime())) {
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+                return `${day}/${month}/${year}`;
+            }
+            return tglString; // Balikin apa adanya jika format aneh
+        }
+
         function renderUI(data) {
             const body = document.getElementById('histBody');
             body.innerHTML = "";
@@ -112,16 +126,18 @@
             const stats = { Pengajaran: 0, Penelitian: 0, Pengabdian: 0, Pelatihan: 0, Project: 0, Administrasi: 0 };
 
             data.forEach(item => {
-                // Perhitungan Skor Dinamis
                 let poinAktivitas = 10;
                 if(item.kategori === "Administrasi") poinAktivitas = 5;
                 
                 scoreTotal += poinAktivitas;
                 if(stats[item.kategori] !== undefined) stats[item.kategori]++;
                 
+                // Gunakan formatTanggalTampil agar tidak backdate
+                const tglTampil = formatTanggalTampil(item.tanggal);
+                
                 body.innerHTML += `
                     <tr>
-                        <td class="p-8 pl-12 font-bold text-gray-400 italic">${item.tanggal}</td>
+                        <td class="p-8 pl-12 font-bold text-gray-400 italic">${tglTampil}</td>
                         <td class="p-8"><span class="font-black text-blue-900 uppercase text-sm italic">${item.kategori} (+${poinAktivitas})</span><br><span class="text-gray-400 italic">"${item.deskripsi}"</span></td>
                         <td class="p-8 text-center pr-12">
                             <div class="flex gap-2 justify-center">
@@ -139,15 +155,13 @@
             const item = kpiDataCached.find(d => d.rowId === rowId);
             if(item) {
                 document.getElementById('rowIdInput').value = item.rowId;
-                // Fix tanggal agar tidak bergeser saat masuk ke input date
-                const datePart = item.tanggal.split('/'); 
-                if(datePart.length === 3) {
-                    const formattedDate = `${datePart[2]}-${datePart[1].padStart(2, '0')}-${datePart[0].padStart(2, '0')}`;
-                    document.getElementById('tgl').value = formattedDate;
-                } else {
-                    document.getElementById('tgl').value = item.tanggal;
+                const d = new Date(item.tanggal);
+                if (!isNaN(d.getTime())) {
+                    const yyyy = d.getFullYear();
+                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                    const dd = String(d.getDate()).padStart(2, '0');
+                    document.getElementById('tgl').value = `${yyyy}-${mm}-${dd}`;
                 }
-                
                 document.getElementById('kat').value = item.kategori;
                 document.getElementById('desk').value = item.deskripsi;
                 document.getElementById('formTitle').innerText = "Edit Aktivitas";
@@ -177,16 +191,13 @@
             btn.innerText = "SINKRONISASI...";
             
             const actionType = editId ? "UPDATE" : "INSERT";
-            
-            // Set poin sesuai aturan baru
-            let poinFinal = 10;
-            if(kat === "Administrasi") poinFinal = 5;
+            let poinFinal = (kat === "Administrasi") ? 5 : 10;
 
             const payload = {
                 action: actionType, type: "KPI", id: user.id, nama: user.name,
                 kategori: kat,
                 deskripsi: document.getElementById('desk').value,
-                tanggal: document.getElementById('tgl').value, // Mengirim string murni YYYY-MM-DD
+                tanggal: document.getElementById('tgl').value,
                 poin: poinFinal, 
                 rowId: editId ? editId : "KPI-" + Date.now()
             };
