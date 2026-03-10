@@ -7,7 +7,6 @@
     <link rel="icon" type="image/png" href="logo.png">
     <meta name="theme-color" content="#0f172a">
     <title>SVM-HUB</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -18,17 +17,14 @@
     </style>
 </head>
 <body class="brand-gradient flex items-center justify-center min-h-screen p-6 relative overflow-hidden">
-    
     <div class="absolute -top-20 -left-20 w-80 h-80 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
     <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
 
     <div class="glass-effect w-full max-w-sm p-8 rounded-[3rem] shadow-2xl text-center border-b-[12px] border-orange-600 relative z-10">
-        
         <div class="mb-8">
             <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl mx-auto mb-4 overflow-hidden border border-white/20">
                 <img src="logo.png" alt="Logo SVM" class="w-full h-full object-contain scale-[1.55]">
             </div>
-            
             <h1 class="font-black text-3xl text-blue-900 tracking-tighter leading-none italic uppercase">PORTAL SVM</h1>
             <div class="mt-2 space-y-1">
                 <p class="text-[9px] font-black text-blue-800/60 uppercase tracking-[0.1em] leading-tight">Integrated System of Survey and Mapping</p>
@@ -56,7 +52,6 @@
                 Login System <i class="fas fa-chevron-right text-[10px]"></i>
             </button>
         </div>
-
         <p class="mt-8 text-[8px] text-gray-300 font-black uppercase tracking-[0.4em] italic">Survei dan Pemetaan © 2026</p>
     </div>
 
@@ -68,10 +63,7 @@
             const pass = document.getElementById('passInput').value;
             const btn = document.getElementById('btnLogin');
 
-            if(!idUser || !pass) { 
-                alert("ID dan PIN wajib diisi!"); 
-                return; 
-            }
+            if(!idUser || !pass) { alert("ID dan PIN wajib diisi!"); return; }
 
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Authenticating...';
@@ -85,7 +77,12 @@
 
                 if(result.success) {
                     localStorage.setItem('current_user', JSON.stringify({ id: result.id, name: result.nama, role: result.role }));
-                    window.location.replace(result.role.toUpperCase() === "DOSEN" ? 'dashboard_dosen.html' : 'logbook.html');
+                    // REDIRECT LOGIC
+                    if(result.role.toUpperCase() === "DOSEN") {
+                        window.location.replace('dashboard_dosen.html');
+                    } else {
+                        window.location.replace('gateway_mahasiswa.html');
+                    }
                 } else {
                     alert("⚠️ Akses Ditolak: " + result.msg);
                     resetButton(btn);
@@ -103,4 +100,3 @@
     </script>
 </body>
 </html>
-
