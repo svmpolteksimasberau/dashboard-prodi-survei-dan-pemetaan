@@ -3,140 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="SVM-HUB">
-
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/854/854929.png">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/854/854929.png">
-
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <title>Logbook Prakerin</title>
+    <title>Logbook Prakerin - SVM</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #1e3a8a; }
-        .tab-btn.active { background-color: #1e3a8a; color: white; transform: scale(1.05); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2); }
-        .glass-card { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); }
-        .input-focus:focus { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2); }
+        .tab-btn.active { background-color: #1e3a8a; color: white; transform: scale(1.05); }
+        .glass-card { background: rgba(255, 255, 255, 0.98); }
     </style>
 </head>
 <body class="min-h-screen pb-10">
-
     <div class="p-8 text-center text-white">
-        <div class="flex justify-center mb-4">
-            <div class="w-24 h-24 bg-white rounded-[2rem] flex items-center justify-center shadow-2xl transform -rotate-6 border-4 border-orange-500">
-                <i class="fas fa-hard-hat text-blue-900 text-4xl"></i>
-            </div>
+        <div class="w-20 h-20 bg-white rounded-[1.5rem] flex items-center justify-center shadow-xl mx-auto mb-4 transform -rotate-6 border-4 border-orange-500">
+            <i class="fas fa-hard-hat text-blue-900 text-3xl"></i>
         </div>
-        <h1 class="font-black text-2xl uppercase tracking-tighter leading-tight">Logbook Prakerin</h1>
-        <h2 class="text-orange-400 font-bold text-xs uppercase tracking-[0.2em] mt-1 italic">Survei dan Pemetaan</h2>
-        <div class="mt-3 py-1 px-4 bg-blue-800/50 rounded-full inline-block border border-blue-700">
-            <p class="text-[9px] font-medium tracking-widest text-blue-100 uppercase">Politeknik Sinar Mas Berau Coal</p>
-        </div>
+        <h1 class="font-black text-2xl uppercase tracking-tighter">Logbook Prakerin</h1>
     </div>
 
-    <div class="glass-card mx-6 p-8 rounded-[3.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-b-[12px] border-orange-600 min-h-[550px]">
-        
-        <div class="flex items-center gap-4 mb-8 p-4 bg-gray-50 rounded-3xl border border-gray-100">
-            <div class="w-12 h-12 bg-blue-900 rounded-2xl flex items-center justify-center text-white shadow-lg">
-                <i class="fas fa-user-graduate"></i>
-            </div>
-            <div>
-                <h3 id="userName" class="font-black text-blue-900 text-sm uppercase leading-none italic">Memuat...</h3>
-                <p id="userId" class="text-[10px] font-bold text-gray-400 mt-1 italic tracking-widest uppercase">NIM: --</p>
-            </div>
-        </div>
-
-        <div class="flex gap-3 mb-10 bg-gray-100 p-2 rounded-2xl">
-            <button onclick="switchTab('form')" id="btn-form" class="tab-btn active flex-1 py-4 rounded-xl text-[10px] font-black uppercase transition-all tracking-[0.2em]">Lapor</button>
-            <button onclick="switchTab('history')" id="btn-history" class="tab-btn flex-1 py-4 rounded-xl text-[10px] font-black uppercase transition-all tracking-[0.2em]">Riwayat</button>
+    <div class="glass-card mx-6 p-8 rounded-[3rem] shadow-2xl border-b-[12px] border-orange-600">
+        <div class="flex gap-3 mb-8 bg-gray-100 p-2 rounded-2xl">
+            <button onclick="switchTab('form')" id="btn-form" class="tab-btn active flex-1 py-4 rounded-xl text-[10px] font-black uppercase">Lapor</button>
+            <button onclick="switchTab('history')" id="btn-history" class="tab-btn flex-1 py-4 rounded-xl text-[10px] font-black uppercase">Riwayat</button>
         </div>
 
         <div id="pane-form" class="space-y-5">
-            <input type="hidden" id="editRowId"> 
-            <div id="gps-status" class="hidden p-3 bg-green-50 text-green-700 text-[9px] font-black rounded-xl text-center uppercase border border-green-200">
-                <i class="fas fa-check-circle mr-1"></i> GPS Terkunci & Valid
+            <input type="hidden" id="editRowId">
+            <input type="date" id="tgl_kegiatan" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none">
+            <input type="text" id="lokasi" placeholder="Lokasi / Area Kerja" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none">
+            <select id="jenis" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none">
+                <option value="Project">Project (13 Poin)</option>
+                <option value="Survei">Survei (10 Poin)</option>
+                <option value="Non-Survei">Non-Survei (5 Poin)</option>
+                <option value="Administrasi">Administrasi (3 Poin)</option>
+            </select>
+            <textarea id="deskripsi" placeholder="Detail Tugas Harian" rows="3" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none"></textarea>
+            <div class="bg-blue-50 p-6 rounded-[2rem] border-2 border-dashed border-blue-100 text-center">
+                <input type="file" id="fotoInput" accept="image/*" class="text-[10px] font-bold">
             </div>
-
-            <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70">Tanggal Pekerjaan *</label>
-                <input type="date" id="tgl_kegiatan" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none input-focus transition-all">
-            </div>
-
-            <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70">Lokasi / Area Kerja *</label>
-                <input type="text" id="lokasi" placeholder="Misal: Pit G South Area" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none input-focus transition-all shadow-inner">
-            </div>
-
-            <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70">Kategori Pekerjaan *</label>
-                <select id="jenis" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none input-focus transition-all italic">
-                    <option value="">-- Pilih Kategori --</option>
-                    <option value="Project">Project (13 Poin)</option>
-                    <option value="Survei">Survei (10 Poin)</option>
-                    <option value="Non-Survei">Non-Survei (5 Poin)</option>
-                    <option value="Administrasi">Administrasi (3 Poin)</option>
-                    <option value="Lain-lain">Lain-lain (3 Poin)</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="text-[9px] font-black text-blue-900 uppercase ml-5 mb-1 block italic opacity-70">Detail Tugas Hari Ini *</label>
-                <textarea id="deskripsi" placeholder="Jelaskan rincian kegiatan..." rows="3" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none input-focus transition-all shadow-inner"></textarea>
-            </div>
-
-            <div>
-                <label class="text-[9px] font-black text-orange-600 uppercase ml-5 mb-1 block italic opacity-70">Kendala (Opsional)</label>
-                <textarea id="kendala" placeholder="Misal: Alat trouble atau cuaca buruk..." rows="2" class="w-full p-4 bg-orange-50/50 rounded-2xl border border-orange-100 font-bold text-[11px] outline-none input-focus italic"></textarea>
-            </div>
-
-            <div class="bg-blue-50/50 p-6 rounded-[2rem] border-2 border-dashed border-blue-100 text-center">
-                <label class="text-[9px] font-black text-blue-900 uppercase block mb-3 italic">Lampiran Foto Dokumentasi *</label>
-                <input type="file" id="fotoInput" accept="image/*" class="text-[10px] font-bold text-gray-400 file:bg-blue-900 file:text-white file:rounded-xl file:border-0 file:px-5 file:py-2 file:mr-4 file:uppercase file:text-[9px] file:font-black">
-                <p id="editFotoInfo" class="hidden text-[8px] text-blue-500 mt-2 font-bold italic">Abaikan jika tidak ingin mengganti foto lama</p>
-            </div>
-
-            <button onclick="simpanLaporan()" id="btnSimpan" class="w-full bg-orange-500 text-white font-black py-6 rounded-[2rem] shadow-xl uppercase tracking-[0.25em] mt-6 active:scale-95 transition-all text-sm border-b-4 border-orange-700">
-                Kirim Laporan & GPS
-            </button>
-            <button onclick="cancelEdit()" id="btnCancelEdit" class="hidden w-full bg-gray-200 text-gray-500 font-black py-4 rounded-2xl uppercase text-[10px] mt-2">Batal Edit</button>
+            <button onclick="simpanLaporan()" id="btnSimpan" class="w-full bg-orange-500 text-white font-black py-6 rounded-[2rem] shadow-xl uppercase tracking-widest active:scale-95">Kirim Laporan</button>
         </div>
 
-        <div id="pane-history" class="hidden space-y-6">
-            <div class="bg-blue-900 p-8 rounded-[3rem] shadow-2xl text-center border-b-8 border-orange-500 relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10"><i class="fas fa-trophy text-white text-6xl"></i></div>
-                <p class="text-[9px] font-black text-orange-400 uppercase tracking-[0.4em] mb-2 italic">Akumulasi Skor</p>
-                <h2 id="overallScore" class="text-6xl font-black text-white italic tracking-tighter">0</h2>
-                <div class="h-1 w-20 bg-orange-500 mx-auto mt-4 rounded-full"></div>
+        <div id="pane-history" class="hidden space-y-4">
+            <div class="bg-blue-900 p-6 rounded-3xl text-center text-white">
+                <p class="text-[9px] font-black text-orange-400 uppercase tracking-widest mb-1">Total Skor</p>
+                <h2 id="overallScore" class="text-5xl font-black italic">0</h2>
             </div>
-            <div id="loading" class="text-center py-10 font-black text-blue-900 text-[10px] animate-pulse uppercase tracking-[0.3em] italic">Sinkronisasi Cloud...</div>
-            <div id="riwayatList" class="space-y-5 pb-10"></div>
+            <div id="riwayatList" class="space-y-4"></div>
         </div>
 
-        <div class="mt-12 pt-8 border-t border-gray-100 text-center">
-            <button onclick="logout()" class="text-gray-300 font-black text-[10px] uppercase tracking-[0.3em] italic hover:text-red-500 transition-all">
-                <i class="fas fa-power-off mr-2"></i> Keluar Sistem
-            </button>
-        </div>
+        <div class="mt-8 text-center"><a href="gateway_mahasiswa.html" class="text-blue-900 font-black text-[10px] uppercase italic tracking-widest"><i class="fas fa-arrow-left"></i> Kembali ke Menu</a></div>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyc3PTfnMe84nRGpCthhPMtYcKnqNFf6PBt8yfFNeJfEl3rSG0iMhkhl_8XgeUhskVB/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxfNzd0wWXutaAVJD2uxmhCgAAMI9UPf2JymP8dppbq8XAOTcNny8wRuOiEunq8_EgO7g/exec";
         const user = JSON.parse(localStorage.getItem('current_user'));
-        const MAX_IDLE_TIME = 60 * 60 * 1000;
-        let idleTimer;
         let listData = [];
-
-        if(!user || user.role !== "MAHASISWA") { window.location.href = 'index.html'; }
-        else { document.getElementById('userName').innerText = "Halo, " + user.name + "!"; document.getElementById('userId').innerText = "NIM: " + user.id; }
-
-        function resetIdleTimer() { clearTimeout(idleTimer); idleTimer = setTimeout(() => { alert("Sesi Berakhir."); logout(); }, MAX_IDLE_TIME); }
-        document.onmousemove = resetIdleTimer; document.ontouchstart = resetIdleTimer;
 
         function switchTab(tab) {
             document.getElementById('pane-form').classList.toggle('hidden', tab !== 'form');
@@ -150,117 +72,60 @@
             const editId = document.getElementById('editRowId').value;
             const btn = document.getElementById('btnSimpan');
             const tgl = document.getElementById('tgl_kegiatan').value;
-            const lok = document.getElementById('lokasi').value;
             const kat = document.getElementById('jenis').value;
-            const des = document.getElementById('deskripsi').value;
-            const ken = document.getElementById('kendala').value || "-";
             const fotoFile = document.getElementById('fotoInput').files[0];
 
-            if (!tgl || !lok || !kat || !des) return alert("❌ Kolom wajib belum lengkap!");
-            if (!editId && !fotoFile) return alert("❌ Foto wajib diunggah!");
-
+            if(!tgl || !document.getElementById('lokasi').value) return alert("Lengkapi data!");
             btn.disabled = true; btn.innerText = "MENGUNCI GPS...";
-            
-            let mapsLink = "-";
+
+            let maps = "-";
             try {
-                const pos = await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 8000 });
-                });
-                mapsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-            } catch (err) { alert("❌ GPS Gagal! Aktifkan GPS HP."); btn.disabled = false; btn.innerText = "Kirim Laporan"; return; }
+                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {timeout: 8000}));
+                maps = `http://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            } catch(e) { alert("GPS Gagal!"); btn.disabled = false; return; }
 
-            // LOGIKA SKOR TERBARU: Project = 13 poin
-            let skorOtomatis = 3;
-            if(kat === "Project") skorOtomatis = 13;
-            else if(kat === "Survei") skorOtomatis = 10;
-            else if(kat === "Non-Survei") skorOtomatis = 5;
-
-            let base64Foto = "";
-            if(fotoFile) {
-                btn.innerText = "UPLOADING...";
-                const reader = new FileReader();
-                base64Foto = await new Promise(resolve => {
-                    reader.onload = e => resolve(e.target.result.split(',')[1]);
-                    reader.readAsDataURL(fotoFile);
-                });
-            }
+            let skor = (kat === "Project") ? 13 : (kat === "Survei" ? 10 : (kat === "Non-Survei" ? 5 : 3));
+            let b64 = ""; if(fotoFile) { const r = new FileReader(); b64 = await new Promise(res => { r.onload = e => res(e.target.result.split(',')[1]); r.readAsDataURL(fotoFile); }); }
 
             try {
-                await fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: "addLogbook", nim: user.id, nama: user.name,
-                        tanggal: tgl, lokasi: lok, jenis: kat, deskripsi: des,
-                        kendala: ken, foto: base64Foto, 
-                        rowId: editId || "ID-" + Date.now(),
-                        skor: skorOtomatis, geotagging: mapsLink 
-                    })
-                });
+                await fetch(scriptURL, { method: 'POST', body: JSON.stringify({
+                    action: "addLogbook", nim: user.id, nama: user.name, tanggal: tgl,
+                    lokasi: document.getElementById('lokasi').value, jenis: kat, 
+                    deskripsi: document.getElementById('deskripsi').value, foto: b64, 
+                    rowId: editId || "ID-" + Date.now(), skor: skor, geotagging: maps
+                })});
                 alert("✅ BERHASIL!"); location.reload();
-            } catch (e) { alert("❌ ERROR KONEKSI!"); btn.disabled = false; }
+            } catch(e) { alert("Error!"); btn.disabled = false; }
         }
 
         async function fetchRiwayatCloud() {
             const container = document.getElementById('riwayatList');
-            const scoreLabel = document.getElementById('overallScore');
-            const loading = document.getElementById('loading');
-            loading.classList.remove('hidden'); container.innerHTML = "";
+            container.innerHTML = "Memuat...";
             try {
-                const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "readLogbook", nim: user.id }) });
-                listData = await response.json();
-                loading.classList.add('hidden');
-                let totalScore = 0;
+                const r = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "readLogbook", nim: user.id }) });
+                listData = await r.json();
+                container.innerHTML = ""; let total = 0;
                 listData.forEach((item, index) => {
-                    let s = parseInt(item.skor) || 0; totalScore += s;
-                    container.innerHTML += `
-                        <div class="bg-gray-50 p-6 rounded-[2.5rem] border-l-[12px] border-blue-900 shadow-sm relative mb-4">
-                            <div class="flex justify-between items-start mb-2">
-                                <span class="text-[9px] font-black text-orange-600 uppercase italic italic tracking-tighter">${item.tanggal}</span>
-                                <div class="flex gap-3">
-                                    <button onclick="startEdit(${index})" class="text-blue-500 text-[10px]"><i class="fas fa-edit"></i></button>
-                                    <button onclick="hapusLaporan('${item.rowId}')" class="text-red-400 text-[10px]"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                            <h3 class="font-black text-blue-900 text-sm uppercase leading-tight mb-1">${item.lokasi}</h3>
-                            <p class="text-[11px] text-gray-500 italic leading-relaxed">"${item.deskripsi}"</p>
-                            ${item.kendala && item.kendala !== "-" ? `<p class="text-[9px] text-red-500 font-bold mt-2 uppercase italic"><i class="fas fa-exclamation-triangle mr-1"></i> Kendala: ${item.kendala}</p>` : ""}
-                            <div class="mt-5 pt-4 border-t border-gray-200 flex justify-between items-center">
-                                <div class="bg-orange-100 px-4 py-1 rounded-full border border-orange-200">
-                                    <span class="text-[9px] font-black text-orange-600 uppercase italic tracking-widest">SKOR: ${s}</span>
-                                </div>
-                                <div class="flex gap-4">
-                                    <a href="${item.geotagging}" target="_blank" class="text-green-600 text-[11px]"><i class="fas fa-map-marker-alt"></i></a>
-                                    <a href="${item.foto}" target="_blank" class="text-blue-600 text-[11px]"><i class="fas fa-camera"></i></a>
-                                </div>
-                            </div>
-                        </div>`;
+                    total += parseInt(item.skor) || 0;
+                    const tglFix = item.tanggal.split('T')[0].split('-').reverse().join('/');
+                    container.innerHTML += `<div class="bg-gray-50 p-5 rounded-[2rem] border-l-8 border-blue-900 mb-3 shadow-sm">
+                        <div class="flex justify-between text-[9px] font-black text-orange-600 uppercase mb-1"><span>${tglFix}</span><i class="fas fa-edit text-blue-500" onclick="startEdit(${index})"></i></div>
+                        <h3 class="font-black text-blue-900 text-sm uppercase">${item.lokasi}</h3>
+                        <p class="text-[10px] text-gray-500 italic mt-1">"${item.deskripsi}"</p>
+                    </div>`;
                 });
-                scoreLabel.innerText = totalScore;
-            } catch (e) { loading.innerText = "GAGAL SINKRON!"; }
+                document.getElementById('overallScore').innerText = total;
+            } catch(e) { container.innerHTML = "Gagal memuat."; }
         }
 
-        function startEdit(index) {
-            const item = listData[index];
+        function startEdit(i) {
+            const item = listData[i];
             document.getElementById('editRowId').value = item.rowId;
-            document.getElementById('tgl_kegiatan').value = item.tanggal;
+            document.getElementById('tgl_kegiatan').value = item.tanggal.split('T')[0];
             document.getElementById('lokasi').value = item.lokasi;
             document.getElementById('jenis').value = item.jenis;
             document.getElementById('deskripsi').value = item.deskripsi;
-            document.getElementById('kendala').value = (item.kendala === "-") ? "" : item.kendala;
-            document.getElementById('btnSimpan').innerText = "Update Laporan";
-            document.getElementById('btnCancelEdit').classList.remove('hidden');
-            document.getElementById('editFotoInfo').classList.remove('hidden');
             switchTab('form');
-        }
-
-        function cancelEdit() { location.reload(); }
-
-        async function hapusLaporan(rowId) {
-            if(!confirm("Hapus laporan ini secara permanen di Cloud?")) return;
-            try {
-                await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "deleteLogbook", rowId: rowId }) });
-                alert("TERHAPUS!"); fetchRiwayatCloud();
-            } catch (e) { alert("GAGAL!"); }
         }
 
         function logout() { localStorage.clear(); window.location.href = 'index.html'; }
