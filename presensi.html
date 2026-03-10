@@ -22,38 +22,45 @@
 
     <div class="glass-effect mx-6 -mt-10 p-8 rounded-[3rem] shadow-2xl border-b-[12px] border-green-600 space-y-6 relative z-10">
         <div>
+            <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic tracking-wider">Tanggal Hari Ini *</label>
+            <input type="date" id="tgl_absen" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none text-blue-900">
+        </div>
+
+        <div>
             <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic tracking-wider">Status Kehadiran *</label>
-            <select id="statusHadir" onchange="toggleSakit()" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none italic text-blue-900">
+            <select id="statusHadir" onchange="toggleSakit()" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none text-blue-900">
                 <option value="On-Site">Hadir: On-Site</option>
                 <option value="WFH">Hadir: WFH</option>
-                <option value="Izin">Izin (Keperluan Mendesak)</option>
-                <option value="Sakit">Sakit (Butuh Surat Dokter)</option>
+                <option value="Izin">Izin</option>
+                <option value="Sakit">Sakit (Butuh Surat)</option>
             </select>
         </div>
 
         <div id="boxSakit" class="hidden bg-red-50 p-6 rounded-[2.5rem] border-2 border-dashed border-red-200 text-center">
-            <label class="text-[9px] font-black text-red-900 uppercase block mb-3 italic">Upload Surat Keterangan Sakit *</label>
-            <input type="file" id="suratFile" accept="image/*" class="text-[10px] font-bold text-gray-400 file:bg-red-600 file:text-white file:border-0 file:px-4 file:py-2 file:rounded-xl">
+            <label class="text-[9px] font-black text-red-900 uppercase block mb-3 italic">Upload Surat Sakit *</label>
+            <input type="file" id="suratFile" accept="image/*" class="text-[10px] font-bold">
         </div>
 
         <div>
-            <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic tracking-wider">Keterangan / Alasan</label>
-            <textarea id="ket" placeholder="Misal: Izin urusan keluarga..." rows="2" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none shadow-inner"></textarea>
+            <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic tracking-wider">Keterangan</label>
+            <textarea id="keterangan" placeholder="Catatan tambahan..." rows="2" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none"></textarea>
         </div>
 
         <div id="gpsStatus" class="p-4 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-2xl text-center uppercase border border-blue-100">
-            <i class="fas fa-location-arrow mr-2 animate-pulse"></i> Menunggu GPS...
+            <i class="fas fa-location-arrow mr-2"></i> GPS Standby
         </div>
 
-        <button onclick="kirimPresensi()" id="btnPresensi" class="w-full bg-green-600 text-white font-black py-6 rounded-[2.5rem] shadow-xl uppercase tracking-[0.2em] active:scale-95 transition-all text-sm border-b-4 border-green-800">
+        <button onclick="kirimPresensi()" id="btnPresensi" class="w-full bg-green-600 text-white font-black py-6 rounded-[2.5rem] shadow-xl uppercase active:scale-95 transition-all text-sm border-b-4 border-green-800">
             Kirim Kehadiran
         </button>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzU7w2wscuu0GzVRDmlI_Javq_bKNqfmBZVUOgyPPcUq_IyfhNgDHaIPLrTiwC0XGAmZg/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyxg63h40By9379Ij8UgZHNPyCKaZsJVm0BtSgeTWOQARtI07gojTmDtXy1HzFkiaC4/exec";
         const user = JSON.parse(localStorage.getItem('current_user'));
-        if(!user) window.location.replace('index.html');
+        
+        // Set default date hari ini
+        document.getElementById('tgl_absen').valueAsDate = new Date();
 
         function toggleSakit() {
             document.getElementById('boxSakit').classList.toggle('hidden', document.getElementById('statusHadir').value !== 'Sakit');
@@ -62,40 +69,40 @@
         async function kirimPresensi() {
             const btn = document.getElementById('btnPresensi');
             const status = document.getElementById('statusHadir').value;
-            const ket = document.getElementById('ket').value || "-";
             const fileInput = document.getElementById('suratFile').files[0];
 
             if(status === 'Sakit' && !fileInput) return alert("Wajib upload bukti surat sakit!");
-            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
+            btn.disabled = true; btn.innerHTML = "Memproses...";
 
             let maps = "-";
             try {
-                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, timeout: 10000 }));
+                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true }));
                 maps = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                document.getElementById('gpsStatus').innerHTML = "<i class='fas fa-check-circle'></i> GPS Terverifikasi";
-                document.getElementById('gpsStatus').classList.replace('text-blue-700', 'text-green-700');
-            } catch (e) { alert("GPS Gagal! Aktifkan GPS aktif."); btn.disabled = false; btn.innerText = "Kirim Kehadiran"; return; }
+            } catch (e) { alert("GPS Wajib Aktif!"); btn.disabled = false; btn.innerText="Kirim"; return; }
 
             let fileBase64 = "";
             if(fileInput) {
                 const reader = new FileReader();
-                fileBase64 = await new Promise(res => {
-                    reader.onload = e => res(e.target.result.split(',')[1]);
-                    reader.readAsDataURL(fileInput);
-                });
+                fileBase64 = await new Promise(res => { reader.onload = e => res(e.target.result.split(',')[1]); reader.readAsDataURL(fileInput); });
             }
 
             const payload = {
-                action: "INSERT", type: "PRESENSI", id: user.id, nama: user.name,
-                tanggal: new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')+'-'+String(new Date().getDate()).padStart(2,'0'),
-                kategori: status, deskripsi: ket, link: maps, foto: fileBase64, rowId: "ATT-" + Date.now()
+                action: "addPresensi",
+                nim: user.id,
+                nama: user.name,
+                tanggal: document.getElementById('tgl_absen').value,
+                status: status,
+                keterangan: document.getElementById('keterangan').value || "-",
+                maps: maps,
+                foto: fileBase64,
+                rowId: "ATT-" + Date.now()
             };
 
             try {
                 await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
-                alert("✅ PRESENSI BERHASIL!");
+                alert("✅ ABSEN BERHASIL!");
                 window.location.replace('gateway_mahasiswa.html');
-            } catch (e) { alert("Gagal!"); btn.disabled = false; btn.innerText = "Kirim Kehadiran"; }
+            } catch (e) { alert("Gagal!"); btn.disabled = false; }
         }
     </script>
 </body>
