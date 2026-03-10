@@ -11,6 +11,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f5f9; }
         .glass-effect { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); }
         .brand-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
+        .tab-btn.active { background-color: #1e3a8a; color: white; transform: scale(1.05); }
     </style>
 </head>
 <body class="min-h-screen pb-10">
@@ -20,50 +21,101 @@
         <p class="text-orange-400 text-[10px] font-bold uppercase tracking-widest mt-1">Status Kehadiran Mahasiswa</p>
     </div>
 
-    <div class="glass-effect mx-6 -mt-10 p-8 rounded-[3rem] shadow-2xl border-b-[12px] border-green-600 space-y-6 relative z-10">
-        <div>
-            <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic tracking-wider">Tanggal Hari Ini *</label>
-            <input type="date" id="tgl_absen" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none text-blue-900">
+    <div class="glass-effect mx-6 -mt-10 p-8 rounded-[3rem] shadow-2xl border-b-[12px] border-green-600 relative z-10">
+        <div class="flex gap-3 mb-8 bg-gray-100 p-2 rounded-2xl">
+            <button onclick="switchTab('form')" id="btn-form" class="tab-btn active flex-1 py-4 rounded-xl text-[10px] font-black uppercase transition-all">Input</button>
+            <button onclick="switchTab('history')" id="btn-history" class="tab-btn flex-1 py-4 rounded-xl text-[10px] font-black uppercase transition-all">Riwayat</button>
         </div>
 
-        <div>
-            <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic tracking-wider">Status Kehadiran *</label>
-            <select id="statusHadir" onchange="toggleSakit()" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none text-blue-900">
-                <option value="On-Site">Hadir: On-Site</option>
-                <option value="WFH">Hadir: WFH</option>
-                <option value="Izin">Izin</option>
-                <option value="Sakit">Sakit (Butuh Surat)</option>
-            </select>
+        <div id="pane-form" class="space-y-5">
+            <div>
+                <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic">Tanggal Hari Ini *</label>
+                <input type="date" id="tgl_absen" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none text-blue-900">
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic">Status Kehadiran *</label>
+                <select id="statusHadir" onchange="toggleSakit()" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none italic text-blue-900">
+                    <option value="On-Site">Hadir: On-Site</option>
+                    <option value="WFH">Hadir: WFH</option>
+                    <option value="Izin">Izin (Keperluan Mendesak)</option>
+                    <option value="Sakit">Sakit (Butuh Surat/Bukti)</option>
+                </select>
+            </div>
+
+            <div class="bg-blue-50/50 p-6 rounded-[2.5rem] border-2 border-dashed border-blue-200 text-center">
+                <label class="text-[9px] font-black text-blue-900 uppercase block mb-3 italic">Lampiran Foto (Selfie/Surat) *</label>
+                <input type="file" id="suratFile" accept="image/*" class="text-[10px] font-bold text-gray-400 file:bg-blue-900 file:text-white file:border-0 file:px-4 file:py-2 file:rounded-xl">
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic">Keterangan Tambahan</label>
+                <textarea id="keterangan" placeholder="Misal: Pit G South Area atau alasan izin..." rows="2" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none shadow-inner"></textarea>
+            </div>
+
+            <div id="gpsStatus" class="p-4 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-2xl text-center uppercase border border-blue-100">
+                <i class="fas fa-location-arrow mr-2 animate-pulse"></i> Menunggu GPS...
+            </div>
+
+            <button onclick="kirimPresensi()" id="btnPresensi" class="w-full bg-green-600 text-white font-black py-6 rounded-[2.5rem] shadow-xl uppercase tracking-[0.2em] active:scale-95 transition-all text-sm border-b-4 border-green-800">
+                Kirim Kehadiran
+            </button>
         </div>
 
-        <div id="boxSakit" class="hidden bg-red-50 p-6 rounded-[2.5rem] border-2 border-dashed border-red-200 text-center">
-            <label class="text-[9px] font-black text-red-900 uppercase block mb-3 italic">Upload Surat Sakit *</label>
-            <input type="file" id="suratFile" accept="image/*" class="text-[10px] font-bold">
+        <div id="pane-history" class="hidden space-y-4">
+            <div id="riwayatList" class="space-y-4">
+                <p class="text-center animate-pulse italic text-gray-400 text-xs">Memuat riwayat...</p>
+            </div>
         </div>
-
-        <div>
-            <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic tracking-wider">Keterangan</label>
-            <textarea id="keterangan" placeholder="Catatan tambahan..." rows="2" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none"></textarea>
-        </div>
-
-        <div id="gpsStatus" class="p-4 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-2xl text-center uppercase border border-blue-100">
-            <i class="fas fa-location-arrow mr-2"></i> GPS Standby
-        </div>
-
-        <button onclick="kirimPresensi()" id="btnPresensi" class="w-full bg-green-600 text-white font-black py-6 rounded-[2.5rem] shadow-xl uppercase active:scale-95 transition-all text-sm border-b-4 border-green-800">
-            Kirim Kehadiran
-        </button>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyxg63h40By9379Ij8UgZHNPyCKaZsJVm0BtSgeTWOQARtI07gojTmDtXy1HzFkiaC4/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzVFH8KIDGjGIRoemzfMoOoznL1DQ_je1fTQs-hAHP624Fe8Fo-7Ni67AzojGrMF04-/exec";
         const user = JSON.parse(localStorage.getItem('current_user'));
-        
-        // Set default date hari ini
+        let listPresensi = [];
+
+        if(!user) window.location.replace('index.html');
         document.getElementById('tgl_absen').valueAsDate = new Date();
 
-        function toggleSakit() {
-            document.getElementById('boxSakit').classList.toggle('hidden', document.getElementById('statusHadir').value !== 'Sakit');
+        function switchTab(tab) {
+            document.getElementById('pane-form').classList.toggle('hidden', tab !== 'form');
+            document.getElementById('pane-history').classList.toggle('hidden', tab !== 'history');
+            document.getElementById('btn-form').classList.toggle('active', tab === 'form');
+            document.getElementById('btn-history').classList.toggle('active', tab === 'history');
+            if(tab === 'history') fetchRiwayatPresensi();
+        }
+
+        async function fetchRiwayatPresensi() {
+            const container = document.getElementById('riwayatList');
+            try {
+                const r = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "readPresensi", nim: user.id }) });
+                listPresensi = await r.json();
+                container.innerHTML = "";
+                
+                if(listPresensi.length === 0) {
+                    container.innerHTML = "<p class='text-center text-gray-400 text-xs italic'>Belum ada riwayat presensi.</p>";
+                    return;
+                }
+
+                listPresensi.forEach(item => {
+                    const tglFix = item.tanggal.split('T')[0].split('-').reverse().join('/');
+                    const colorStatus = item.jenis === "Sakit" ? "text-red-500" : (item.jenis === "Izin" ? "text-orange-500" : "text-green-600");
+                    
+                    container.innerHTML += `
+                        <div class="bg-gray-50 p-5 rounded-[2rem] border-l-8 border-blue-900 shadow-sm text-left">
+                            <div class="flex justify-between text-[9px] font-black uppercase mb-1">
+                                <span class="text-gray-400">${tglFix}</span>
+                                <span class="${colorStatus}">${item.jenis}</span>
+                            </div>
+                            <h3 class="font-black text-blue-900 text-sm uppercase">${item.id} - ${user.name.split(' ')[0]}</h3>
+                            <p class="text-[10px] text-gray-500 italic mt-1 leading-tight">"${item.deskripsi}"</p>
+                            <div class="mt-3 flex gap-3">
+                                <a href="${item.link}" target="_blank" class="text-blue-500 text-[10px] font-bold underline"><i class="fas fa-map-marker-alt"></i> Lokasi</a>
+                                ${item.foto !== "-" ? `<a href="${item.foto}" target="_blank" class="text-green-600 text-[10px] font-bold underline"><i class="fas fa-image"></i> Lihat Foto</a>` : ""}
+                            </div>
+                        </div>`;
+                });
+            } catch(e) { container.innerHTML = "Gagal memuat."; }
         }
 
         async function kirimPresensi() {
@@ -71,14 +123,15 @@
             const status = document.getElementById('statusHadir').value;
             const fileInput = document.getElementById('suratFile').files[0];
 
-            if(status === 'Sakit' && !fileInput) return alert("Wajib upload bukti surat sakit!");
-            btn.disabled = true; btn.innerHTML = "Memproses...";
+            if(!fileInput && (status === 'Sakit' || status === 'Izin')) return alert("Wajib upload foto bukti!");
+            
+            btn.disabled = true; btn.innerHTML = "Proses...";
 
             let maps = "-";
             try {
                 const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true }));
                 maps = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-            } catch (e) { alert("GPS Wajib Aktif!"); btn.disabled = false; btn.innerText="Kirim"; return; }
+            } catch (e) { alert("GPS Harus Aktif!"); btn.disabled = false; btn.innerText="Kirim"; return; }
 
             let fileBase64 = "";
             if(fileInput) {
@@ -100,10 +153,12 @@
 
             try {
                 await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
-                alert("✅ ABSEN BERHASIL!");
-                window.location.replace('gateway_mahasiswa.html');
+                alert("✅ PRESENSI BERHASIL!");
+                switchTab('history');
             } catch (e) { alert("Gagal!"); btn.disabled = false; }
         }
+
+        function toggleSakit() { /* Logic tambahan jika diperlukan */ }
     </script>
 </body>
 </html>
