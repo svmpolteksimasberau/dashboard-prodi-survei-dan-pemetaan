@@ -2,48 +2,50 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Utama - SVM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portal Mahasiswa - SVM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-effect { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); }
+        .brand-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6 text-center text-white">
-    <div class="w-full max-w-sm space-y-8">
-        <div>
+<body class="brand-gradient flex items-center justify-center min-h-screen p-6 relative overflow-hidden text-center">
+    <div class="glass-effect w-full max-w-sm p-8 rounded-[3rem] shadow-2xl text-center border-b-[12px] border-orange-600 relative z-10">
+        <div class="mb-8">
             <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl mx-auto mb-4 overflow-hidden border border-white/20">
                 <img src="logo.png" alt="Logo" class="w-full h-full object-contain scale-[1.55]">
             </div>
-            <h1 id="greetUser" class="font-black text-xl italic uppercase tracking-tighter">Halo, Mahasiswa!</h1>
-            <p class="text-blue-300 text-[10px] uppercase tracking-widest font-bold">Portal Layanan Mahasiswa SVM</p>
+            <h1 id="greetUser" class="font-black text-xl text-blue-900 tracking-tighter italic uppercase">Halo!</h1>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Layanan Mahasiswa SVM</p>
         </div>
 
         <div class="grid grid-cols-1 gap-4">
-            <a href="presensi.html" class="bg-white p-6 rounded-[2.5rem] shadow-2xl flex items-center gap-6 border-b-8 border-green-600 active:scale-95 transition-all text-left text-blue-900">
-                <div class="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center shadow-inner">
-                    <i class="fas fa-calendar-check text-2xl"></i>
+            <a href="presensi.html" class="bg-blue-50 p-6 rounded-[2rem] border border-blue-100 flex items-center gap-5 active:scale-95 transition-all text-left">
+                <div class="w-12 h-12 bg-blue-900 text-white rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-user-check text-xl"></i>
                 </div>
                 <div>
-                    <h3 class="font-black leading-none text-lg italic uppercase">Presensi</h3>
-                    <p class="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-tight">On-Site, WFH, Sakit, Izin</p>
+                    <h3 class="font-black text-blue-900 leading-none text-sm uppercase italic">Presensi</h3>
+                    <p class="text-[9px] font-bold text-gray-400 mt-1 uppercase">Hadir, WFH, Sakit, Izin</p>
                 </div>
             </a>
 
-            <a href="logbook.html" class="bg-white p-6 rounded-[2.5rem] shadow-2xl flex items-center gap-6 border-b-8 border-orange-600 active:scale-95 transition-all text-left text-blue-900">
-                <div class="w-14 h-14 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center shadow-inner">
-                    <i class="fas fa-book text-2xl"></i>
+            <a href="logbook.html" class="bg-orange-50 p-6 rounded-[2rem] border border-orange-100 flex items-center gap-5 active:scale-95 transition-all text-left">
+                <div class="w-12 h-12 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-book text-xl"></i>
                 </div>
                 <div>
-                    <h3 class="font-black leading-none text-lg italic uppercase">Logbook</h3>
-                    <p class="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-tight">Laporan Kegiatan Harian</p>
+                    <h3 class="font-black text-blue-900 leading-none text-sm uppercase italic">Logbook</h3>
+                    <p class="text-[9px] font-bold text-gray-400 mt-1 uppercase">Laporan Kerja Harian</p>
                 </div>
             </a>
         </div>
 
-        <button onclick="logout()" class="mt-8 text-blue-300 font-bold text-[10px] uppercase tracking-[0.3em] hover:text-white transition-all">
+        <button onclick="logout()" class="mt-8 text-[10px] text-gray-400 font-black uppercase tracking-[0.3em] italic hover:text-red-500 transition-all">
             <i class="fas fa-power-off mr-2"></i> Keluar Sistem
         </button>
     </div>
