@@ -35,7 +35,7 @@
 
             <div>
                 <label class="text-[10px] font-black text-blue-900 uppercase ml-4 mb-1 block opacity-60 italic">Status Kehadiran *</label>
-                <select id="statusHadir" onchange="toggleSakit()" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none italic text-blue-900">
+                <select id="statusHadir" class="w-full p-5 bg-gray-50 rounded-2xl border border-gray-100 font-bold text-sm outline-none italic text-blue-900">
                     <option value="On-Site">Hadir: On-Site</option>
                     <option value="WFH">Hadir: WFH</option>
                     <option value="Izin">Izin (Keperluan Mendesak)</option>
@@ -46,6 +46,7 @@
             <div class="bg-blue-50/50 p-6 rounded-[2.5rem] border-2 border-dashed border-blue-200 text-center">
                 <label class="text-[9px] font-black text-blue-900 uppercase block mb-3 italic">Lampiran Foto (Selfie/Surat) *</label>
                 <input type="file" id="suratFile" accept="image/*" class="text-[10px] font-bold text-gray-400 file:bg-blue-900 file:text-white file:border-0 file:px-4 file:py-2 file:rounded-xl">
+                <p class="text-[8px] text-red-500 mt-2 font-bold italic">* Foto wajib diunggah untuk semua status</p>
             </div>
 
             <div>
@@ -70,10 +71,9 @@
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycby24fUfPoGrvowbD2nqeH0VyJCrat7lsXgpnsfJ1-B2TTu25Qv3O25nHNvmblfVv20b/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyxg63h40By9379Ij8UgZHNPyCKaZsJVm0BtSgeTWOQARtI07gojTmDtXy1HzFkiaC4/exec";
         const user = JSON.parse(localStorage.getItem('current_user'));
-        let listPresensi = [];
-
+        
         if(!user) window.location.replace('index.html');
         document.getElementById('tgl_absen').valueAsDate = new Date();
 
@@ -88,34 +88,41 @@
         async function fetchRiwayatPresensi() {
             const container = document.getElementById('riwayatList');
             try {
-                const r = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "readPresensi", nim: user.id }) });
-                listPresensi = await r.json();
+                const response = await fetch(scriptURL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ action: "readPresensi", nim: user.id }) 
+                });
+                const listPresensi = await response.json();
                 container.innerHTML = "";
                 
-                if(listPresensi.length === 0) {
+                if(!listPresensi || listPresensi.length === 0) {
                     container.innerHTML = "<p class='text-center text-gray-400 text-xs italic'>Belum ada riwayat presensi.</p>";
                     return;
                 }
 
                 listPresensi.forEach(item => {
-                    const tglFix = item.tanggal.split('T')[0].split('-').reverse().join('/');
-                    const colorStatus = item.jenis === "Sakit" ? "text-red-500" : (item.jenis === "Izin" ? "text-orange-500" : "text-green-600");
+                    // Sesuaikan pengambilan variabel dengan Apps Script (kolom di sheet)
+                    const tglFix = item.tanggal ? item.tanggal.split('T')[0].split('-').reverse().join('/') : '-';
+                    const status = item.jenis || item.status; 
+                    const colorStatus = status === "Sakit" ? "text-red-500" : (status === "Izin" ? "text-orange-500" : "text-green-600");
                     
                     container.innerHTML += `
                         <div class="bg-gray-50 p-5 rounded-[2rem] border-l-8 border-blue-900 shadow-sm text-left">
                             <div class="flex justify-between text-[9px] font-black uppercase mb-1">
                                 <span class="text-gray-400">${tglFix}</span>
-                                <span class="${colorStatus}">${item.jenis}</span>
+                                <span class="${colorStatus}">${status}</span>
                             </div>
-                            <h3 class="font-black text-blue-900 text-sm uppercase">${item.id} - ${user.name.split(' ')[0]}</h3>
-                            <p class="text-[10px] text-gray-500 italic mt-1 leading-tight">"${item.deskripsi}"</p>
+                            <h3 class="font-black text-blue-900 text-sm uppercase">${user.name}</h3>
+                            <p class="text-[10px] text-gray-500 italic mt-1 leading-tight">"${item.deskripsi || item.keterangan || '-'}"</p>
                             <div class="mt-3 flex gap-3">
-                                <a href="${item.link}" target="_blank" class="text-blue-500 text-[10px] font-bold underline"><i class="fas fa-map-marker-alt"></i> Lokasi</a>
-                                ${item.foto !== "-" ? `<a href="${item.foto}" target="_blank" class="text-green-600 text-[10px] font-bold underline"><i class="fas fa-image"></i> Lihat Foto</a>` : ""}
+                                <a href="${item.link || item.maps}" target="_blank" class="text-blue-500 text-[10px] font-bold underline"><i class="fas fa-map-marker-alt"></i> Lokasi</a>
+                                ${item.foto && item.foto !== "-" ? `<a href="${item.foto}" target="_blank" class="text-green-600 text-[10px] font-bold underline"><i class="fas fa-image"></i> Lihat Foto</a>` : ""}
                             </div>
                         </div>`;
                 });
-            } catch(e) { container.innerHTML = "Gagal memuat."; }
+            } catch(e) { 
+                container.innerHTML = "<p class='text-center text-red-500 text-xs italic'>Gagal memuat data riwayat.</p>"; 
+            }
         }
 
         async function kirimPresensi() {
@@ -123,21 +130,35 @@
             const status = document.getElementById('statusHadir').value;
             const fileInput = document.getElementById('suratFile').files[0];
 
-            if(!fileInput && (status === 'Sakit' || status === 'Izin')) return alert("Wajib upload foto bukti!");
+            // VALIDASI FOTO WAJIB (Sesuai permintaan Irma)
+            if(!fileInput) {
+                alert("WAJIB: Silakan ambil foto selfie atau unggah surat bukti terlebih dahulu!");
+                return;
+            }
             
-            btn.disabled = true; btn.innerHTML = "Proses...";
+            btn.disabled = true; 
+            btn.innerHTML = "<i class='fas fa-spinner fa-spin mr-2'></i> Mengunggah...";
 
             let maps = "-";
             try {
-                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true }));
+                const pos = await new Promise((res, rej) => {
+                    navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, timeout: 10000 });
+                });
                 maps = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-            } catch (e) { alert("GPS Harus Aktif!"); btn.disabled = false; btn.innerText="Kirim"; return; }
-
-            let fileBase64 = "";
-            if(fileInput) {
-                const reader = new FileReader();
-                fileBase64 = await new Promise(res => { reader.onload = e => res(e.target.result.split(',')[1]); reader.readAsDataURL(fileInput); });
+                document.getElementById('gpsStatus').innerHTML = "<i class='fas fa-check-circle'></i> GPS Terverifikasi";
+                document.getElementById('gpsStatus').classList.replace('text-blue-700', 'text-green-700');
+            } catch (e) { 
+                alert("Gagal mengunci lokasi! Pastikan GPS aktif."); 
+                btn.disabled = false; 
+                btn.innerText="Kirim Kehadiran"; 
+                return; 
             }
+
+            const reader = new FileReader();
+            const fileBase64 = await new Promise(res => {
+                reader.onload = e => res(e.target.result.split(',')[1]);
+                reader.readAsDataURL(fileInput);
+            });
 
             const payload = {
                 action: "addPresensi",
@@ -152,13 +173,20 @@
             };
 
             try {
-                await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
-                alert("✅ PRESENSI BERHASIL!");
-                switchTab('history');
-            } catch (e) { alert("Gagal!"); btn.disabled = false; }
+                const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
+                const resJson = await response.json();
+                if(resJson.success) {
+                    alert("✅ PRESENSI BERHASIL DISIMPAN!");
+                    location.reload(); // Refresh untuk melihat riwayat terbaru
+                } else {
+                    throw new Error();
+                }
+            } catch (e) { 
+                alert("❌ Gagal mengirim ke server. Coba lagi."); 
+                btn.disabled = false; 
+                btn.innerText = "Kirim Kehadiran";
+            }
         }
-
-        function toggleSakit() { /* Logic tambahan jika diperlukan */ }
     </script>
 </body>
 </html>
